@@ -1,0 +1,12 @@
+{
+	"parser": "babel-eslint",
+	"extends": [
+		"standard",
+		"standard-react"
+	],
+	"rules":{
+		"indent": [1, 4, {"SwitchCase": 1}],
+		"space-before-function-paren":0,
+        "react/prop-types":0
+	}
+}

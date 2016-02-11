@@ -1,0 +1,40 @@
+{
+	"preset":"default",
+	"indent":{
+		"value":"    ",
+		"ReturnStatement":">=1"
+	},
+	"lineBreak":{
+		"before":{
+			"EndOfFile":1
+		}
+	},
+	"whiteSpace":{
+		"after":{
+			"FunctionName":1,
+			"FunctionReservedWord":1
+		}
+	},
+	"plugins": [
+		"esformatter-jsx",
+		"esformatter-braces",
+		"esformatter-remove-trailing-commas",
+		"esformatter-limit-linebreaks"
+	],
+	"LimitLineBreaks": 2,
+	"jsx": {
+		"formatJSX": true,
+		"attrsOnSameLineAsTag": true,
+		"maxAttrsOnTag": 3,
+		"firstAttributeOnSameLine": true,
+		"spaceInJSXExpressionContainers": " ",
+		"alignWithFirstAttribute": false,
+		"htmlOptions": {
+			"brace_style": "collapse",
+			"indent_char": " ",
+			"indent_size": 4,
+			"max_preserve_newlines": 2,
+			"preserve_newlines": true
+		}
+	}
+}
