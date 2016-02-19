@@ -15,6 +15,7 @@ const MainSection = (React) => {
     return connect(selectState)(({fileStorage}) => {
         let fileContent = fileStorage[0].content
         let ast = fileStorage[0].ast
+        let functions = fileStorage[0].functions
         let width = 500
         let height = 500
         let styleBase = {
@@ -33,7 +34,7 @@ const MainSection = (React) => {
                        <Editor content={ fileContent } />
                    </div>
                    <div style={ styleRight }>
-                       <FunctionsView ast={ ast } />
+                       <FunctionsView ast={ ast } functions={ functions } />
                    </div>
                </div>
     })

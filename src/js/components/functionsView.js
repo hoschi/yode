@@ -1,7 +1,8 @@
 const FunctionsView = (React) => {
-    return ({ast}) => {
+    return ({functions, ast}) => {
         return <div>
-                   this should list all functions:
+                   { JSON.stringify(functions) }
+                   <br/>
                    <br/>
                    { JSON.stringify(ast) }
                </div>

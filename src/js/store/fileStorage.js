@@ -1,6 +1,7 @@
 import createReducer from './createReducer'
-import parser from '../parser'
 import Profiler from '../Profiler'
+import parser from '../ast/parser'
+import estraverse from '../../../lib/estraverse'
 
 function parseCode (text) {
     let stop = Profiler.start('code to ast')
@@ -16,13 +17,35 @@ function parseCode (text) {
     return ast
 }
 
+function getFunctionsFromAst (ast) {
+    let stop = Profiler.start('ast to functions')
+    let functions = []
+
+    estraverse.traverse(ast, {
+        enter(node, parent) {
+            if (node.type === 'JSXElement') {
+                // unknown to estraverse
+                return estraverse.VisitorOption.Skip
+            }
+
+            if (node.type === 'FunctionDeclaration' || node.type === 'ArrowFunctionExpression' || node.type === 'FunctionExpression') {
+                functions.push(node)
+            }
+        }
+    })
+    stop()
+    return functions
+}
+
 function createFileFromContent (path, content) {
-    return {
+    let file = {
         id: path,
         path,
         content,
         ast: parseCode(content)
     }
+    file.functions = getFunctionsFromAst(file.ast)
+    return file
 }
 
 const initialState = [
