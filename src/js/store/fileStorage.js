@@ -3,6 +3,8 @@ import Profiler from '../Profiler'
 import parser from '../ast/parser'
 import estraverse from '../../../lib/estraverse'
 
+let id = 0
+
 function parseCode (text) {
     let stop = Profiler.start('code to ast')
     let ast = parser.parse(text, {
@@ -17,7 +19,7 @@ function parseCode (text) {
     return ast
 }
 
-function getFunctionsFromAst (ast) {
+function getFunctionsFromAst (content, ast) {
     let stop = Profiler.start('ast to functions')
     let functions = []
 
@@ -29,10 +31,15 @@ function getFunctionsFromAst (ast) {
             }
 
             if (node.type === 'FunctionDeclaration' || node.type === 'ArrowFunctionExpression' || node.type === 'FunctionExpression') {
+                let length = node.end - node.start
+                node.id = id++
+                node.text = content.substr(node.start, length)
                 functions.push(node)
             }
         }
     })
+    // sort descending by content length
+    functions = functions.sort((a, b) => (a.end - a.start) - (b.end - b.start))
     stop()
     return functions
 }
@@ -44,7 +51,7 @@ function createFileFromContent (path, content) {
         content,
         ast: parseCode(content)
     }
-    file.functions = getFunctionsFromAst(file.ast)
+    file.functions = getFunctionsFromAst(file.content, file.ast)
     return file
 }
 

@@ -74,12 +74,13 @@ const Editor = (React) => {
         },
 
         render() {
-            const style = {
+            let containerStyle = {
                 height: '100%',
                 width: '100%'
             }
+            const style = Object.assign({}, containerStyle, this.props.editorStyle)
             return <div style={ style }>
-                       <div className='editor' ref='container' style={ style }></div>
+                       <div className='editor' ref='container' style={ containerStyle }></div>
                    </div>
         }
     })

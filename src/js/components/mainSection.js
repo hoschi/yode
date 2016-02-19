@@ -17,7 +17,7 @@ const MainSection = (React) => {
         let ast = fileStorage[0].ast
         let functions = fileStorage[0].functions
         let width = 500
-        let height = 500
+        let height = 900
         let styleBase = {
             position: 'absolute',
             height: height,
