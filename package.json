@@ -24,6 +24,8 @@
     "webpack-hot-middleware": "^2.6.0"
   },
   "dependencies": {
+    "acorn": "^2.7.0",
+    "acorn-jsx": "^2.0.1",
     "babel-plugin-transform-object-rest-spread": "^6.3.13",
     "codemirror": "^5.11.0",
     "ramda": "^0.19.0",

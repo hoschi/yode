@@ -16,6 +16,7 @@
 		}
 	},
 	"plugins": [
+		"esformatter-jsx",
 		"esformatter-braces",
 		"esformatter-remove-trailing-commas",
 		"esformatter-limit-linebreaks"

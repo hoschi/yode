@@ -12,13 +12,9 @@ const MainSection = (React) => {
         }
     }
 
-    let onContentChange = ({cursor, value}) => {
-        // TODO replace with real logic
-        console.log('content changed', cursor, value)
-    }
-
     return connect(selectState)(({fileStorage}) => {
         let fileContent = fileStorage[0].content
+        let ast = fileStorage[0].ast
         let width = 500
         let height = 500
         let styleBase = {
@@ -34,10 +30,10 @@ const MainSection = (React) => {
         })
         return <div>
                    <div style={ styleBase }>
-                       <Editor content={ fileContent } onContentChange={ onContentChange }/>
+                       <Editor content={ fileContent } />
                    </div>
                    <div style={ styleRight }>
-                       <FunctionsView />
+                       <FunctionsView ast={ ast } />
                    </div>
                </div>
     })

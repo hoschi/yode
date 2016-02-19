@@ -27,18 +27,18 @@ const Editor = (React) => {
 
             if (this.props.onContentChange) {
                 this._onContentChange()
-            }
 
-            this._bindCMHandler('changes', () => {
-                clearTimeout(this._updateTimer)
-                this._updateTimer = setTimeout(this._onContentChange.bind(this), 50)
-            })
-        /*
-         *this._bindCMHandler('cursorActivity', () => {
-         *    clearTimeout(this._updateTimer)
-         *    this._updateTimer = setTimeout(this._onActivity.bind(this), 100)
-         *})
-         */
+                this._bindCMHandler('changes', () => {
+                    clearTimeout(this._updateTimer)
+                    this._updateTimer = setTimeout(this._onContentChange.bind(this), 50)
+                })
+            }
+            /*
+             *this._bindCMHandler('cursorActivity', () => {
+             *    clearTimeout(this._updateTimer)
+             *    this._updateTimer = setTimeout(this._onActivity.bind(this), 100)
+             *})
+             */
         },
 
         componentWillUnmount() {
@@ -78,8 +78,8 @@ const Editor = (React) => {
                 height: '100%',
                 width: '100%'
             }
-            return <div style={style}>
-                       <div className='editor' ref='container' style={style}></div>
+            return <div style={ style }>
+                       <div className='editor' ref='container' style={ style }></div>
                    </div>
         }
     })
