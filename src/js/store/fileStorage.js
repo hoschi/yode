@@ -1,7 +1,7 @@
 import createReducer from './createReducer'
 
 const initialState = [{
-    content: 'my code goes here'
+    content: 'if (test) {return "foo"}\nconst foo = "bar"'
 }]
 
 let fileStorage = {}
