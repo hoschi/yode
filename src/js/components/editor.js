@@ -26,8 +26,6 @@ const Editor = (React) => {
             )
 
             if (this.props.onContentChange) {
-                this._onContentChange()
-
                 this._bindCMHandler('changes', () => {
                     clearTimeout(this._updateTimer)
                     this._updateTimer = setTimeout(this._onContentChange.bind(this), 50)

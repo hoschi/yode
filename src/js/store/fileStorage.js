@@ -4,18 +4,29 @@ import parser from '../ast/parser'
 import estraverse from '../../../lib/estraverse'
 import escodegen from 'escodegen'
 
-let id = 0
+let id = 1
+
+function addTextToNode (ast) {
+    ast.text = escodegen.generate(ast)
+}
 
 function parseCode (text) {
     let stop = Profiler.start('code to ast')
-    let ast = parser.parse(text, {
-        plugins: {
-            jsx: true
-        },
-        ecmaVersion: 6,
-        sourceType: 'module',
-        locations: true
-    })
+    let ast
+    try {
+        ast = parser.parse(text, {
+            plugins: {
+                jsx: true
+            },
+            ecmaVersion: 6,
+            sourceType: 'module',
+            locations: true
+        })
+    } /* eslint-disable */ catch ( e ) /* eslint-enable */ {
+        console.log(e)
+        stop()
+        return undefined
+    }
     stop()
     return ast
 }
@@ -32,9 +43,12 @@ function getFunctionsFromAst (content, ast) {
             }
 
             if (node.type === 'FunctionDeclaration' || node.type === 'ArrowFunctionExpression' || node.type === 'FunctionExpression') {
-                let length = node.end - node.start
-                node.id = id++
-                node.text = content.substr(node.start, length)
+                if (!node.customId) {
+                    node.customId = id++
+                }
+                if (!node.text) {
+                    addTextToNode(node)
+                }
                 functions.push(node)
             }
         }
@@ -51,10 +65,19 @@ function createFileFromContent (path, content) {
         path
     }
     // create formatted code
-    file.content = escodegen.generate(parseCode(content))
-    // refresh ast from formatted code
-    file.ast = parseCode(file.content)
-    file.functions = getFunctionsFromAst(file.content, file.ast)
+    let ast = parseCode(content)
+    if (ast) {
+        file.content = escodegen.generate(ast)
+        // refresh ast from formatted code
+        file.ast = parseCode(file.content)
+        file.functions = getFunctionsFromAst(file.content, file.ast).map(f => {
+            f.fileId = file.id
+            return f
+        })
+    } else {
+        file.content = content
+        file.functions = []
+    }
 
     return file
 }
@@ -117,6 +140,73 @@ return pA+pB
 
 ]
 
-let fileStorage = {}
+export const FUNCTION_CONTENT_UPDATED = 'FUNCTION_CONTENT_UPDATED '
+
+export const updateFunctionContent = (params) => {
+    return Object.assign({}, params, {
+        type: FUNCTION_CONTENT_UPDATED
+    })
+}
+
+let fileStorage = {
+    [FUNCTION_CONTENT_UPDATED]: (state, action) => {
+        const {newContent, oldFunction} = action
+
+        let ast = parseCode(newContent)
+        if (!ast) {
+            // broken code, wait for working code
+            return state
+        }
+        // ast parsing wraps content always in a "programm node"
+        let newFunction
+        estraverse.traverse(ast, {
+            enter(node) {
+                if (node.type === oldFunction.type) {
+                    newFunction = node
+                    this.break()
+                }
+            }
+        })
+
+        if (!newFunction) {
+            // not found, uh oh?!
+            throw new Error('old node type not found')
+        }
+        addTextToNode(newFunction)
+        // save old id, because it is still the same function
+        newFunction.customId = oldFunction.customId
+
+        let file = state.find(file => file.id === oldFunction.fileId)
+        // replace new ast in file
+        file.ast = estraverse.replace(file.ast, {
+            enter(node, parent) {
+                if (node.type === 'JSXElement') {
+                    // unknown to estraverse
+                    return this.skip()
+                }
+
+                if (node.customId === newFunction.customId) {
+                    return newFunction
+                }
+            }
+        })
+
+        // update file content with merged ast
+        file.content = escodegen.generate(file.ast)
+        file.functions = getFunctionsFromAst(file.content, file.ast).map(f => {
+            f.fileId = file.id
+            return f
+        })
+
+        // update state identity, so change is triggered in redux
+        return state.map(f => {
+            if (f.id === file.id) {
+                return file
+            } else {
+                return f
+            }
+        })
+    }
+}
 
 export default createReducer(initialState, fileStorage)

@@ -8,12 +8,11 @@ const MainSection = (React) => {
 
     let selectState = ({fileStorage}) => {
         return {
-            fileStorage
+            fileStorage: fileStorage.concat([]).reverse()
         }
     }
 
     return connect(selectState)(({fileStorage}) => {
-        let functions = fileStorage[0].functions.concat(fileStorage[1].functions)
         let width = 500
         let height = 900
         let styleBase = {
@@ -33,16 +32,16 @@ const MainSection = (React) => {
             marginBottom: 10
         }
 
-        let editors = fileStorage.map(({content}, i) => <div key={ i } style={ editorContainerStyle }>
-                                                            <Editor content={ content } />
-                                                        </div>)
+        let editors = fileStorage.map(({content, id}) => <div key={ id } style={ editorContainerStyle }>
+                                                             <Editor content={ content } />
+                                                         </div>)
 
         return <div>
                    <div style={ styleBase }>
                        { editors }
                    </div>
                    <div style={ styleRight }>
-                       <FunctionsView functions={ functions } />
+                       <FunctionsView />
                    </div>
                </div>
     })
