@@ -2,6 +2,7 @@ import createReducer from './createReducer'
 import Profiler from '../Profiler'
 import parser from '../ast/parser'
 import estraverse from '../../../lib/estraverse'
+import escodegen from 'escodegen'
 
 let id = 0
 
@@ -47,11 +48,14 @@ function getFunctionsFromAst (content, ast) {
 function createFileFromContent (path, content) {
     let file = {
         id: path,
-        path,
-        content,
-        ast: parseCode(content)
+        path
     }
+    // create formatted code
+    file.content = escodegen.generate(parseCode(content))
+    // refresh ast from formatted code
+    file.ast = parseCode(file.content)
     file.functions = getFunctionsFromAst(file.content, file.ast)
+
     return file
 }
 
@@ -99,14 +103,7 @@ const MainSection = (React) => {
         let styleRight = Object.assign({}, styleBase, {
             left: width
         })
-        return <div>
-                   <div style={ styleBase }>
-                       <Editor content={ fileContent } />
-                   </div>
-                   <div style={ styleRight }>
-                       <FunctionsView ast={ ast } />
-                   </div>
-               </div>
+        return 'no jsx because of escodegen'
     })
 }
 
