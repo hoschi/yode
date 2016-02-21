@@ -13,9 +13,7 @@ const MainSection = (React) => {
     }
 
     return connect(selectState)(({fileStorage}) => {
-        let fileContent = fileStorage[0].content
-        let ast = fileStorage[0].ast
-        let functions = fileStorage[0].functions
+        let functions = fileStorage[0].functions.concat(fileStorage[1].functions)
         let width = 500
         let height = 900
         let styleBase = {
@@ -27,14 +25,24 @@ const MainSection = (React) => {
         }
 
         let styleRight = Object.assign({}, styleBase, {
-            left: width
+            left: width + 20
         })
+
+        let editorContainerStyle = {
+            border: '1px solid black',
+            marginBottom: 10
+        }
+
+        let editors = fileStorage.map(({content}, i) => <div key={ i } style={ editorContainerStyle }>
+                                                            <Editor content={ content } />
+                                                        </div>)
+
         return <div>
                    <div style={ styleBase }>
-                       <Editor content={ fileContent } />
+                       { editors }
                    </div>
                    <div style={ styleRight }>
-                       <FunctionsView ast={ ast } functions={ functions } />
+                       <FunctionsView functions={ functions } />
                    </div>
                </div>
     })

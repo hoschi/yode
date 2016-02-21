@@ -2,7 +2,7 @@ import editor from './editor'
 
 const FunctionsView = (React) => {
     const Editor = editor(React)
-    return ({functions, ast}) => {
+    return ({functions}) => {
         let editorStyle = {
             border: '2px solid steelblue',
             marginBottom: 4
