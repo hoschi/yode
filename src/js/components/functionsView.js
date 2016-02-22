@@ -18,6 +18,10 @@ const FunctionsView = (React) => {
         }
         let texts = functions.map(function (node, i) {
             let onContentChange = ({value}) => {
+                if (value === node.text) {
+                    // content was changed by setting reformatted text
+                    return
+                }
                 dispatch(updateFunctionContent({
                     oldFunction: node,
                     newContent: value
