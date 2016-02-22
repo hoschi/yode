@@ -31,7 +31,7 @@ function parseCode (text) {
     return ast
 }
 
-function getFunctionsFromAst (content, ast) {
+function getFunctionsFromAst (ast) {
     let stop = Profiler.start('ast to functions')
     let functions = []
 
@@ -42,7 +42,8 @@ function getFunctionsFromAst (content, ast) {
                 return estraverse.VisitorOption.Skip
             }
 
-            if (node.type === 'FunctionDeclaration' || node.type === 'ArrowFunctionExpression' || node.type === 'FunctionExpression') {
+            // TODO code generated from FunctionExpression are not parseable again, skip for now
+            if (node.type === 'FunctionDeclaration' || node.type === 'ArrowFunctionExpression') {
                 if (!node.customId) {
                     node.customId = id++
                 }
@@ -70,7 +71,7 @@ function createFileFromContent (path, content) {
         file.content = escodegen.generate(ast)
         // refresh ast from formatted code
         file.ast = parseCode(file.content)
-        file.functions = getFunctionsFromAst(file.content, file.ast).map(f => {
+        file.functions = getFunctionsFromAst(file.ast).map(f => {
             f.fileId = file.id
             return f
         })
@@ -98,7 +99,7 @@ const MainSection = (React) => {
         }
     }
 
-    let assignedFunction = function (a, b) {
+    let assignedFunction = (a, b) => {
         if (a) {
             return 'a'
         } else {
@@ -193,7 +194,7 @@ let fileStorage = {
 
         // update file content with merged ast
         file.content = escodegen.generate(file.ast)
-        file.functions = getFunctionsFromAst(file.content, file.ast).map(f => {
+        file.functions = getFunctionsFromAst(file.ast).map(f => {
             f.fileId = file.id
             return f
         })
