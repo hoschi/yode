@@ -1,6 +1,7 @@
 import editor from './editor'
 import functionsView from './functionsView'
 import { connect } from 'react-redux'
+import { formatCode } from '../store/fileStorage'
 
 const MainSection = (React) => {
     const FunctionsView = functionsView(React)
@@ -8,23 +9,27 @@ const MainSection = (React) => {
 
     let selectState = ({fileStorage}) => {
         return {
-            fileStorage: fileStorage.concat([]).reverse()
+            fileStorage
         }
     }
 
-    return connect(selectState)(({fileStorage}) => {
+    return connect(selectState)(({fileStorage, dispatch}) => {
         let width = 500
         let height = 900
         let styleBase = {
             position: 'absolute',
             height: height,
             width: width,
-            top: 0,
+            top: 40,
             left: 0
         }
 
         let styleRight = Object.assign({}, styleBase, {
             left: width + 20
+        })
+
+        let styleLeft = Object.assign({}, styleBase, {
+            top: styleBase.top + 18
         })
 
         let editorContainerStyle = {
@@ -37,7 +42,10 @@ const MainSection = (React) => {
                                                          </div>)
 
         return <div>
-                   <div style={ styleBase }>
+                   <div>
+                       <button onClick={ () => dispatch(formatCode()) }>format code</button>
+                   </div>
+                   <div style={ styleLeft }>
                        { editors }
                    </div>
                    <div style={ styleRight }>

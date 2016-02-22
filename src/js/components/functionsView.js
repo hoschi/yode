@@ -18,7 +18,7 @@ const FunctionsView = (React) => {
         }
         let texts = functions.map(function (node, i) {
             let onContentChange = ({value}) => {
-                if (value === node.text) {
+                if (value === node.unformattedText) {
                     // content was changed by setting reformatted text
                     return
                 }
@@ -32,7 +32,7 @@ const FunctionsView = (React) => {
                            { ' ' }
                            { node.customId }
                        </div>
-                       <Editor editorStyle={ editorStyle } content={ node.text } onContentChange={ onContentChange } />
+                       <Editor editorStyle={ editorStyle } content={ node.unformattedText } onContentChange={ onContentChange } />
                    </div>
         })
         return <div>

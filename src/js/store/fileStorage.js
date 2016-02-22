@@ -44,13 +44,16 @@ function getFunctionsFromAst (ast, functionsToCompare) {
 
             // code generated from FunctionExpression are not parseable again, skip for now
             if (node.type === 'FunctionDeclaration' || node.type === 'ArrowFunctionExpression') {
-                // console.log(node, escodegen.generate(node))
-
                 // always regenerate text for node, because this node could
                 // contain a function which was changed. Could be skipped when
                 // `node.text` is already there and we can make sure this node
                 // contains no other function.
                 addTextToNode(node)
+
+                if (!node.unformattedText) {
+                    // set unformatted (starting) text to node in case this is first run
+                    node.unformattedText = node.text
+                }
 
                 // update or assign custom id
                 if (!node.customId) {
@@ -99,6 +102,8 @@ function createFileFromContent (path, content) {
 }
 
 const initialState = [
+    createFileFromContent('foo/b.js', 'export default function test (pA, pB) { return pA+pB } '),
+
     createFileFromContent('foo/a.js', `
 import editor from './editor'
 import functionsView from './functionsView'
@@ -147,21 +152,35 @@ const MainSection = (React) => {
 }
 
 export default MainSection
-`),
-
-    createFileFromContent('foo/b.js', 'export default function test (pA, pB) { return pA+pB } ')
+`)
 
 ]
 
 export const FUNCTION_CONTENT_UPDATED = 'FUNCTION_CONTENT_UPDATED '
-
 export const updateFunctionContent = (params) => {
     return Object.assign({}, params, {
         type: FUNCTION_CONTENT_UPDATED
     })
 }
 
+export const FORMAT_CODE = 'FORMAT_CODE '
+export const formatCode = () => {
+    return {
+        type: FORMAT_CODE
+    }
+}
+
 let fileStorage = {
+    [FORMAT_CODE]: (state) => {
+        return state.map(file => {
+            file.functions = file.functions.map(f => {
+                f.unformattedText = f.text
+                return f
+            })
+            return file
+        })
+    },
+
     [FUNCTION_CONTENT_UPDATED]: (state, action) => {
         const {newContent, oldFunction} = action
 
@@ -172,8 +191,8 @@ let fileStorage = {
             // broken code, wait for working code
             return state
         }
-        // ast parsing wraps content always in a "programm node"
         let newFunction
+        // ast parsing wraps content in other nodes, because it parses it standalone and out of context of original text
         estraverse.traverse(ast, {
             enter(node) {
                 if (node.type === oldFunction.type) {
@@ -187,7 +206,10 @@ let fileStorage = {
             // not found, uh oh?!
             throw new Error('old node type not found')
         }
+        // add formatted text for function node comparision
         addTextToNode(newFunction)
+        // add unformatted text for editor
+        newFunction.unformattedText = newContent
         // save old id, because it is still the same function
         newFunction.customId = oldFunction.customId
 
