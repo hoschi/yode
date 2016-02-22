@@ -28,7 +28,7 @@ const FunctionsView = (React) => {
                 }))
             }
             return <div key={ node.customId }>
-                       <div>unique id:
+                       <div>id:
                            { ' ' }
                            { node.customId }
                        </div>
