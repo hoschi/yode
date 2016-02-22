@@ -15,9 +15,9 @@ function parseCode (text) {
     let ast
     try {
         ast = parser.parse(text, {
-            plugins: {
-                jsx: true
-            },
+            // plugins: {
+            // jsx: true
+            // },
             ecmaVersion: 6,
             sourceType: 'module',
             locations: true
@@ -31,7 +31,7 @@ function parseCode (text) {
     return ast
 }
 
-function getFunctionsFromAst (ast) {
+function getFunctionsFromAst (ast, functionsToCompare) {
     let stop = Profiler.start('ast to functions')
     let functions = []
 
@@ -42,13 +42,22 @@ function getFunctionsFromAst (ast) {
                 return estraverse.VisitorOption.Skip
             }
 
-            // TODO code generated from FunctionExpression are not parseable again, skip for now
+            // code generated from FunctionExpression are not parseable again, skip for now
             if (node.type === 'FunctionDeclaration' || node.type === 'ArrowFunctionExpression') {
-                if (!node.customId) {
-                    node.customId = id++
-                }
+                // console.log(node, escodegen.generate(node))
                 if (!node.text) {
                     addTextToNode(node)
+                }
+                if (!node.customId) {
+                    let foundFunction
+                    if (functionsToCompare) {
+                        foundFunction = functionsToCompare.find(f => node.text === f.text)
+                    }
+                    if (foundFunction) {
+                        node.customId = foundFunction.customId
+                    } else {
+                        node.customId = id++
+                    }
                 }
                 functions.push(node)
             }
@@ -134,10 +143,7 @@ const MainSection = (React) => {
 export default MainSection
 `),
 
-    createFileFromContent('foo/b.js', `export default function test (pA, pB) {
-return pA+pB
-}
-`)
+    createFileFromContent('foo/b.js', 'export default function test (pA, pB) { return pA+pB } ')
 
 ]
 
@@ -153,8 +159,10 @@ let fileStorage = {
     [FUNCTION_CONTENT_UPDATED]: (state, action) => {
         const {newContent, oldFunction} = action
 
+        let stop = Profiler.start('--content update')
         let ast = parseCode(newContent)
         if (!ast) {
+            stop()
             // broken code, wait for working code
             return state
         }
@@ -194,19 +202,21 @@ let fileStorage = {
 
         // update file content with merged ast
         file.content = escodegen.generate(file.ast)
-        file.functions = getFunctionsFromAst(file.ast).map(f => {
+        file.functions = getFunctionsFromAst(file.ast, file.functions).map(f => {
             f.fileId = file.id
             return f
         })
 
         // update state identity, so change is triggered in redux
-        return state.map(f => {
+        let newState = state.map(f => {
             if (f.id === file.id) {
                 return file
             } else {
                 return f
             }
         })
+        stop()
+        return newState
     }
 }
 

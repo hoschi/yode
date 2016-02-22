@@ -47,7 +47,9 @@ const Editor = (React) => {
 
         componentWillReceiveProps(nextProps) {
             if (nextProps.content !== this.props.content) {
+                let cursor = this.codeMirror.getDoc().getCursor()
                 this.codeMirror.setValue(nextProps.content)
+                this.codeMirror.getDoc().setCursor(cursor)
             }
         },
 
