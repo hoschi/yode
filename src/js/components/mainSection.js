@@ -1,7 +1,7 @@
 import editor from './editor'
 import functionsView from './functionsView'
 import { connect } from 'react-redux'
-import { formatCode } from '../store/fileStorage'
+import { formatCode, updateFileContent } from '../store/fileStorage'
 
 const MainSection = (React) => {
     const FunctionsView = functionsView(React)
@@ -37,9 +37,22 @@ const MainSection = (React) => {
             marginBottom: 10
         }
 
-        let editors = fileStorage.map(({content, id}) => <div key={ id } style={ editorContainerStyle }>
-                                                             <Editor content={ content } />
-                                                         </div>)
+        let editors = fileStorage.map((file) => {
+            const {unformattedContent, id} = file
+            let onContentChange = ({value}) => {
+                if (value === unformattedContent) {
+                    // content was changed by store
+                    return
+                }
+                dispatch(updateFileContent({
+                    file: file,
+                    newContent: value
+                }))
+            }
+            return <div key={ id } style={ editorContainerStyle }>
+                       <Editor content={ unformattedContent } onContentChange={ onContentChange } />
+                   </div>
+        })
 
         return <div>
                    <div>

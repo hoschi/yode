@@ -31,7 +31,7 @@ function parseCode (text) {
     return ast
 }
 
-function getFunctionsFromAst (ast, functionsToCompare) {
+function getFunctionsFromAst (ast, fileId, functionsToCompare) {
     let stop = Profiler.start('ast to functions')
     let functions = []
 
@@ -68,6 +68,7 @@ function getFunctionsFromAst (ast, functionsToCompare) {
                         node.customId = id++
                     }
                 }
+                node.fileId = fileId
                 functions.push(node)
             }
         }
@@ -76,6 +77,17 @@ function getFunctionsFromAst (ast, functionsToCompare) {
     functions = functions.sort((a, b) => (a.end - a.start) - (b.end - b.start))
     stop()
     return functions
+}
+
+function createNewStateWithFile (oldState, file) {
+    // update state identity, so change is triggered in redux
+    return oldState.map(f => {
+        if (f.id === file.id) {
+            return file
+        } else {
+            return f
+        }
+    })
 }
 
 function createFileFromContent (path, content) {
@@ -89,14 +101,13 @@ function createFileFromContent (path, content) {
         file.content = escodegen.generate(ast)
         // refresh ast from formatted code
         file.ast = parseCode(file.content)
-        file.functions = getFunctionsFromAst(file.ast).map(f => {
-            f.fileId = file.id
-            return f
-        })
+        file.functions = getFunctionsFromAst(file.ast, file.id)
     } else {
         file.content = content
         file.functions = []
     }
+
+    file.unformattedContent = file.content
 
     return file
 }
@@ -163,6 +174,13 @@ export const updateFunctionContent = (params) => {
     })
 }
 
+export const FILE_CONTENT_UPDATED = 'FILE_CONTENT_UPDATED '
+export const updateFileContent = (params) => {
+    return Object.assign({}, params, {
+        type: FILE_CONTENT_UPDATED
+    })
+}
+
 export const FORMAT_CODE = 'FORMAT_CODE '
 export const formatCode = () => {
     return {
@@ -173,10 +191,18 @@ export const formatCode = () => {
 let fileStorage = {
     [FORMAT_CODE]: (state) => {
         return state.map(file => {
+            // format functions
             file.functions = file.functions.map(f => {
                 f.unformattedText = f.text
                 return f
             })
+
+            if (file.content !== file.unformattedText) {
+                // generate formatted text
+                file.content = escodegen.generate(file.ast)
+                // set unformatted text to new content
+                file.unformattedContent = file.content
+            }
             return file
         })
     },
@@ -229,20 +255,39 @@ let fileStorage = {
         })
 
         // update file content with merged ast
-        file.content = escodegen.generate(file.ast)
-        file.functions = getFunctionsFromAst(file.ast, file.functions).map(f => {
-            f.fileId = file.id
-            return f
-        })
+        let fileContent = escodegen.generate(file.ast)
 
-        // update state identity, so change is triggered in redux
-        let newState = state.map(f => {
-            if (f.id === file.id) {
-                return file
-            } else {
-                return f
-            }
-        })
+        // update content if possible
+        if (file.content === file.unformattedContent) {
+            // in sync, update
+            file.content = fileContent
+            file.unformattedContent = fileContent
+        }
+        // TODO add ui to show unsynced state or solve problem of putting valid code in invalid file/outer function
+
+        file.functions = getFunctionsFromAst(file.ast, file.id, file.functions)
+
+        let newState = createNewStateWithFile(state, file)
+        stop()
+        return newState
+    },
+
+    [FILE_CONTENT_UPDATED]: (state, action) => {
+        const {newContent, file} = action
+
+        let stop = Profiler.start('--file content update')
+        let ast = parseCode(newContent)
+        if (!ast) {
+            stop()
+            // broken code, wait for working code
+            return state
+        }
+        file.ast = ast
+        // add unformatted text for editor
+        file.unformattedContent = newContent
+
+        file.functions = getFunctionsFromAst(file.ast, file.id, file.functions)
+        let newState = createNewStateWithFile(state, file)
         stop()
         return newState
     }
