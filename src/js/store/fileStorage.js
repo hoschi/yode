@@ -45,10 +45,16 @@ function getFunctionsFromAst (ast, functionsToCompare) {
             // code generated from FunctionExpression are not parseable again, skip for now
             if (node.type === 'FunctionDeclaration' || node.type === 'ArrowFunctionExpression') {
                 // console.log(node, escodegen.generate(node))
-                if (!node.text) {
-                    addTextToNode(node)
-                }
+
+                // always regenerate text for node, because this node could
+                // contain a function which was changed. Could be skipped when
+                // `node.text` is already there and we can make sure this node
+                // contains no other function.
+                addTextToNode(node)
+
+                // update or assign custom id
                 if (!node.customId) {
+                    // check if we previously known that function already
                     let foundFunction
                     if (functionsToCompare) {
                         foundFunction = functionsToCompare.find(f => node.text === f.text)
