@@ -3,11 +3,54 @@ import Profiler from '../Profiler'
 import parser from '../ast/parser'
 import estraverse from '../../../lib/estraverse'
 import escodegen from 'escodegen'
+import * as difflib from 'difflib'
+import R from 'ramda'
 
 let id = 1
 
 function addTextToNode (ast) {
     ast.text = escodegen.generate(ast)
+}
+
+function getClosestMatchIndex (searchTerm, possibilities) {
+    let matcher = new difflib.SequenceMatcher()
+    matcher.setSeq2(searchTerm)
+    let cutoff = 0.6
+    let results = []
+
+    // check identity match first, ratio compution takes time
+    let identityMatchIndex = possibilities.findIndex(text => text === searchTerm)
+    if (identityMatchIndex >= 0) {
+        return identityMatchIndex
+    }
+
+    // search for close match
+    possibilities.forEach(function (testText, i) {
+        matcher.setSeq1(testText)
+        if (matcher.realQuickRatio() >= cutoff &&
+            matcher.quickRatio() >= cutoff) {
+            let score = matcher.ratio()
+            if (score >= cutoff) {
+                results.push({
+                    text: testText,
+                    index: i,
+                    score: score
+                })
+            }
+        }
+    })
+
+    if (results.length <= 0) {
+        console.log('no match found', searchTerm, possibilities)
+        // nothing found
+        return -1
+    }
+
+    // sortBy prop ascending and reverse to have descending sorted results by score
+    let sorted = R.sortBy(R.prop('score'), results).reverse()
+    let bestMatch = R.head(sorted)
+    console.log('match found', searchTerm, bestMatch.score, sorted)
+    return bestMatch.index
 }
 
 function parseCode (text) {
@@ -34,6 +77,11 @@ function parseCode (text) {
 function getFunctionsFromAst (ast, fileId, functionsToCompare) {
     let stop = Profiler.start('ast to functions')
     let functions = []
+    let functionsToCompareLeft
+
+    if (functionsToCompare) {
+        functionsToCompareLeft = [].concat(functionsToCompare)
+    }
 
     estraverse.traverse(ast, {
         enter(node, parent) {
@@ -56,14 +104,29 @@ function getFunctionsFromAst (ast, fileId, functionsToCompare) {
                 }
 
                 // update or assign custom id
-                if (!node.customId) {
-                    // check if we previously known that function already
-                    let foundFunction
-                    if (functionsToCompare) {
-                        foundFunction = functionsToCompare.find(f => node.text === f.text)
+                if (node.customId) {
+                    if (functionsToCompareLeft) {
+                        // remove from compare list, we know this function by id
+                        let currentFunctionIndex = functionsToCompareLeft.findIndex(f => f.customId === node.customId)
+                        if (currentFunctionIndex >= 0) {
+                            functionsToCompareLeft.splice(currentFunctionIndex, 1)
+                        }
                     }
-                    if (foundFunction) {
+                } else {
+                    // check if we previously known that function already
+                    let foundFunctionIndex
+                    if (functionsToCompareLeft) {
+                        foundFunctionIndex = getClosestMatchIndex(node.text, functionsToCompareLeft.map(f => f.text))
+                    }
+                    if (foundFunctionIndex >= 0) {
+                        let foundFunction = functionsToCompareLeft[foundFunctionIndex]
                         node.customId = foundFunction.customId
+                        // restore dirty editor state if needed
+                        if (foundFunction.text !== foundFunction.unformattedText) {
+                            node.unformattedText = foundFunction.unformattedText
+                        }
+                        // remove function we found
+                        functionsToCompareLeft.splice(foundFunctionIndex, 1)
                     } else {
                         node.customId = id++
                     }
@@ -73,6 +136,15 @@ function getFunctionsFromAst (ast, fileId, functionsToCompare) {
             }
         }
     })
+
+    // do some info logging
+    if (functionsToCompareLeft && functionsToCompareLeft.length > 0) {
+        console.log('REMOVED FUNCTIONS', functionsToCompareLeft.length, functionsToCompareLeft)
+        functionsToCompareLeft.forEach(function (node) {
+            console.log('++', node.text)
+        })
+    }
+
     // sort descending by content length
     functions = functions.sort((a, b) => (a.end - a.start) - (b.end - b.start))
     stop()
@@ -265,7 +337,10 @@ let fileStorage = {
         }
         // TODO add ui to show unsynced state or solve problem of putting valid code in invalid file/outer function
 
-        file.functions = getFunctionsFromAst(file.ast, file.id, file.functions)
+        // get functions to compare, current changed one can be matched
+        let functionsToCompare = file.functions.filter(f => newFunction.customId !== f.customId)
+        // update functions and port props from already known functions
+        file.functions = getFunctionsFromAst(file.ast, file.id, functionsToCompare)
 
         let newState = createNewStateWithFile(state, file)
         stop()

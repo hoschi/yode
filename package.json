@@ -28,6 +28,7 @@
     "acorn-jsx": "^2.0.1",
     "babel-plugin-transform-object-rest-spread": "^6.3.13",
     "codemirror": "^5.11.0",
+    "difflib": "^0.2.4",
     "escodegen": "^1.8.0",
     "ramda": "^0.19.0",
     "react": "^0.14.2",
