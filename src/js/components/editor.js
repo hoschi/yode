@@ -31,12 +31,6 @@ const Editor = (React) => {
                     this._updateTimer = setTimeout(this._onTextChange.bind(this), 50)
                 })
             }
-            /*
-             *this._bindCMHandler('cursorActivity', () => {
-             *    clearTimeout(this._updateTimer)
-             *    this._updateTimer = setTimeout(this._onActivity.bind(this), 100)
-             *})
-             */
         },
 
         componentWillUnmount() {
@@ -50,6 +44,32 @@ const Editor = (React) => {
                 let cursor = this.codeMirror.getDoc().getCursor()
                 this.codeMirror.setValue(nextProps.text)
                 this.codeMirror.getDoc().setCursor(cursor)
+            }
+            this._setError(nextProps.error)
+        },
+
+        _getErrorLine(error) {
+            return error.loc.line
+        },
+
+        _setError(error) {
+            if (!this.codeMirror) {
+                return
+            }
+
+            let oldError = this.props.error
+            if (oldError) {
+                let lineNumber = this._getErrorLine(oldError)
+                if (lineNumber) {
+                    this.codeMirror.removeLineClass(lineNumber - 1, 'text', 'errorMarker')
+                }
+            }
+
+            if (error) {
+                let lineNumber = this._getErrorLine(error)
+                if (lineNumber) {
+                    this.codeMirror.addLineClass(lineNumber - 1, 'text', 'errorMarker')
+                }
             }
         },
 

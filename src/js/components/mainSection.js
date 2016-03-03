@@ -1,4 +1,5 @@
 import editor from './editor'
+import nodeEditorStateLabels from './nodeEditorStateLabels'
 import functionsView from './functionsView'
 import { connect } from 'react-redux'
 import { formatCode, updateFileText } from '../store/fileStorage'
@@ -6,6 +7,7 @@ import { formatCode, updateFileText } from '../store/fileStorage'
 const MainSection = (React) => {
     const FunctionsView = functionsView(React)
     const Editor = editor(React)
+    const NodeEditorStateLabels = nodeEditorStateLabels(React)
 
     let selectState = ({fileStorage}) => {
         return {
@@ -24,17 +26,20 @@ const MainSection = (React) => {
             left: 0
         }
 
-        let styleRight = Object.assign({}, styleBase, {
-            left: width + 20
+        let styleLeft = Object.assign({}, styleBase, {
+            left: 8
         })
 
-        let styleLeft = Object.assign({}, styleBase, {
-            top: styleBase.top + 18
+        let styleRight = Object.assign({}, styleBase, {
+            left: width + 20 + styleLeft.left
         })
 
         let editorContainerStyle = {
-            border: '1px solid black',
             marginBottom: 10
+        }
+
+        const editorStyle = {
+            border: '1px solid black'
         }
 
         let editors = fileStorage.map((file) => {
@@ -50,7 +55,13 @@ const MainSection = (React) => {
                 }))
             }
             return <div key={ id } style={ editorContainerStyle }>
-                       <Editor text={ unformattedText } onTextChange={ onTextChange } />
+                       <div>path:
+                           { ' ' }
+                           { file.path }
+                           { ' ' }
+                           <NodeEditorStateLabels node={ file } />
+                       </div>
+                       <Editor editorStyle={ editorStyle } error={ file.syntaxError } text={ unformattedText } onTextChange={ onTextChange } />
                    </div>
         })
 

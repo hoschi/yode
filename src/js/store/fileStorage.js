@@ -8,6 +8,10 @@ import R from 'ramda'
 
 let id = 1
 
+function isEditorDirty (node) {
+    return node.text !== node.unformattedText
+}
+
 function addTextToNode (ast) {
     ast.text = escodegen.generate(ast)
 }
@@ -65,13 +69,17 @@ function parseCode (text) {
             sourceType: 'module',
             locations: true
         })
-    } /* eslint-disable */ catch ( e ) /* eslint-enable */ {
-        console.log(e)
+    } /* eslint-disable */ catch ( error ) /* eslint-enable */ {
+        console.log(error)
         stop()
-        return undefined
+        return {
+            error
+        }
     }
     stop()
-    return ast
+    return {
+        ast
+    }
 }
 
 function getFunctionsFromAst (ast, fileId, functionsToCompare) {
@@ -98,6 +106,9 @@ function getFunctionsFromAst (ast, fileId, functionsToCompare) {
                 // contains no other function.
                 addTextToNode(node)
 
+                // AST nodes can't have syntax error, only unformatted code can
+                node.syntaxError = undefined
+
                 if (!node.unformattedText) {
                     // set unformatted (starting) text to node in case this is first run
                     node.unformattedText = node.text
@@ -122,8 +133,9 @@ function getFunctionsFromAst (ast, fileId, functionsToCompare) {
                         let foundFunction = functionsToCompareLeft[foundFunctionIndex]
                         node.customId = foundFunction.customId
                         // restore dirty editor state if needed
-                        if (foundFunction.text !== foundFunction.unformattedText) {
+                        if (isEditorDirty(foundFunction)) {
                             node.unformattedText = foundFunction.unformattedText
+                            node.syntaxError = foundFunction.syntaxError
                         }
                         // remove function we found
                         functionsToCompareLeft.splice(foundFunctionIndex, 1)
@@ -165,14 +177,16 @@ function createNewStateWithFile (oldState, file) {
 function createFileFromText (path, text) {
     let file = {
         id: path,
+        syntaxError: undefined,
         path
     }
     // create formatted code
-    let ast = parseCode(text)
+    let {ast} = parseCode(text)
     if (ast) {
         file.text = escodegen.generate(ast)
         // refresh ast from formatted code
-        file.ast = parseCode(file.text)
+        let {ast: astFormatted} = parseCode(file.text)
+        file.ast = astFormatted
         file.functions = getFunctionsFromAst(file.ast, file.id)
     } else {
         file.text = text
@@ -269,7 +283,7 @@ let fileStorage = {
                 return f
             })
 
-            if (file.text !== file.unformattedText) {
+            if (isEditorDirty(file)) {
                 // generate formatted text
                 file.text = escodegen.generate(file.ast)
                 // set unformatted text to new text
@@ -281,15 +295,27 @@ let fileStorage = {
 
     [FUNCTION_TEXT_UPDATED]: (state, action) => {
         const {newText, oldFunction} = action
+        let newState, newFunction
 
         let stop = Profiler.start('--text update')
-        let ast = parseCode(newText)
-        if (!ast) {
-            stop()
+        let file = state.find(file => file.id === oldFunction.fileId)
+        let {error: syntaxError, ast} = parseCode(newText)
+        if (syntaxError) {
             // broken code, wait for working code
-            return state
+            file.functions = file.functions.map(f => {
+                if (f.customId === oldFunction.customId) {
+                    // set new state for editor
+                    f.syntaxError = syntaxError
+                    f.unformattedText = newText
+                }
+                return f
+            })
+            newState = createNewStateWithFile(state, file)
+            stop()
+            return newState
         }
-        let newFunction
+
+        oldFunction.syntaxError = undefined
         // ast parsing wraps text in other nodes, because it parses it standalone and out of context of original text
         estraverse.traverse(ast, {
             enter(node) {
@@ -311,7 +337,6 @@ let fileStorage = {
         // save old id, because it is still the same function
         newFunction.customId = oldFunction.customId
 
-        let file = state.find(file => file.id === oldFunction.fileId)
         // replace new ast in file
         file.ast = estraverse.replace(file.ast, {
             enter(node, parent) {
@@ -330,39 +355,43 @@ let fileStorage = {
         let fileText = escodegen.generate(file.ast)
 
         // update text if possible
-        if (file.text === file.unformattedText) {
+        if (!isEditorDirty(file)) {
             // in sync, update
             file.text = fileText
             file.unformattedText = fileText
         }
-        // TODO add ui to show unsynced state or solve problem of putting valid code in invalid file/outer function
 
         // get functions to compare, current changed one can be matched
         let functionsToCompare = file.functions.filter(f => newFunction.customId !== f.customId)
         // update functions and port props from already known functions
         file.functions = getFunctionsFromAst(file.ast, file.id, functionsToCompare)
 
-        let newState = createNewStateWithFile(state, file)
+        newState = createNewStateWithFile(state, file)
         stop()
         return newState
     },
 
     [FILE_TEXT_UPDATED]: (state, action) => {
         const {newText, file} = action
+        let newState
 
         let stop = Profiler.start('--file text update')
-        let ast = parseCode(newText)
-        if (!ast) {
-            stop()
+        let {error: syntaxError, ast} = parseCode(newText)
+        if (syntaxError) {
             // broken code, wait for working code
-            return state
+            file.syntaxError = syntaxError
+            file.unformattedText = newText
+            newState = createNewStateWithFile(state, file)
+            stop()
+            return newState
         }
+        file.syntaxError = undefined
         file.ast = ast
         // add unformatted text for editor
         file.unformattedText = newText
 
         file.functions = getFunctionsFromAst(file.ast, file.id, file.functions)
-        let newState = createNewStateWithFile(state, file)
+        newState = createNewStateWithFile(state, file)
         stop()
         return newState
     }
