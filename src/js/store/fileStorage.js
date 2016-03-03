@@ -100,11 +100,24 @@ function getFunctionsFromAst (ast, fileId, functionsToCompare) {
 
             // code generated from FunctionExpression are not parseable again, skip for now
             if (node.type === 'FunctionDeclaration' || node.type === 'ArrowFunctionExpression') {
-                // always regenerate text for node, because this node could
-                // contain a function which was changed. Could be skipped when
-                // `node.text` is already there and we can make sure this node
-                // contains no other function.
-                addTextToNode(node)
+                if (node.unformattedText === node.text) {
+                    // update both, because this can't disturb user input.
+                    // Editor text and generated text are in sync. This is
+                    // important when node.text changed from outside. E.g. when
+                    // changing an inner function of this function node. In
+                    // this case the generated text is not the text which is in
+                    // the editor, because the ast changed, not the editor.
+                    //
+                    // TODO this can be removed when we track function containment, then we can replace the changed function AST in all containers not only file AST
+                    addTextToNode(node)
+                    node.unformattedText = node.text
+                } else {
+                    // always regenerate text for node, because this node could
+                    // contain a function which was changed. Could be skipped when
+                    // `node.text` is already there and we can make sure this node
+                    // contains no other function.
+                    addTextToNode(node)
+                }
 
                 // AST nodes can't have syntax error, only unformatted code can
                 node.syntaxError = undefined
