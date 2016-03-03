@@ -1,6 +1,6 @@
 import editor from './editor'
 import { connect } from 'react-redux'
-import { updateFunctionContent } from '../store/fileStorage'
+import { updateFunctionText } from '../store/fileStorage'
 
 const FunctionsView = (React) => {
     const Editor = editor(React)
@@ -17,14 +17,14 @@ const FunctionsView = (React) => {
             marginBottom: 4
         }
         let texts = functions.map(function (node, i) {
-            let onContentChange = ({value}) => {
+            let onTextChange = ({value}) => {
                 if (value === node.unformattedText) {
-                    // content was changed by setting reformatted text
+                    // text was changed by setting reformatted text
                     return
                 }
-                dispatch(updateFunctionContent({
+                dispatch(updateFunctionText({
                     oldFunction: node,
-                    newContent: value
+                    newText: value
                 }))
             }
             return <div key={ node.customId }>
@@ -32,7 +32,7 @@ const FunctionsView = (React) => {
                            { ' ' }
                            { node.customId }
                        </div>
-                       <Editor editorStyle={ editorStyle } content={ node.unformattedText } onContentChange={ onContentChange } />
+                       <Editor editorStyle={ editorStyle } text={ node.unformattedText } onTextChange={ onTextChange } />
                    </div>
         })
         return <div>

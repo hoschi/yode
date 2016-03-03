@@ -145,7 +145,7 @@ function getFunctionsFromAst (ast, fileId, functionsToCompare) {
         })
     }
 
-    // sort descending by content length
+    // sort descending by text length
     functions = functions.sort((a, b) => (a.end - a.start) - (b.end - b.start))
     stop()
     return functions
@@ -162,32 +162,32 @@ function createNewStateWithFile (oldState, file) {
     })
 }
 
-function createFileFromContent (path, content) {
+function createFileFromText (path, text) {
     let file = {
         id: path,
         path
     }
     // create formatted code
-    let ast = parseCode(content)
+    let ast = parseCode(text)
     if (ast) {
-        file.content = escodegen.generate(ast)
+        file.text = escodegen.generate(ast)
         // refresh ast from formatted code
-        file.ast = parseCode(file.content)
+        file.ast = parseCode(file.text)
         file.functions = getFunctionsFromAst(file.ast, file.id)
     } else {
-        file.content = content
+        file.text = text
         file.functions = []
     }
 
-    file.unformattedContent = file.content
+    file.unformattedText = file.text
 
     return file
 }
 
 const initialState = [
-    createFileFromContent('foo/b.js', 'export default function test (pA, pB) { return pA+pB } '),
+    createFileFromText('foo/b.js', 'export default function test (pA, pB) { return pA+pB } '),
 
-    createFileFromContent('foo/a.js', `
+    createFileFromText('foo/a.js', `
 import editor from './editor'
 import functionsView from './functionsView'
 import { connect } from 'react-redux'
@@ -215,7 +215,7 @@ const MainSection = (React) => {
     }
 
     return connect(selectState)(({fileStorage}) => {
-        let fileContent = fileStorage[0].content
+        let fileText = fileStorage[0].text
         let ast = fileStorage[0].ast
         let width = 500
         let height = 500
@@ -239,17 +239,17 @@ export default MainSection
 
 ]
 
-export const FUNCTION_CONTENT_UPDATED = 'FUNCTION_CONTENT_UPDATED '
-export const updateFunctionContent = (params) => {
+export const FUNCTION_TEXT_UPDATED = 'FUNCTION_TEXT_UPDATED '
+export const updateFunctionText = (params) => {
     return Object.assign({}, params, {
-        type: FUNCTION_CONTENT_UPDATED
+        type: FUNCTION_TEXT_UPDATED
     })
 }
 
-export const FILE_CONTENT_UPDATED = 'FILE_CONTENT_UPDATED '
-export const updateFileContent = (params) => {
+export const FILE_TEXT_UPDATED = 'FILE_TEXT_UPDATED '
+export const updateFileText = (params) => {
     return Object.assign({}, params, {
-        type: FILE_CONTENT_UPDATED
+        type: FILE_TEXT_UPDATED
     })
 }
 
@@ -269,28 +269,28 @@ let fileStorage = {
                 return f
             })
 
-            if (file.content !== file.unformattedText) {
+            if (file.text !== file.unformattedText) {
                 // generate formatted text
-                file.content = escodegen.generate(file.ast)
-                // set unformatted text to new content
-                file.unformattedContent = file.content
+                file.text = escodegen.generate(file.ast)
+                // set unformatted text to new text
+                file.unformattedText = file.text
             }
             return file
         })
     },
 
-    [FUNCTION_CONTENT_UPDATED]: (state, action) => {
-        const {newContent, oldFunction} = action
+    [FUNCTION_TEXT_UPDATED]: (state, action) => {
+        const {newText, oldFunction} = action
 
-        let stop = Profiler.start('--content update')
-        let ast = parseCode(newContent)
+        let stop = Profiler.start('--text update')
+        let ast = parseCode(newText)
         if (!ast) {
             stop()
             // broken code, wait for working code
             return state
         }
         let newFunction
-        // ast parsing wraps content in other nodes, because it parses it standalone and out of context of original text
+        // ast parsing wraps text in other nodes, because it parses it standalone and out of context of original text
         estraverse.traverse(ast, {
             enter(node) {
                 if (node.type === oldFunction.type) {
@@ -307,7 +307,7 @@ let fileStorage = {
         // add formatted text for function node comparision
         addTextToNode(newFunction)
         // add unformatted text for editor
-        newFunction.unformattedText = newContent
+        newFunction.unformattedText = newText
         // save old id, because it is still the same function
         newFunction.customId = oldFunction.customId
 
@@ -326,14 +326,14 @@ let fileStorage = {
             }
         })
 
-        // update file content with merged ast
-        let fileContent = escodegen.generate(file.ast)
+        // update file text with merged ast
+        let fileText = escodegen.generate(file.ast)
 
-        // update content if possible
-        if (file.content === file.unformattedContent) {
+        // update text if possible
+        if (file.text === file.unformattedText) {
             // in sync, update
-            file.content = fileContent
-            file.unformattedContent = fileContent
+            file.text = fileText
+            file.unformattedText = fileText
         }
         // TODO add ui to show unsynced state or solve problem of putting valid code in invalid file/outer function
 
@@ -347,11 +347,11 @@ let fileStorage = {
         return newState
     },
 
-    [FILE_CONTENT_UPDATED]: (state, action) => {
-        const {newContent, file} = action
+    [FILE_TEXT_UPDATED]: (state, action) => {
+        const {newText, file} = action
 
-        let stop = Profiler.start('--file content update')
-        let ast = parseCode(newContent)
+        let stop = Profiler.start('--file text update')
+        let ast = parseCode(newText)
         if (!ast) {
             stop()
             // broken code, wait for working code
@@ -359,7 +359,7 @@ let fileStorage = {
         }
         file.ast = ast
         // add unformatted text for editor
-        file.unformattedContent = newContent
+        file.unformattedText = newText
 
         file.functions = getFunctionsFromAst(file.ast, file.id, file.functions)
         let newState = createNewStateWithFile(state, file)

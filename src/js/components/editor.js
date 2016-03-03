@@ -13,7 +13,7 @@ const Editor = (React) => {
         componentDidMount() {
             this._CMHandlers = []
             let config = {
-                value: this.props.content,
+                value: this.props.text,
                 highlight: true,
                 readOnly: false,
                 mode: 'javascript',
@@ -25,10 +25,10 @@ const Editor = (React) => {
                 config
             )
 
-            if (this.props.onContentChange) {
+            if (this.props.onTextChange) {
                 this._bindCMHandler('changes', () => {
                     clearTimeout(this._updateTimer)
-                    this._updateTimer = setTimeout(this._onContentChange.bind(this), 50)
+                    this._updateTimer = setTimeout(this._onTextChange.bind(this), 50)
                 })
             }
             /*
@@ -46,9 +46,9 @@ const Editor = (React) => {
         },
 
         componentWillReceiveProps(nextProps) {
-            if (nextProps.content !== this.props.content) {
+            if (nextProps.text !== this.props.text) {
                 let cursor = this.codeMirror.getDoc().getCursor()
-                this.codeMirror.setValue(nextProps.content)
+                this.codeMirror.setValue(nextProps.text)
                 this.codeMirror.getDoc().setCursor(cursor)
             }
         },
@@ -65,9 +65,9 @@ const Editor = (React) => {
             }
         },
 
-        _onContentChange() {
+        _onTextChange() {
             let doc = this.codeMirror.getDoc()
-            this.props.onContentChange({
+            this.props.onTextChange({
                 value: doc.getValue(),
                 cursor: doc.indexFromPos(doc.getCursor())
             })
