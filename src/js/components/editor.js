@@ -28,7 +28,7 @@ const Editor = (React) => {
             if (this.props.onTextChange) {
                 this._bindCMHandler('changes', () => {
                     clearTimeout(this._updateTimer)
-                    this._updateTimer = setTimeout(this._onTextChange.bind(this), 50)
+                    this._updateTimer = setTimeout(this._onTextChange.bind(this), 1)
                 })
             }
         },
@@ -49,7 +49,13 @@ const Editor = (React) => {
         },
 
         _getErrorLine(error) {
-            return error.loc.line
+            if (error.loc && error.loc.line) {
+                return error.loc.line
+            } else if (error.lineNumber) {
+                return error.lineNumber;
+            }
+            console.warning('no error line');
+            return 0;
         },
 
         _setError(error) {

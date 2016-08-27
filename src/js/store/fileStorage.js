@@ -1,8 +1,7 @@
 import createReducer from './createReducer'
 import Profiler from '../Profiler'
-import parser from '../ast/parser'
+import {parse, print} from '../ast/parser-recast';
 import estraverse from '../../../lib/estraverse'
-import escodegen from 'escodegen'
 import * as difflib from 'difflib'
 import R from 'ramda'
 
@@ -13,7 +12,7 @@ function isEditorDirty (node) {
 }
 
 function addTextToNode (ast) {
-    ast.text = escodegen.generate(ast)
+    ast.text = print(ast)
 }
 
 function getClosestMatchIndex (searchTerm, possibilities) {
@@ -61,14 +60,7 @@ function parseCode (text) {
     let stop = Profiler.start('code to ast')
     let ast
     try {
-        ast = parser.parse(text, {
-            // plugins: {
-            // jsx: true
-            // },
-            ecmaVersion: 6,
-            sourceType: 'module',
-            locations: true
-        })
+        ast = parse(text)
     } /* eslint-disable */ catch ( error ) /* eslint-enable */ {
         console.log(error)
         stop()
@@ -196,7 +188,7 @@ function createFileFromText (path, text) {
     // create formatted code
     let {ast} = parseCode(text)
     if (ast) {
-        file.text = escodegen.generate(ast)
+        file.text = print(ast)
         // refresh ast from formatted code
         let {ast: astFormatted} = parseCode(file.text)
         file.ast = astFormatted
@@ -298,7 +290,7 @@ let fileStorage = {
 
             if (isEditorDirty(file)) {
                 // generate formatted text
-                file.text = escodegen.generate(file.ast)
+                file.text = print(file.ast)
                 // set unformatted text to new text
                 file.unformattedText = file.text
             }
@@ -365,7 +357,7 @@ let fileStorage = {
         })
 
         // update file text with merged ast
-        let fileText = escodegen.generate(file.ast)
+        let fileText = print(file.ast)
 
         // update text if possible
         if (!isEditorDirty(file)) {
