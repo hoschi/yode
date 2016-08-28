@@ -391,6 +391,7 @@ let fileStorage = {
         }
         file.syntaxError = undefined
         file.ast = ast
+        file.text = print(ast);
         // add unformatted text for editor
         file.unformattedText = newText
 
