@@ -1,7 +1,6 @@
 import createReducer from './createReducer'
 import Profiler from '../Profiler'
-import {parse, print} from '../ast/parser-recast';
-import estraverse from '../../../lib/estraverse'
+import {parse, print, estraverse} from '../ast/parser-recast';
 import * as difflib from 'difflib'
 import R from 'ramda'
 

@@ -4,3 +4,5 @@ import * as acorn from 'acorn'
 
 // export default inject(acorn)
 export default acorn
+
+export {default as  estraverse } from '../../../lib/estraverse'
