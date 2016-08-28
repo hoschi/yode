@@ -19,7 +19,7 @@
     "eventsource-polyfill": "^0.9.6",
     "express": "^4.13.3",
     "style-loader": "^0.13.0",
-    "webpack": "^1.12.9",
+    "webpack": "^1.13.2",
     "webpack-dev-middleware": "^1.4.0",
     "webpack-hot-middleware": "^2.6.0"
   },
