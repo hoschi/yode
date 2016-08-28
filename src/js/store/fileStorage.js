@@ -84,11 +84,6 @@ function getFunctionsFromAst (ast, fileId, functionsToCompare) {
 
     estraverse.traverse(ast, {
         enter(node, parent) {
-            if (node.type === 'JSXElement') {
-                // unknown to estraverse
-                return estraverse.VisitorOption.Skip
-            }
-
             // code generated from FunctionExpression are not parseable again, skip for now
             if (node.type === 'FunctionDeclaration' || node.type === 'ArrowFunctionExpression') {
                 if (node.unformattedText === node.text) {
@@ -220,6 +215,9 @@ const MainSection = (React) => {
         }
     }
 
+    // some jsx stuff
+    let Foo = <MyComponent onEvent={e => 'target' + e.target} />;
+
     let assignedFunction = (a, b) => {
         if (a) {
             return 'a'
@@ -248,7 +246,11 @@ const MainSection = (React) => {
         let styleRight = Object.assign({}, styleBase, {
             left: width
         })
-        return 'no jsx because of escodegen'
+        return <Editor
+            styleRight={styleRight}
+            ast={ast}
+            text={fileText}
+        />
     })
 }
 
@@ -344,11 +346,6 @@ let fileStorage = {
         // replace new ast in file
         file.ast = estraverse.replace(file.ast, {
             enter(node, parent) {
-                if (node.type === 'JSXElement') {
-                    // unknown to estraverse
-                    return this.skip()
-                }
-
                 if (node.customId === newFunction.customId) {
                     return newFunction
                 }
