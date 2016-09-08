@@ -1,7 +1,7 @@
 import editor from './editor'
 import nodeEditorStateLabels from './nodeEditorStateLabels'
 import { connect } from 'react-redux'
-import { updateFunctionText } from '../store/fileStorage'
+import { updateFunctionText, cursorPositionInFunctionEditorChanged } from '../store/fileStorage'
 
 const FunctionsView = (React) => {
     const Editor = editor(React)
@@ -30,6 +30,10 @@ const FunctionsView = (React) => {
                     newText: value
                 }))
             }
+            let onActivity = (cursor) => dispatch(cursorPositionInFunctionEditorChanged({
+                cursor,
+                node
+            }))
 
             return <div key={ node.customId }>
                        <div>id:
@@ -38,7 +42,7 @@ const FunctionsView = (React) => {
                            { ' ' }
                            <NodeEditorStateLabels node={ node } />
                        </div>
-                       <Editor editorStyle={ editorStyle } error={ node.syntaxError } text={ node.unformattedText } onTextChange={ onTextChange } />
+                       <Editor editorStyle={ editorStyle } error={ node.syntaxError } text={ node.unformattedText } onTextChange={ onTextChange } onActivity={onActivity} />
                    </div>
         })
         return <div>

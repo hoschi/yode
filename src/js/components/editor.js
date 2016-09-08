@@ -29,6 +29,13 @@ const Editor = (React) => {
                     this._updateTimer = setTimeout(this._onTextChange, 100)
                 })
             }
+
+            if (this.props.onActivity) {
+                this._bindCMHandler('cursorActivity', () => {
+                    clearTimeout(this._updateTimer);
+                    this._updateTimer = setTimeout(this._onActivity, 100);
+                });
+            }
         },
 
         componentWillUnmount() {
@@ -94,6 +101,15 @@ const Editor = (React) => {
             this.props.onTextChange({
                 value: doc.getValue(),
                 cursor: doc.indexFromPos(doc.getCursor())
+            })
+        },
+
+        _onActivity() {
+            let doc = this.codeMirror.getDoc()
+                let cursor = doc.getCursor();
+            this.props.onActivity({
+                line: cursor.line,
+                column: cursor.ch
             })
         },
 

@@ -2,7 +2,7 @@ import editor from './editor'
 import nodeEditorStateLabels from './nodeEditorStateLabels'
 import functionsView from './functionsView'
 import { connect } from 'react-redux'
-import { formatCode, updateFileText } from '../store/fileStorage'
+import { formatCode, updateFileText, cursorPositionInFileEditorChanged } from '../store/fileStorage'
 
 const MainSection = (React) => {
     const FunctionsView = functionsView(React)
@@ -54,6 +54,10 @@ const MainSection = (React) => {
                     newText: value
                 }))
             }
+            let onActivity = (cursor) => dispatch(cursorPositionInFileEditorChanged({
+                cursor,
+                fileId: file.id
+            }))
             return <div key={ id } style={ editorContainerStyle }>
                        <div>path:
                            { ' ' }
@@ -61,7 +65,8 @@ const MainSection = (React) => {
                            { ' ' }
                            <NodeEditorStateLabels node={ file } />
                        </div>
-                       <Editor editorStyle={ editorStyle } error={ file.syntaxError } text={ unformattedText } onTextChange={ onTextChange } />
+                       <Editor editorStyle={ editorStyle } error={ file.syntaxError } text={ unformattedText } onTextChange={ onTextChange } onActivity={ onActivity }
+                       />
                    </div>
         })
 

@@ -61,7 +61,10 @@ function getClosestMatchIndex (searchTerm, possibilities) {
     })
 
     if (results.length <= 0) {
-        console.debug('--- no match found', { searchTerm, possibilities })
+        console.debug('--- no match found', {
+            searchTerm,
+            possibilities
+        })
         // nothing found
         return -1
     }
@@ -69,7 +72,11 @@ function getClosestMatchIndex (searchTerm, possibilities) {
     // sortBy prop ascending and reverse to have descending sorted results by score
     let sorted = R.sortBy(R.prop('score'), results).reverse()
     let bestMatch = R.head(sorted)
-    console.debug('--- match found', { searchTerm, score: bestMatch.score, sorted })
+    console.debug('--- match found', {
+        searchTerm,
+        score: bestMatch.score,
+        sorted
+    })
     return bestMatch.index
 }
 
@@ -292,6 +299,24 @@ export const formatCode = () => {
     }
 }
 
+export const CURSOR_POSITION_IN_FILE_EDITOR_CHANGED = 'CURSOR_POSITION_IN_FILE_EDITOR_CHANGED '
+export const cursorPositionInFileEditorChanged = ({cursor, fileId}) => {
+    return {
+        type: CURSOR_POSITION_IN_FILE_EDITOR_CHANGED,
+        cursor,
+        fileId
+    }
+}
+
+export const CURSOR_POSITION_IN_FUNCTION_EDITOR_CHANGED = 'CURSOR_POSITION_IN_FUNCTION_EDITOR_CHANGED '
+export const cursorPositionInFunctionEditorChanged = ({cursor, node}) => {
+    return {
+        type: CURSOR_POSITION_IN_FUNCTION_EDITOR_CHANGED,
+        cursor,
+        node
+    }
+}
+
 let fileStorage = {
     [FORMAT_CODE]: (state) => {
         return state.map(file => {
@@ -313,7 +338,8 @@ let fileStorage = {
 
     [FUNCTION_TEXT_UPDATED]: (state, action) => {
         const {newText, oldFunction} = action
-        let newState, newFunction
+        let newState,
+            newFunction
 
         let stop = Profiler.start('- text update')
         let file = state.find(file => file.id === oldFunction.fileId)
@@ -409,7 +435,36 @@ let fileStorage = {
         newState = createNewStateWithFile(state, file)
         stop()
         return newState
+    },
+
+    [CURSOR_POSITION_IN_FILE_EDITOR_CHANGED]: (state, action) => {
+        const {cursor, fileId} = action;
+        let file = getFileById(state, fileId);
+        /*
+         *let innerMostFunction = file.functions.reduce(findInnerMostFunction(cursor), {
+         *    distance: {
+         *        toStart: {
+         *            line: Number.POSITIVE_INFINITY,
+         *            column: Number.POSITIVE_INFINITY
+         *        },
+         *        toEnd: {
+         *            line: Number.POSITIVE_INFINITY,
+         *            column: Number.POSITIVE_INFINITY
+         *        }
+         *    },
+         *    func: null
+         *})
+         */
+
+        return state;
     }
 }
+
+let getFileById = (files, id) => R.find(R.propEq('id', id), files);
+
+/*
+ *let findInnerMostFunction = R.curry((targetPos, prevBest, candidateFunction) => {
+ *})
+ */
 
 export default createReducer(initialState, fileStorage)
