@@ -117,9 +117,11 @@ function getFunctionsFromAst (ast, fileId, functionsToCompare) {
                     node.unformattedText = node.text
                 } else {
                     // always regenerate text for node, because this node could
-                    // contain a function which was changed. Could be skipped when
-                    // `node.text` is already there and we can make sure this node
-                    // contains no other function.
+                    // contain a function which was changed.
+                    //
+                    // TODO Could be skipped when `node.text` is already there
+                    // and we can make sure this node contains no other
+                    // function.
                     addTextToNode(node)
                 }
 
@@ -334,6 +336,7 @@ let fileStorage = {
         oldFunction.syntaxError = undefined
         // ast parsing wraps text in other nodes, because it parses it standalone and out of context of original text
         estraverse.traverse(ast, {
+            // search for node with same type as old function and save that one instead
             enter(node) {
                 if (node.type === oldFunction.type) {
                     newFunction = node
@@ -353,7 +356,7 @@ let fileStorage = {
         // save old id, because it is still the same function
         newFunction.customId = oldFunction.customId
 
-        // replace new ast in file
+        // replace ast of old function, with ast generated from newText, in file ast
         file.ast = estraverse.replace(file.ast, {
             enter(node, parent) {
                 if (node.customId === newFunction.customId) {
@@ -372,7 +375,7 @@ let fileStorage = {
             file.unformattedText = fileText
         }
 
-        // get functions to compare, current changed one can be matched
+        // get functions to compare, current changed one can't be matched
         let functionsToCompare = file.functions.filter(f => newFunction.customId !== f.customId)
         // update functions and port props from already known functions
         file.functions = getFunctionsFromAst(file.ast, file.id, functionsToCompare)
