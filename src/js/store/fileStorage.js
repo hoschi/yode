@@ -1,8 +1,26 @@
 import createReducer from './createReducer'
 import Profiler from '../Profiler'
-import {parse, print, estraverse} from '../ast/parser-recast';
+//import parser from '../ast/parser-recast';
+//import parser from '../ast/parser-recast';
+//import parser from '../ast/parser-recast-jsx';
+import parser from '../ast/parser-acorn';
+//import parser from '../ast/parser-acorn-jsx';
 import * as difflib from 'difflib'
 import R from 'ramda'
+
+let {estraverse} = parser;
+function parse (...args) {
+    //let stop = Profiler.start('parse', true);
+    let r = parser.parse.apply(parser, args);
+    //stop();
+    return r;
+}
+function print (...args) {
+    //let stop = Profiler.start('--- print', true);
+    let r = parser.print.apply(parser, args);
+    //stop();
+    return r;
+}
 
 let id = 1
 
@@ -43,7 +61,7 @@ function getClosestMatchIndex (searchTerm, possibilities) {
     })
 
     if (results.length <= 0) {
-        console.log('no match found', searchTerm, possibilities)
+        console.debug('--- no match found', { searchTerm, possibilities })
         // nothing found
         return -1
     }
@@ -51,12 +69,12 @@ function getClosestMatchIndex (searchTerm, possibilities) {
     // sortBy prop ascending and reverse to have descending sorted results by score
     let sorted = R.sortBy(R.prop('score'), results).reverse()
     let bestMatch = R.head(sorted)
-    console.log('match found', searchTerm, bestMatch.score, sorted)
+    console.debug('--- match found', { searchTerm, score: bestMatch.score, sorted })
     return bestMatch.index
 }
 
 function parseCode (text) {
-    let stop = Profiler.start('code to ast')
+    let stop = Profiler.start('-- code to ast')
     let ast
     try {
         ast = parse(text)
@@ -74,7 +92,7 @@ function parseCode (text) {
 }
 
 function getFunctionsFromAst (ast, fileId, functionsToCompare) {
-    let stop = Profiler.start('ast to functions')
+    let stop = Profiler.start('-- ast to functions')
     let functions = []
     let functionsToCompareLeft
 
@@ -215,9 +233,6 @@ const MainSection = (React) => {
         }
     }
 
-    // some jsx stuff
-    let Foo = <MyComponent onEvent={e => 'target' + e.target} />;
-
     let assignedFunction = (a, b) => {
         if (a) {
             return 'a'
@@ -246,11 +261,6 @@ const MainSection = (React) => {
         let styleRight = Object.assign({}, styleBase, {
             left: width
         })
-        return <Editor
-            styleRight={styleRight}
-            ast={ast}
-            text={fileText}
-        />
     })
 }
 
@@ -303,7 +313,7 @@ let fileStorage = {
         const {newText, oldFunction} = action
         let newState, newFunction
 
-        let stop = Profiler.start('--text update')
+        let stop = Profiler.start('- text update')
         let file = state.find(file => file.id === oldFunction.fileId)
         let {error: syntaxError, ast} = parseCode(newText)
         if (syntaxError) {
@@ -376,7 +386,7 @@ let fileStorage = {
         const {newText, file} = action
         let newState
 
-        let stop = Profiler.start('--file text update')
+        let stop = Profiler.start('- file text update')
         let {error: syntaxError, ast} = parseCode(newText)
         if (syntaxError) {
             // broken code, wait for working code
