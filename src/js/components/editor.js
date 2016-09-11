@@ -2,10 +2,8 @@ require('codemirror/mode/javascript/javascript')
 require('codemirror/lib/codemirror.css')
 import CodeMirror from 'codemirror'
 
-import reactStamp from 'react-stamp'
-
 const Editor = (React) => {
-    return reactStamp(React).compose({
+    return React.createClass({
         shouldComponentUpdate() {
             return false
         },
@@ -28,7 +26,7 @@ const Editor = (React) => {
             if (this.props.onTextChange) {
                 this._bindCMHandler('changes', () => {
                     clearTimeout(this._updateTimer)
-                    this._updateTimer = setTimeout(this._onTextChange.bind(this), 100)
+                    this._updateTimer = setTimeout(this._onTextChange, 100)
                 })
             }
         },
