@@ -19,19 +19,31 @@ export const cursorPositionInFunctionEditorChanged = ({cursor, node}) => {
     }
 }
 
+export const CLOSE_FUNCTION_EDITOR = 'CLOSE_FUNCTION_EDITOR '
+export const closeFunctionEditor = ({id}) => {
+    return {
+        type: CLOSE_FUNCTION_EDITOR,
+        id
+    }
+}
+
 let setProp = R.curry((prop, value, obj) => R.set(R.lensProp(prop), value, obj));
 
 let actionObject = {
     [CURSOR_POSITION_IN_FILE_EDITOR_CHANGED]: setProp('focusedFunctionEditor', undefined),
     [CURSOR_POSITION_IN_FUNCTION_EDITOR_CHANGED]: (state, action) => {
         const {node} = action
-        return setProp('focusedFunctionEditor',node.customId, state)
+        return setProp('focusedFunctionEditor', node.customId, state)
+    },
+    [CLOSE_FUNCTION_EDITOR]: (state, action) => {
+        const {id} = action;
+        return setProp('functionEditorIds', R.filter((openFnId) => openFnId !== id, state.functionEditorIds), state);
     }
 }
 
 let initialState = {
     focusedFunctionEditor: undefined,
-    functionEditorIds:[3],
+    functionEditorIds: [3, 2],
     fileStorage: fileStorage()
 }
 

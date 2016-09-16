@@ -3,7 +3,21 @@ import editor from './editor'
 import nodeEditorStateLabels from './nodeEditorStateLabels'
 import { connect } from 'react-redux'
 import { updateFunctionText } from '../store/fileStorage'
-import { cursorPositionInFunctionEditorChanged } from '../store/editorReducer'
+import { cursorPositionInFunctionEditorChanged, closeFunctionEditor } from '../store/editorReducer'
+
+let headerContainerStyle = {
+    display: 'flex'
+}
+
+let textAndLabelContainerStyle = {
+    flexGrow: 2
+}
+
+let closeButtonStyle = {
+    flexGrow: 0,
+    flexShrink: 0,
+    flexBasis: 1
+}
 
 const FunctionsView = (React) => {
     const Editor = editor(React)
@@ -39,15 +53,25 @@ const FunctionsView = (React) => {
                 cursor,
                 node
             }))
+            let onClose = () => {
+                dispatch(closeFunctionEditor({
+                    id: node.customId
+                }))
+            }
 
             return <div key={ node.customId }>
-                       <div>id:
-                           { ' ' }
-                           { node.customId }
-                           { ' ' }
-                           <NodeEditorStateLabels node={ node } />
+                       <div style={ headerContainerStyle }>
+                           <div style={ textAndLabelContainerStyle }>
+                               id:
+                               { ' ' }
+                               { node.customId }
+                               { ' ' }
+                               <NodeEditorStateLabels node={ node } />
+                           </div>
+                           <div style={ closeButtonStyle } onClick={ onClose }>X</div>
                        </div>
-                       <Editor editorStyle={ editorStyle } error={ node.syntaxError } text={ node.unformattedText } onTextChange={ onTextChange } onActivity={onActivity} />
+                       <Editor editorStyle={ editorStyle } error={ node.syntaxError } text={ node.unformattedText } onTextChange={ onTextChange } onActivity={ onActivity }
+                       />
                    </div>
         })
         return <div>
