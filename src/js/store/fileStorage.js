@@ -127,7 +127,7 @@ function getFunctionsFromAst (ast, fileId, functionsToCompare) {
         node.parentFunction = parentFunc;
     }
 
-    let leaveFunctionNode = (node) => {
+    let leaveFunctionNode = () => {
         currentFunc = parentFunc;
         if (currentFunc) {
             parentFunc = currentFunc.parentFunction;
