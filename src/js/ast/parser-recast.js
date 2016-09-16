@@ -22,5 +22,3 @@ let parser = {
 }
 
 export default parser;
-
-

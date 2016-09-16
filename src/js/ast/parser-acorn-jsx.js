@@ -9,9 +9,9 @@ let parser = {
     estraverse,
     parse(text) {
         return acorn.parse(text, {
-             plugins: {
-             jsx: true
-             },
+            plugins: {
+                jsx: true
+            },
             ecmaVersion: 6,
             sourceType: 'module',
             locations: true
@@ -24,4 +24,3 @@ let parser = {
 }
 
 export default parser;
-

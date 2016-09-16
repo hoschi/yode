@@ -9,9 +9,9 @@ let acorn = inject(acornBase)
 let acornParser = {
     parse(text, options) {
         let baseOptions = {
-             plugins: {
-                 jsx: true
-             }
+            plugins: {
+                jsx: true
+            }
         };
         let mergedOptions = Object.assign({}, options, baseOptions);
         return acorn.parse(text, mergedOptions);
