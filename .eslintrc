@@ -1,12 +1,27 @@
 {
-	"parser": "babel-eslint",
-	"extends": [
-		"standard",
-		"standard-react"
-	],
+    "parserOptions": {
+        "ecmaVersion": 6,
+        "sourceType": "module",
+        "ecmaFeatures": {
+            "jsx": true,
+            "experimentalObjectRestSpread": true
+        }
+    },
+    "env": {
+        "node": true,
+        "browser": true
+    },
+    "plugins": [
+        "react"
+    ],
+    "extends": [
+        "eslint:recommended",
+        "plugin:react/recommended"
+    ],
 	"rules":{
-		"indent": [1, 4, {"SwitchCase": 1}],
 		"space-before-function-paren":0,
+        "no-console": 0,
+        "indent": "off",
         "react/prop-types":0
 	}
 }

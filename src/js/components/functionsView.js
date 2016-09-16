@@ -19,7 +19,7 @@ const FunctionsView = (React) => {
             border: '2px solid steelblue',
             marginBottom: 4
         }
-        let texts = functions.map(function (node, i) {
+        let texts = functions.map(function (node) {
             const onTextChange = ({value}) => {
                 if (value === node.unformattedText) {
                     // text was changed by setting reformatted text

@@ -101,7 +101,7 @@ function getFunctionsFromAst (ast, fileId, functionsToCompare) {
     }
 
     estraverse.traverse(ast, {
-        enter(node, parent) {
+        enter(node) {
             // code generated from FunctionExpression are not parseable again, skip for now
             if (node.type === 'FunctionDeclaration' || node.type === 'ArrowFunctionExpression') {
                 if (node.unformattedText === node.text) {
@@ -358,7 +358,7 @@ let fileStorage = {
 
         // replace ast of old function, with ast generated from newText, in file ast
         file.ast = estraverse.replace(file.ast, {
-            enter(node, parent) {
+            enter(node) {
                 if (node.customId === newFunction.customId) {
                     return newFunction
                 }
