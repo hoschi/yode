@@ -30,10 +30,19 @@ export const closeFunctionEditor = ({id}) => {
 let setProp = R.curry((prop, value, obj) => R.set(R.lensProp(prop), value, obj));
 
 let actionObject = {
-    [CURSOR_POSITION_IN_FILE_EDITOR_CHANGED]: setProp('focusedFunctionEditor', undefined),
+    [CURSOR_POSITION_IN_FILE_EDITOR_CHANGED]: (state, action) => {
+        const {cursor} = action
+        return R.pipe(
+            setProp('focusedFunctionEditor', undefined),
+            setProp('cursor', cursor)
+        )(state)
+    },
     [CURSOR_POSITION_IN_FUNCTION_EDITOR_CHANGED]: (state, action) => {
-        const {node} = action
-        return setProp('focusedFunctionEditor', node.customId, state)
+        const {node, cursor} = action
+        return R.pipe(
+            setProp('focusedFunctionEditor', node.customId),
+            setProp('cursor', cursor)
+        )(state)
     },
     [CLOSE_FUNCTION_EDITOR]: (state, action) => {
         const {id} = action;
@@ -44,6 +53,7 @@ let actionObject = {
 let initialState = {
     focusedFunctionEditor: undefined,
     functionEditorIds: [3, 2],
+    cursor: undefined,
     fileStorage: fileStorage()
 }
 
