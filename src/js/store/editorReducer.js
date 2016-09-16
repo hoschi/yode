@@ -31,6 +31,7 @@ let actionObject = {
 
 let initialState = {
     focusedFunctionEditor: undefined,
+    functionEditorIds:[3],
     fileStorage: fileStorage()
 }
 

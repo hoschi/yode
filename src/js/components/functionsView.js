@@ -1,3 +1,4 @@
+import R from 'ramda';
 import editor from './editor'
 import nodeEditorStateLabels from './nodeEditorStateLabels'
 import { connect } from 'react-redux'
@@ -9,7 +10,10 @@ const FunctionsView = (React) => {
     const NodeEditorStateLabels = nodeEditorStateLabels(React)
 
     let selectState = (state) => {
-        let functions = state.editor.fileStorage[1].functions.concat(state.editor.fileStorage[0].functions)
+        let allFunctions = state.editor.fileStorage[1].functions.concat(state.editor.fileStorage[0].functions)
+        let openIds = state.editor.functionEditorIds;
+        let createIdMatcher = (id) => R.propEq('customId', id);
+        let functions = openIds.map(R.pipe(createIdMatcher, R.find(R.__, allFunctions)))
         return {
             functions
         }
