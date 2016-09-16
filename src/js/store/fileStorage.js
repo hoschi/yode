@@ -5,8 +5,7 @@ import parser from '../ast/parser-recast';
 //import parser from '../ast/parser-recast-jsx';
 //import parser from '../ast/parser-acorn';
 //import parser from '../ast/parser-acorn-jsx';
-import * as difflib from 'difflib'
-import R from 'ramda'
+import { getFunctionIndexByText } from '../ast/functionHelper';
 
 let {estraverse} = parser;
 function parse (...args) {
@@ -30,54 +29,6 @@ function isEditorDirty (node) {
 
 function addTextToNode (ast) {
     ast.text = print(ast)
-}
-
-function getClosestMatchIndex (searchTerm, possibilities) {
-    let matcher = new difflib.SequenceMatcher()
-    matcher.setSeq2(searchTerm)
-    let cutoff = 0.6
-    let results = []
-
-    // check identity match first, ratio compution takes time
-    let identityMatchIndex = possibilities.findIndex(text => text === searchTerm)
-    if (identityMatchIndex >= 0) {
-        return identityMatchIndex
-    }
-
-    // search for close match
-    possibilities.forEach(function (testText, i) {
-        matcher.setSeq1(testText)
-        if (matcher.realQuickRatio() >= cutoff &&
-            matcher.quickRatio() >= cutoff) {
-            let score = matcher.ratio()
-            if (score >= cutoff) {
-                results.push({
-                    text: testText,
-                    index: i,
-                    score: score
-                })
-            }
-        }
-    })
-
-    if (results.length <= 0) {
-        console.debug('--- no match found', {
-            searchTerm,
-            possibilities
-        })
-        // nothing found
-        return -1
-    }
-
-    // sortBy prop ascending and reverse to have descending sorted results by score
-    let sorted = R.sortBy(R.prop('score'), results).reverse()
-    let bestMatch = R.head(sorted)
-    console.debug('--- match found', {
-        searchTerm,
-        score: bestMatch.score,
-        sorted
-    })
-    return bestMatch.index
 }
 
 function parseCode (text) {
@@ -110,7 +61,7 @@ function getFunctionsFromAst (ast, fileId, functionsToCompare) {
     let parentFunc;
     let currentFunc = {
         children: [],
-        isRoot:true
+        isRoot: true
     };
     let functionsTreeRoot = currentFunc;
 
@@ -183,7 +134,7 @@ function getFunctionsFromAst (ast, fileId, functionsToCompare) {
                     // check if we previously known that function already
                     let foundFunctionIndex
                     if (functionsToCompareLeft) {
-                        foundFunctionIndex = getClosestMatchIndex(node.text, functionsToCompareLeft.map(f => f.text))
+                        foundFunctionIndex = getFunctionIndexByText(node.text, functionsToCompareLeft)
                     }
                     if (foundFunctionIndex >= 0) {
                         let foundFunction = functionsToCompareLeft[foundFunctionIndex]
@@ -218,8 +169,6 @@ function getFunctionsFromAst (ast, fileId, functionsToCompare) {
         })
     }
 
-    // sort descending by text length
-    functions = functions.sort((a, b) => (a.end - a.start) - (b.end - b.start))
     stop()
     return {
         functions,
@@ -252,14 +201,24 @@ function createFileFromText (path, text) {
         let {ast: astFormatted} = parseCode(file.text)
         file.ast = astFormatted
         let {functions, functionsTreeRoot} = getFunctionsFromAst(file.ast, file.id)
+        functions.forEach((node) => {
+            // create text for each function at start, because recast can't
+            // keep all formatting when parsing code snippets instead of code
+            // in file
+            node.text = print(node);
+            // and use this as editor text, so we don't start with "dirty" editors
+            node.unformattedText = node.text
+        });
         file.functions = functions;
         file.functionsTreeRoot = functionsTreeRoot
+        // set text in node
+        file.ast.text = file.ast.unformattedText = file.text;
     } else {
         file.text = text
         file.functions = []
         file.functionsTreeRoot = {
-            children:[],
-            isRoot:true
+            children: [],
+            isRoot: true
         }
     }
 
@@ -301,7 +260,7 @@ const MainSection = (React) => {
         }
     }
 
-    function functionWithName () {
+    function functionWithName() {
         return 'simple'
     }
 
@@ -435,6 +394,8 @@ let fileStorage = {
             // in sync, update
             file.text = fileText
             file.unformattedText = fileText
+            file.ast.text = fileText
+            file.ast.unformattedText = fileText
         }
 
         // get functions to compare, current changed one can't be matched
@@ -468,6 +429,8 @@ let fileStorage = {
         file.text = print(ast);
         // add unformatted text for editor
         file.unformattedText = newText
+        file.ast.text = newText
+        file.ast.unformattedText = newText
 
         let {functions, functionsTreeRoot} = getFunctionsFromAst(file.ast, file.id, file.functions)
         file.functions = functions;
@@ -475,7 +438,7 @@ let fileStorage = {
         newState = createNewStateWithFile(state, file)
         stop()
         return newState
-    },
+    }
 }
 
 export default createReducer(initialState, fileStorage)

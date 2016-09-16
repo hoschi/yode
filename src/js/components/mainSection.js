@@ -3,7 +3,11 @@ import nodeEditorStateLabels from './nodeEditorStateLabels'
 import functionsView from './functionsView'
 import { connect } from 'react-redux'
 import { formatCode, updateFileText } from '../store/fileStorage'
-import { cursorPositionInFileEditorChanged } from '../store/editorReducer'
+import { cursorPositionInFileEditorChanged, openFunctionEditorUnderCursor } from '../store/editorReducer'
+
+let globalButtonStyle = {
+    marginRight: '10px'
+}
 
 const MainSection = (React) => {
     const FunctionsView = functionsView(React)
@@ -12,7 +16,7 @@ const MainSection = (React) => {
 
     let selectState = (state) => {
         return {
-            fileStorage: state.editor.fileStorage,
+            fileStorage: state.editor.fileStorage
         }
     }
 
@@ -73,7 +77,8 @@ const MainSection = (React) => {
 
         return <div>
                    <div>
-                       <button onClick={ () => dispatch(formatCode()) }>format code</button>
+                       <button style={ globalButtonStyle } onClick={ () => dispatch(formatCode()) }>format code</button>
+                       <button style={ globalButtonStyle } onClick={ () => dispatch(openFunctionEditorUnderCursor()) }>open function editor for function under cursor</button>
                    </div>
                    <div style={ styleLeft }>
                        { editors }
