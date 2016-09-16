@@ -25,7 +25,11 @@ module.exports = {
                 loader: 'style-loader!css-loader'
             },
             {
-                loaders: ['babel'],
+                loader: 'babel',
+                query: {
+                    cacheDirectory: '.tmp-babel'
+                },
+                exclude: 'node_modules',
                 test: dir_js
             }
         ]
@@ -38,5 +42,7 @@ module.exports = {
         // Nice colored output
         colors: true
     },
-    devtool: 'cheap-module-eval-source-map'
+    // didn't create mappable version in chrome
+    //devtool: 'cheap-module-eval-source-map'
+    devtool: 'eval-source-map'
 }
