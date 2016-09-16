@@ -107,10 +107,40 @@ function getFunctionsFromAst (ast, fileId, functionsToCompare) {
         functionsToCompareLeft = [].concat(functionsToCompare)
     }
 
+    let parentFunc;
+    let currentFunc = {
+        children: [],
+        isRoot:true
+    };
+    let functionsTreeRoot = currentFunc;
+
+    let addNodeToParent = (node) => {
+        parentFunc = currentFunc;
+        if (parentFunc) {
+            if (parentFunc.children) {
+                parentFunc.children.push(node);
+            } else {
+                parentFunc.children = [node];
+            }
+        }
+        currentFunc = node;
+        node.parentFunction = parentFunc;
+    }
+
+    let leaveFunctionNode = (node) => {
+        currentFunc = parentFunc;
+        if (currentFunc) {
+            parentFunc = currentFunc.parentFunction;
+        } else {
+            parentFunc = undefined;
+        }
+    }
+
     estraverse.traverse(ast, {
         enter(node) {
             // code generated from FunctionExpression are not parseable again, skip for now
             if (node.type === 'FunctionDeclaration' || node.type === 'ArrowFunctionExpression') {
+                addNodeToParent(node);
                 if (node.unformattedText === node.text) {
                     // update both, because this can't disturb user input.
                     // Editor text and generated text are in sync. This is
@@ -172,6 +202,11 @@ function getFunctionsFromAst (ast, fileId, functionsToCompare) {
                 node.fileId = fileId
                 functions.push(node)
             }
+        },
+        leave(node) {
+            if (node.type === 'FunctionDeclaration' || node.type === 'ArrowFunctionExpression') {
+                leaveFunctionNode(node)
+            }
         }
     })
 
@@ -186,7 +221,10 @@ function getFunctionsFromAst (ast, fileId, functionsToCompare) {
     // sort descending by text length
     functions = functions.sort((a, b) => (a.end - a.start) - (b.end - b.start))
     stop()
-    return functions
+    return {
+        functions,
+        functionsTreeRoot
+    }
 }
 
 function createNewStateWithFile (oldState, file) {
@@ -213,10 +251,16 @@ function createFileFromText (path, text) {
         // refresh ast from formatted code
         let {ast: astFormatted} = parseCode(file.text)
         file.ast = astFormatted
-        file.functions = getFunctionsFromAst(file.ast, file.id)
+        let {functions, functionsTreeRoot} = getFunctionsFromAst(file.ast, file.id)
+        file.functions = functions;
+        file.functionsTreeRoot = functionsTreeRoot
     } else {
         file.text = text
         file.functions = []
+        file.functionsTreeRoot = {
+            children:[],
+            isRoot:true
+        }
     }
 
     file.unformattedText = file.text
@@ -225,7 +269,12 @@ function createFileFromText (path, text) {
 }
 
 const initialState = [
-    createFileFromText('foo/b.js', 'export default function test (pA, pB) { return pA+pB } '),
+    createFileFromText('foo/b.js', `
+let test = (pA, pB) => {
+  return pA+pB
+}
+export default test
+`),
 
     createFileFromText('foo/a.js', `
 import editor from './editor'
@@ -237,6 +286,8 @@ const MainSection = (React) => {
     const Editor = editor(React)
 
     let selectState = ({fileStorage}) => {
+        let innerOne = () => 'inner one'
+        let innerTwo = () => 'inner two'
         return {
             fileStorage
         }
@@ -273,8 +324,11 @@ const MainSection = (React) => {
     })
 }
 
-export default MainSection
-`)
+const SecondSection = () => {
+  return 'cool jsx stuff here'
+}
+
+export default MainSection`)
 
 ]
 
@@ -296,24 +350,6 @@ export const FORMAT_CODE = 'FORMAT_CODE '
 export const formatCode = () => {
     return {
         type: FORMAT_CODE
-    }
-}
-
-export const CURSOR_POSITION_IN_FILE_EDITOR_CHANGED = 'CURSOR_POSITION_IN_FILE_EDITOR_CHANGED '
-export const cursorPositionInFileEditorChanged = ({cursor, fileId}) => {
-    return {
-        type: CURSOR_POSITION_IN_FILE_EDITOR_CHANGED,
-        cursor,
-        fileId
-    }
-}
-
-export const CURSOR_POSITION_IN_FUNCTION_EDITOR_CHANGED = 'CURSOR_POSITION_IN_FUNCTION_EDITOR_CHANGED '
-export const cursorPositionInFunctionEditorChanged = ({cursor, node}) => {
-    return {
-        type: CURSOR_POSITION_IN_FUNCTION_EDITOR_CHANGED,
-        cursor,
-        node
     }
 }
 
@@ -404,7 +440,9 @@ let fileStorage = {
         // get functions to compare, current changed one can't be matched
         let functionsToCompare = file.functions.filter(f => newFunction.customId !== f.customId)
         // update functions and port props from already known functions
-        file.functions = getFunctionsFromAst(file.ast, file.id, functionsToCompare)
+        let {functions, functionsTreeRoot} = getFunctionsFromAst(file.ast, file.id, functionsToCompare)
+        file.functions = functions;
+        file.functionsTreeRoot = functionsTreeRoot
 
         newState = createNewStateWithFile(state, file)
         stop()
@@ -431,40 +469,13 @@ let fileStorage = {
         // add unformatted text for editor
         file.unformattedText = newText
 
-        file.functions = getFunctionsFromAst(file.ast, file.id, file.functions)
+        let {functions, functionsTreeRoot} = getFunctionsFromAst(file.ast, file.id, file.functions)
+        file.functions = functions;
+        file.functionsTreeRoot = functionsTreeRoot
         newState = createNewStateWithFile(state, file)
         stop()
         return newState
     },
-
-    [CURSOR_POSITION_IN_FILE_EDITOR_CHANGED]: (state, action) => {
-        const {cursor, fileId} = action;
-        let file = getFileById(state, fileId);
-        /*
-         *let innerMostFunction = file.functions.reduce(findInnerMostFunction(cursor), {
-         *    distance: {
-         *        toStart: {
-         *            line: Number.POSITIVE_INFINITY,
-         *            column: Number.POSITIVE_INFINITY
-         *        },
-         *        toEnd: {
-         *            line: Number.POSITIVE_INFINITY,
-         *            column: Number.POSITIVE_INFINITY
-         *        }
-         *    },
-         *    func: null
-         *})
-         */
-
-        return state;
-    }
 }
-
-let getFileById = (files, id) => R.find(R.propEq('id', id), files);
-
-/*
- *let findInnerMostFunction = R.curry((targetPos, prevBest, candidateFunction) => {
- *})
- */
 
 export default createReducer(initialState, fileStorage)

@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux'
-import fileStorage from './fileStorage'
+import editor from './editorReducer'
 
 export default combineReducers({
-    fileStorage
+    editor
 })

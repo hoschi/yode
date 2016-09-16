@@ -12,7 +12,6 @@ const Editor = (React) => {
             this._CMHandlers = []
             let config = {
                 value: this.props.text,
-                highlight: true,
                 readOnly: false,
                 mode: 'javascript',
                 lineNumbers: true
@@ -106,11 +105,7 @@ const Editor = (React) => {
 
         _onActivity() {
             let doc = this.codeMirror.getDoc()
-                let cursor = doc.getCursor();
-            this.props.onActivity({
-                line: cursor.line,
-                column: cursor.ch
-            })
+            this.props.onActivity(doc.indexFromPos(doc.getCursor()))
         },
 
         render() {

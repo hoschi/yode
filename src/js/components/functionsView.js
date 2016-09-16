@@ -1,14 +1,15 @@
 import editor from './editor'
 import nodeEditorStateLabels from './nodeEditorStateLabels'
 import { connect } from 'react-redux'
-import { updateFunctionText, cursorPositionInFunctionEditorChanged } from '../store/fileStorage'
+import { updateFunctionText } from '../store/fileStorage'
+import { cursorPositionInFunctionEditorChanged } from '../store/editorReducer'
 
 const FunctionsView = (React) => {
     const Editor = editor(React)
     const NodeEditorStateLabels = nodeEditorStateLabels(React)
 
-    let selectState = ({fileStorage}) => {
-        let functions = fileStorage[1].functions.concat(fileStorage[0].functions)
+    let selectState = (state) => {
+        let functions = state.editor.fileStorage[1].functions.concat(state.editor.fileStorage[0].functions)
         return {
             functions
         }
