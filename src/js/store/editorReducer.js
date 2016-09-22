@@ -30,6 +30,14 @@ export const closeFunctionEditor = ({id}) => {
     }
 }
 
+export const SWAP_WITH_PARENT_FUNCTION = 'SWAP_WITH_PARENT_FUNCTION '
+export const swapWithParentFunction = ({id}) => {
+    return {
+        type: SWAP_WITH_PARENT_FUNCTION,
+        id
+    }
+}
+
 export const OPEN_FUNCTION_EDITOR_UNDER_CURSOR = 'OPEN_FUNCTION_EDITOR_UNDER_CURSOR '
 export const openFunctionEditorUnderCursor = () => {
     return {
@@ -39,20 +47,24 @@ export const openFunctionEditorUnderCursor = () => {
 
 let setProp = R.curry((prop, value, obj) => R.set(R.lensProp(prop), value, obj));
 
-function getFileAndNodeForFocusedEditor (state) {
-    if (state.focusedFunctionEditor !== undefined) {
-        for (let i = 0; i < state.fileStorage.length; i++) {
-            let file = state.fileStorage[i];
-            for (let j = 0; j < file.functions.length; j++) {
-                let func = file.functions[j];
-                if (func.customId === state.focusedFunctionEditor) {
-                    return {
-                        file,
-                        node: func
-                    }
+function getFileAndNodeForFunctionId (state, id) {
+    for (let i = 0; i < state.fileStorage.length; i++) {
+        let file = state.fileStorage[i];
+        for (let j = 0; j < file.functions.length; j++) {
+            let func = file.functions[j];
+            if (func.customId === id) {
+                return {
+                    file,
+                    node: func
                 }
             }
         }
+    }
+}
+
+function getFileAndNodeForFocusedEditor (state) {
+    if (state.focusedFunctionEditor !== undefined) {
+        return getFileAndNodeForFunctionId(state, state.focusedFunctionEditor)
     } else if (state.focusedFileEditor !== undefined) {
         for (let i = 0; i < state.fileStorage.length; i++) {
             let file = state.fileStorage[i];
@@ -124,6 +136,32 @@ let actionObject = {
                 return state
             },
             setProp('functionEditorIds', R.filter((openFnId) => openFnId !== id, state.functionEditorIds))
+        )(state);
+
+    },
+    [SWAP_WITH_PARENT_FUNCTION]: (state, action) => {
+        const {id} = action;
+        let {node} = getFileAndNodeForFunctionId(state, id);
+        if (!node.parentFunction || node.parentFunction.isRoot) {
+            // has no parent, or parent is the root. so, nothing to swap with
+            return state;
+        }
+        // remove parent, we insert it at another position later
+        let editorIdsWithoutParent = R.filter((openFnId) => openFnId !== node.parentFunction.customId, state.functionEditorIds)
+        // get current position from updated list
+        let currentPosition = editorIdsWithoutParent.indexOf(id)
+        // remove current editor
+        let editorIdsWithoutCurrentEditor = R.filter((openFnId) => openFnId !== id, editorIdsWithoutParent)
+        return R.pipe(
+            (state) => {
+                if (state.focusedFunctionEditor === id) {
+                    // closed editor was focused, reset
+                    return setProp('focusedFunctionEditor', undefined, state)
+                }
+                return state
+            },
+            // add parent editor at position of child editor
+            setProp('functionEditorIds', R.insert(currentPosition, node.parentFunction.customId, editorIdsWithoutCurrentEditor))
         )(state);
 
     },

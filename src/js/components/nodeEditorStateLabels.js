@@ -28,7 +28,7 @@ const NodeEditorStateLabels = (React) => {
         }
 
         return <span>
-                                  <span style={ dirtyLabelStyle }>unformatted</span>
+                                                 <span style={ dirtyLabelStyle }>unformatted</span>
                { ' ' }
                <span style={ errorLabelStyle }>unparsable</span>
                { ' ' }

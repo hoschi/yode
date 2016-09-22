@@ -176,6 +176,8 @@ function getFunctionsFromAst (ast, fileId, functionsToCompare) {
     }
 }
 
+export let getFileOfFunction = (files, functionId) => files.find(file => file.id === functionId)
+
 function createNewStateWithFile (oldState, file) {
     // update state identity, so change is triggered in redux
     return oldState.map(f => {
@@ -337,7 +339,7 @@ let fileStorage = {
             newFunction
 
         let stop = Profiler.start('- text update')
-        let file = state.find(file => file.id === oldFunction.fileId)
+        let file = getFileOfFunction(state, oldFunction.fileId)
         let {error: syntaxError, ast} = parseCode(newText)
         if (syntaxError) {
             // broken code, wait for working code

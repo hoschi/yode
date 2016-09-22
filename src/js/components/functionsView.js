@@ -3,7 +3,7 @@ import editor from './editor'
 import nodeEditorStateLabels from './nodeEditorStateLabels'
 import { connect } from 'react-redux'
 import { updateFunctionText } from '../store/fileStorage'
-import { cursorPositionInFunctionEditorChanged, closeFunctionEditor } from '../store/editorReducer'
+import { cursorPositionInFunctionEditorChanged, closeFunctionEditor, swapWithParentFunction } from '../store/editorReducer'
 
 let headerContainerStyle = {
     display: 'flex'
@@ -17,6 +17,13 @@ let closeButtonStyle = {
     flexGrow: 0,
     flexShrink: 0,
     flexBasis: 1
+}
+
+let swapWithParentButtonStyle = {
+    flexGrow: 0,
+    flexShrink: 0,
+    flexBasis: 1,
+    marginRight: 16
 }
 
 const FunctionsView = (React) => {
@@ -59,6 +66,12 @@ const FunctionsView = (React) => {
                 }))
             }
 
+            let onSwapWithParent = () => {
+                dispatch(swapWithParentFunction({
+                    id: node.customId
+                }))
+            }
+
             return <div key={ node.customId }>
                        <div style={ headerContainerStyle }>
                            <div style={ textAndLabelContainerStyle }>
@@ -68,6 +81,7 @@ const FunctionsView = (React) => {
                                { ' ' }
                                <NodeEditorStateLabels node={ node } />
                            </div>
+                           <div style={ swapWithParentButtonStyle } onClick={ onSwapWithParent }>up</div>
                            <div style={ closeButtonStyle } onClick={ onClose }>X</div>
                        </div>
                        <Editor editorStyle={ editorStyle } error={ node.syntaxError } text={ node.unformattedText } onTextChange={ onTextChange } onActivity={ onActivity }
