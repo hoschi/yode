@@ -45,6 +45,8 @@ export const openFunctionEditorUnderCursor = () => {
     }
 }
 
+export let selectNoEditorIsFocused = (state) => R.isNil(state.editor.focusedFunctionEditor) && R.isNil(state.editor.focusedFileEditor)
+
 let setProp = R.curry((prop, value, obj) => R.set(R.lensProp(prop), value, obj));
 
 function getFileAndNodeForFunctionId (state, id) {

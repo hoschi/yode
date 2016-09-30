@@ -5,6 +5,7 @@ var path = require('path')
 var webpack = require('webpack')
 
 var dir_js = path.resolve(__dirname, 'src/js')
+var dir_base = path.resolve(__dirname);
 var dir_build = path.resolve(__dirname, 'build')
 
 module.exports = {
@@ -38,6 +39,12 @@ module.exports = {
         new webpack.HotModuleReplacementPlugin(),
         new webpack.NoErrorsPlugin()
     ],
+    // make absolute import statements possible, also for local modules
+    resolve: {
+        extensions: ['', '.js'],
+        modulesDirectories: ['src/js/', 'node_modules'],
+        root: dir_base,
+    },
     stats: {
         // Nice colored output
         colors: true

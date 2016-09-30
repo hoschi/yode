@@ -1,4 +1,5 @@
 import createReducer from './createReducer'
+import R from 'ramda'
 import Profiler from '../Profiler'
 import parser from '../ast/parser-recast';
 //import parser from '../ast/parser-recast';
@@ -227,6 +228,15 @@ function createFileFromText (path, text) {
     file.unformattedText = file.text
 
     return file
+}
+
+export let selectFiles = (state) => state.editor.fileStorage
+export let selectFunctions = (state) => {
+    let allFunctions = R.chain(R.prop('functions'), state.editor.fileStorage);
+    let openIds = state.editor.functionEditorIds;
+    let createIdMatcher = (id) => R.propEq('customId', id);
+    let functions = openIds.map(R.pipe(createIdMatcher, R.find(R.__, allFunctions)))
+    return functions
 }
 
 const initialState = [
