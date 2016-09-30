@@ -27,7 +27,7 @@ const MainSection = (React) => {
             position: 'absolute',
             height: height,
             width: width,
-            top: 40,
+            top: 100,
             left: 0
         }
 
