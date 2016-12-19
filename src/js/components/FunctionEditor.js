@@ -2,7 +2,7 @@ import React from 'react'
 import IconButton from 'material-ui/IconButton';
 import IconClose from 'material-ui/svg-icons/navigation/close';
 import IconUp from 'material-ui/svg-icons/navigation/arrow-upward';
-import EditorCard, { subtleLabelStyle } from './EditorCard'
+import EditorPaper, { subtleLabelStyle } from './EditorPaper'
 import NodeEditorStateLabels from './NodeEditorStateLabels'
 
 const FunctionEditor = ({functionNode, onFunctionTextChange, onFunctionActivity, onClose, onSwapWithParent, style}) => {
@@ -55,7 +55,7 @@ const FunctionEditor = ({functionNode, onFunctionTextChange, onFunctionActivity,
                          <IconClose />
                      </IconButton>
                  </div>
-    return <EditorCard style={ style } header={ header } editorProps={ editorProps } />
+    return <EditorPaper style={ style } header={ header } editorProps={ editorProps } />
 }
 
 export default FunctionEditor

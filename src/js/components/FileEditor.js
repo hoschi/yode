@@ -1,5 +1,5 @@
 import React from 'react'
-import EditorCard, { subtleLabelStyle } from './EditorCard'
+import EditorPaper, { subtleLabelStyle } from './EditorPaper'
 import NodeEditorStateLabels from './NodeEditorStateLabels'
 
 const FileEditor = ({file, onFileTextChange, onFileActivity, style}) => {
@@ -32,7 +32,7 @@ const FileEditor = ({file, onFileTextChange, onFileActivity, style}) => {
                      { ' ' }
                      <NodeEditorStateLabels node={ file } />
                  </div>
-    return <EditorCard style={ style } header={ header } editorProps={ editorProps } />
+    return <EditorPaper style={ style } header={ header } editorProps={ editorProps } />
 }
 
 FileEditor.propTypes = {
