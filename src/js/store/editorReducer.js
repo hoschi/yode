@@ -45,6 +45,11 @@ export const openFunctionEditorUnderCursor = () => {
     }
 }
 
+export const LOST_EDITOR_FOCUS = 'LOST_EDITOR_FOCUS';
+export const lostEditorFocus = () => ({
+    type:LOST_EDITOR_FOCUS
+})
+
 export let selectNoEditorIsFocused = (state) => R.isNil(state.editor.focusedFunctionEditor) && R.isNil(state.editor.focusedFileEditor)
 
 let setProp = R.curry((prop, value, obj) => R.set(R.lensProp(prop), value, obj));
@@ -127,6 +132,10 @@ let actionObject = {
             setProp('cursor', cursor)
         )(state)
     },
+    [LOST_EDITOR_FOCUS]: R.pipe(
+        setProp('focusedFunctionEditor', undefined),
+        setProp('focusedFileEditor', undefined)
+    ),
     [CLOSE_FUNCTION_EDITOR]: (state, action) => {
         const {id} = action;
         return R.pipe(

@@ -36,6 +36,10 @@ const Editor = React.createClass({
                 this._updateTimer = setTimeout(this._onActivity, 100);
             });
         }
+
+        if (this.props.onBlur) {
+            this._bindCMHandler('blur', this.props.onBlur);
+        }
     },
 
     componentWillUnmount() {
