@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "description": "prototype for non file based editing",
   "scripts": {
-    "start": "node devServer.js"
+    "start": "node devServer.js",
+    "format": "jsfmt -w src/js && eslint --fix src/js"
   },
   "author": "Stefan Gojan",
   "license": "Copyright",
