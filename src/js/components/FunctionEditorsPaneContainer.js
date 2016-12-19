@@ -1,11 +1,12 @@
 import { connect } from 'react-redux'
 import FunctionEditorsPane from './FunctionEditorsPane'
 import { updateFunctionText, selectFunctions } from 'store/fileStorage'
-import { cursorPositionInFunctionEditorChanged, closeFunctionEditor, swapWithParentFunction } from 'store/editorReducer'
+import { cursorPositionInFunctionEditorChanged, closeFunctionEditor, swapWithParentFunction, selectFocusedFunctionEditor } from 'store/editorReducer'
 
 let mapStateToProps = (state) => {
     return {
-        functions: selectFunctions(state)
+        functions: selectFunctions(state),
+        focusedFunctionEditor: selectFocusedFunctionEditor(state)
     }
 }
 

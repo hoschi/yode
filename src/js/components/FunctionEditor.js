@@ -5,7 +5,7 @@ import IconUp from 'material-ui/svg-icons/navigation/arrow-upward';
 import EditorPaper, { subtleLabelStyle } from './EditorPaper'
 import NodeEditorStateLabels from './NodeEditorStateLabels'
 
-const FunctionEditor = ({functionNode, onFunctionTextChange, onFunctionActivity, onClose, onSwapWithParent, style}) => {
+const FunctionEditor = ({functionNode, onFunctionTextChange, onFunctionActivity, onClose, onSwapWithParent, isFocused, style}) => {
     const {syntaxError, unformattedText, customId} = functionNode;
     const onEditorTextChange = ({value}) => {
         if (value === unformattedText) {
@@ -55,7 +55,7 @@ const FunctionEditor = ({functionNode, onFunctionTextChange, onFunctionActivity,
                          <IconClose />
                      </IconButton>
                  </div>
-    return <EditorPaper style={ style } header={ header } editorProps={ editorProps } />
+    return <EditorPaper style={ style } header={ header } editorProps={ editorProps } isFocused={ isFocused } />
 }
 
 export default FunctionEditor

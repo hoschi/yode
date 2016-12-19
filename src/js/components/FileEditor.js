@@ -2,7 +2,7 @@ import React from 'react'
 import EditorPaper, { subtleLabelStyle } from './EditorPaper'
 import NodeEditorStateLabels from './NodeEditorStateLabels'
 
-const FileEditor = ({file, onFileTextChange, onFileActivity, style}) => {
+const FileEditor = ({file, onFileTextChange, onFileActivity, style, isFocused}) => {
     const {unformattedText, id, path, syntaxError} = file
 
     let onEditorTextChange = ({value}) => {
@@ -32,7 +32,7 @@ const FileEditor = ({file, onFileTextChange, onFileActivity, style}) => {
                      { ' ' }
                      <NodeEditorStateLabels node={ file } />
                  </div>
-    return <EditorPaper style={ style } header={ header } editorProps={ editorProps } />
+    return <EditorPaper style={ style } header={ header } editorProps={ editorProps } isFocused={ isFocused } />
 }
 
 FileEditor.propTypes = {

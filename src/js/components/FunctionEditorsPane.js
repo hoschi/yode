@@ -1,7 +1,8 @@
 import React from 'react';
 import FunctionEditor from './FunctionEditor'
+import R from 'ramda';
 
-const FunctionEditorsPane = ({functions, style, onFunctionTextChange, onFunctionActivity, onClose, onSwapWithParent}) => {
+const FunctionEditorsPane = ({functions, style, onFunctionTextChange, onFunctionActivity, onClose, onSwapWithParent, focusedFunctionEditor}) => {
     let items = functions.map((functionNode) => {
         let props = {
             style: editorStyle,
@@ -10,7 +11,8 @@ const FunctionEditorsPane = ({functions, style, onFunctionTextChange, onFunction
             onFunctionTextChange,
             onFunctionActivity,
             onClose,
-            onSwapWithParent
+            onSwapWithParent,
+            isFocused: R.equals(functionNode.customId, focusedFunctionEditor)
         }
         return <FunctionEditor {...props} />
     })

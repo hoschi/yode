@@ -13,6 +13,8 @@ Edit functions directly and save them back to their original place.
 
 * when the user clicks on the X icon of an editor
     * the editor closes
+* when the user clicks in an editor
+    * the editor gets a greater zDepth to lay above other editors
 
 ## "up" button, which swaps current (child )function editor with an editor of its parent function
 
