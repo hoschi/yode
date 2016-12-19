@@ -10,7 +10,6 @@ const Controls = ({onFormatClick, onOpenFunctionEditorUnderCursorClick, openFunc
     }
     let openFunctionEditorButtonProps = {
         label: 'open function editor',
-        primary: true,
         style: buttonStyle,
         onTouchTap: onOpenFunctionEditorUnderCursorClick,
         disabled: openFunctionEditorDisabled,
@@ -29,7 +28,7 @@ let buttonStyle = {
 }
 
 let containerStyle = {
-    paddingTop: 24,
-    // 24 gutter + space for tooltip
-    paddingBottom: 24
+    padding: 24,
+    // needed space for tooltip
+    paddingTop: 32
 }

@@ -1,11 +1,9 @@
 import React from 'react';
-import ControlsContainer from './ControlsContainer'
 import FileEditorsPaneContainer from './FileEditorsPaneContainer'
 import FunctionEditorsPaneContainer from './FunctionEditorsPaneContainer'
 
 const MainSection = () => {
     return <div style={ mainContainerStyle }>
-               <ControlsContainer />
                <div style={ paneContainerStyle }>
                    <FileEditorsPaneContainer style={ leftPaneStyle } />
                    <FunctionEditorsPaneContainer style={ rightPaneStyle } />
