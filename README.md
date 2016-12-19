@@ -39,8 +39,3 @@ Edit functions directly and save them back to their original place.
     * a function editor for this function gets created and placed on the top of function editors on the right side of the app
 * when a function editor should be created, but the function has already a visible editor
     * nothing happens
-
-## when editor lost its focus
-
-* "open function editor" should be disabled
-* editor should have same zDepth as all other editors

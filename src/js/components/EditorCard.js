@@ -1,7 +1,7 @@
 import React from 'react'
 import * as palette from 'material-ui/styles/colors';
 import Paper from 'material-ui/Paper';
-import EditorContainer from './EditorContainer'
+import Editor from './Editor'
 
 const EditorPaper = ({header, style, isFocused, editorProps}) => {
     let zDepth
@@ -15,7 +15,7 @@ const EditorPaper = ({header, style, isFocused, editorProps}) => {
                    { header }
                </div>
                <div style={ editorContainerStyle }>
-                   <EditorContainer {...editorProps} />
+                   <Editor {...editorProps} />
                </div>
            </Paper>
 }
