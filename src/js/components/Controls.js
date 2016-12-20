@@ -1,5 +1,6 @@
 import React from 'react'
 import RaisedButtonWithTooltip from './RaisedButtonWithTooltip'
+import OpenFileMenuContainer from './OpenFileMenuContainer'
 
 const Controls = ({onFormatClick, onOpenFunctionEditorUnderCursorClick, openFunctionEditorDisabled}) => {
     let formatButtonProps = {
@@ -17,6 +18,7 @@ const Controls = ({onFormatClick, onOpenFunctionEditorUnderCursorClick, openFunc
     }
     return <div style={ containerStyle }>
                <RaisedButtonWithTooltip {...openFunctionEditorButtonProps} />
+               <OpenFileMenuContainer />
                <RaisedButtonWithTooltip {...formatButtonProps} />
            </div>
 }

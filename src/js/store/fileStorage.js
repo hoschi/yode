@@ -234,11 +234,21 @@ let getFileById = R.curry((files, searchId) => (
 R.find(R.propEq('id', searchId), files)
 ))
 
-export let selectFiles = (state) => {
+export let selectOpenFiles = (state) => {
     let allFiles = state.editor.fileStorage
     let openIds = state.editor.fileEditorIds
     let files = openIds.map(getFileById(allFiles))
     return files
+}
+
+export let selectFilesWithOpenState = (state) => {
+    let files = state.editor.fileStorage
+    let openIds = state.editor.fileEditorIds
+    let isFileWithIdOpen = R.contains(R.__, openIds)
+    return R.map((file) => ({
+        isOpen: isFileWithIdOpen(file.id),
+        file
+    }), files)
 }
 
 let getFunctionById = R.curry((functions, searchId) => (

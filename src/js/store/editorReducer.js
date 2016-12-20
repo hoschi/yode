@@ -45,6 +45,14 @@ export const openFunctionEditorUnderCursor = () => {
     }
 }
 
+export const OPEN_FILE_EDITOR_BY_ID = 'OPEN_FILE_EDITOR_BY_ID'
+export const openFileEditorById = ({id}) => {
+    return {
+        type: OPEN_FILE_EDITOR_BY_ID,
+        id
+    }
+}
+
 export let selectNoEditorIsFocused = (state) => R.isNil(state.editor.focusedFunctionEditor) && R.isNil(state.editor.focusedFileEditor)
 export let selectFocusedFunctionEditor = R.path(['editor', 'focusedFunctionEditor'])
 export let selectFocusedFileEditor = R.path(['editor', 'focusedFileEditor'])
@@ -113,6 +121,15 @@ function getInnerMostFunctionNode (editorFunction, cursor) {
 
 let cursorIsInNode = (cursor, node) => cursor > node.start && cursor < node.end
 
+let initialState = {
+    focusedFunctionEditor: undefined,
+    focusedFileEditor: undefined,
+    functionEditorIds: [2],
+    fileEditorIds: ['foo/a.js'],
+    cursor: undefined,
+    fileStorage: fileStorage()
+}
+
 let actionObject = {
     [CURSOR_POSITION_IN_FILE_EDITOR_CHANGED]: (state, action) => {
         const {cursor, fileId} = action
@@ -143,6 +160,13 @@ let actionObject = {
             setProp('functionEditorIds', R.filter((openFnId) => openFnId !== id, state.functionEditorIds))
         )(state);
 
+    },
+    [OPEN_FILE_EDITOR_BY_ID]: (state, action) => {
+        const {id} = action;
+        return {
+            ...state,
+            fileEditorIds: R.prepend(id, state.fileEditorIds)
+        }
     },
     [SWAP_WITH_PARENT_FUNCTION]: (state, action) => {
         const {id} = action;
@@ -200,15 +224,6 @@ let actionObject = {
             return state;
         }
     }
-}
-
-let initialState = {
-    focusedFunctionEditor: undefined,
-    focusedFileEditor: undefined,
-    functionEditorIds: [2],
-    fileEditorIds: ['foo/a.js'],
-    cursor: undefined,
-    fileStorage: fileStorage()
 }
 
 let reducer = (state = initialState, action) => {
