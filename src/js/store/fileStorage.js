@@ -230,12 +230,25 @@ function createFileFromText (path, text) {
     return file
 }
 
-export let selectFiles = (state) => state.editor.fileStorage
+let getFileById = R.curry((files, searchId) => (
+R.find(R.propEq('id', searchId), files)
+))
+
+export let selectFiles = (state) => {
+    let allFiles = state.editor.fileStorage
+    let openIds = state.editor.fileEditorIds
+    let files = openIds.map(getFileById(allFiles))
+    return files
+}
+
+let getFunctionById = R.curry((functions, searchId) => (
+R.find(R.propEq('customId', searchId), functions)
+))
+
 export let selectFunctions = (state) => {
     let allFunctions = R.chain(R.prop('functions'), state.editor.fileStorage);
     let openIds = state.editor.functionEditorIds;
-    let createIdMatcher = (id) => R.propEq('customId', id);
-    let functions = openIds.map(R.pipe(createIdMatcher, R.find(R.__, allFunctions)))
+    let functions = openIds.map(getFunctionById(allFunctions))
     return functions
 }
 

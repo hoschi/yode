@@ -48,6 +48,7 @@ export const openFunctionEditorUnderCursor = () => {
 export let selectNoEditorIsFocused = (state) => R.isNil(state.editor.focusedFunctionEditor) && R.isNil(state.editor.focusedFileEditor)
 export let selectFocusedFunctionEditor = R.path(['editor', 'focusedFunctionEditor'])
 export let selectFocusedFileEditor = R.path(['editor', 'focusedFileEditor'])
+export let selectFileEditorIds = R.path(['editor', 'fileEditorIds'])
 
 let setProp = R.curry((prop, value, obj) => R.set(R.lensProp(prop), value, obj))
 
@@ -205,6 +206,7 @@ let initialState = {
     focusedFunctionEditor: undefined,
     focusedFileEditor: undefined,
     functionEditorIds: [2],
+    fileEditorIds: ['foo/a.js'],
     cursor: undefined,
     fileStorage: fileStorage()
 }
