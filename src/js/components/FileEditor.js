@@ -1,8 +1,8 @@
 import React from 'react'
-import EditorPaper, { subtleLabelStyle } from './EditorPaper'
-import NodeEditorStateLabels from './NodeEditorStateLabels'
+import EditorPaper from './EditorPaper'
+import EditorHeader, { closeIconConfig } from './EditorHeader'
 
-const FileEditor = ({file, onFileTextChange, onFileActivity, style, isFocused}) => {
+const FileEditor = ({file, onFileTextChange, onFileActivity, onClose, style, isFocused}) => {
     const {unformattedText, id, path, syntaxError} = file
 
     let onEditorTextChange = ({value}) => {
@@ -19,19 +19,29 @@ const FileEditor = ({file, onFileTextChange, onFileActivity, style, isFocused}) 
         cursor,
         fileId: id
     })
+    let onCloseClick = () => {
+        onClose({
+            id
+        })
+    }
     let editorProps = {
         error: syntaxError,
         text: unformattedText,
         onTextChange: onEditorTextChange,
         onActivity: onEditorActivity
     }
-    let header = <div>
-                     <span style={ subtleLabelStyle }>  path:  </span>
-                     { ' ' }
-                     { path }
-                     { ' ' }
-                     <NodeEditorStateLabels node={ file } />
-                 </div>
+    let headerProps = {
+        titlePrefix: 'path:',
+        title: path,
+        node: file,
+        iconConfigs: [
+            {
+                ...closeIconConfig,
+                onTouchTap: onCloseClick
+            }
+        ]
+    }
+    let header = <EditorHeader {...headerProps} />
     return <EditorPaper style={ style } header={ header } editorProps={ editorProps } isFocused={ isFocused } />
 }
 

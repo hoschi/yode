@@ -53,6 +53,14 @@ export const openFileEditorById = ({id}) => {
     }
 }
 
+export const CLOSE_FILE_EDITOR = 'CLOSE_FILE_EDITOR '
+export const closeFileEditor = ({id}) => {
+    return {
+        type: CLOSE_FILE_EDITOR,
+        id
+    }
+}
+
 export let selectNoEditorIsFocused = (state) => R.isNil(state.editor.focusedFunctionEditor) && R.isNil(state.editor.focusedFileEditor)
 export let selectFocusedFunctionEditor = R.path(['editor', 'focusedFunctionEditor'])
 export let selectFocusedFileEditor = R.path(['editor', 'focusedFileEditor'])
@@ -167,6 +175,20 @@ let actionObject = {
             ...state,
             fileEditorIds: R.prepend(id, state.fileEditorIds)
         }
+    },
+    [CLOSE_FILE_EDITOR]: (state, action) => {
+        const {id} = action;
+        return R.pipe(
+            (state) => {
+                if (state.focusedFileEditor === id) {
+                    // closed editor was focused, reset
+                    return setProp('focusedFileEditor', undefined, state)
+                }
+                return state
+            },
+            setProp('fileEditorIds', R.filter((openFileId) => openFileId !== id, state.fileEditorIds))
+        )(state);
+
     },
     [SWAP_WITH_PARENT_FUNCTION]: (state, action) => {
         const {id} = action;

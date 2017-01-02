@@ -32,7 +32,3 @@ let headerStyle = {
 let editorContainerStyle = {
     marginRight: 1
 }
-
-export let subtleLabelStyle = {
-    color: palette.grey700
-}
