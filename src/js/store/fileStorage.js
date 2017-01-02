@@ -197,7 +197,7 @@ function createFileFromText (path, text) {
         path
     }
     // create formatted code
-    let {ast} = parseCode(text)
+    let {error: syntaxError, ast} = parseCode(text)
     if (ast) {
         file.text = print(ast)
         // refresh ast from formatted code
@@ -223,6 +223,7 @@ function createFileFromText (path, text) {
             children: [],
             isRoot: true
         }
+        file.syntaxError = syntaxError
     }
 
     file.unformattedText = file.text
@@ -233,6 +234,8 @@ function createFileFromText (path, text) {
 let getFileById = R.curry((files, searchId) => (
 R.find(R.propEq('id', searchId), files)
 ))
+
+export let selectAllFiles = (state) => state.editor.fileStorage
 
 export let selectOpenFiles = (state) => {
     let allFiles = state.editor.fileStorage
@@ -347,6 +350,13 @@ export const formatCode = () => {
     }
 }
 
+export const ADD_FILE_TO_STORAGE = 'ADD_FILE_TO_STORAGE'
+export const addFileToStorage = (path, text) => ({
+    type: ADD_FILE_TO_STORAGE,
+    path,
+    text
+})
+
 let fileStorage = {
     [FORMAT_CODE]: (state) => {
         return state.map(file => {
@@ -364,6 +374,10 @@ let fileStorage = {
             }
             return file
         })
+    },
+
+    [ADD_FILE_TO_STORAGE]: (state, {path, text}) => {
+        return state.concat([createFileFromText(path, text)])
     },
 
     [FUNCTION_TEXT_UPDATED]: (state, action) => {
