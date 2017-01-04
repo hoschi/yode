@@ -1,13 +1,9 @@
 import React from 'react';
-import FileEditorsPaneContainer from './FileEditorsPaneContainer'
-import FunctionEditorsPaneContainer from './FunctionEditorsPaneContainer'
+import EditorSectionContainer from './EditorSectionContainer'
 
 const MainSection = () => {
     return <div style={ mainContainerStyle }>
-               <div style={ paneContainerStyle }>
-                   <FileEditorsPaneContainer style={ leftPaneStyle } />
-                   <FunctionEditorsPaneContainer style={ rightPaneStyle } />
-               </div>
+               <EditorSectionContainer/>
            </div>
 }
 
@@ -16,21 +12,3 @@ export default MainSection;
 let mainContainerStyle = {
     padding: 24
 }
-
-let paneContainerStyle = {
-    position: 'relative'
-}
-
-let paneBaseStyle = {
-    position: 'absolute',
-    height: 900,
-    width: 500,
-    top: 0,
-    left: 0
-}
-
-let leftPaneStyle = Object.assign({}, paneBaseStyle)
-
-let rightPaneStyle = Object.assign({}, paneBaseStyle, {
-    left: paneBaseStyle.width + 24 + leftPaneStyle.left
-})
