@@ -1,20 +1,11 @@
 import { connect } from 'react-redux'
 import FunctionEditorsPane from './FunctionEditorsPane'
-import { updateFunctionText, selectFunctions } from 'store/fileStorage'
-import { cursorPositionInFunctionEditorChanged, closeFunctionEditor, swapWithParentFunction, selectFocusedFunctionEditor } from 'store/editorReducer'
+import { selectFunctions } from 'store/fileStorage'
 
 let mapStateToProps = (state) => {
     return {
-        functions: selectFunctions(state),
-        focusedFunctionEditor: selectFocusedFunctionEditor(state)
+        functions: selectFunctions(state)
     }
 }
 
-let mapDispatchToProps = {
-    onFunctionTextChange: updateFunctionText,
-    onFunctionActivity: cursorPositionInFunctionEditorChanged,
-    onClose: closeFunctionEditor,
-    onSwapWithParent: swapWithParentFunction
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(FunctionEditorsPane)
+export default connect(mapStateToProps)(FunctionEditorsPane)

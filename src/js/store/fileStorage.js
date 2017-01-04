@@ -152,7 +152,10 @@ function getFunctionsFromAst (ast, fileId, functionsToCompare) {
                     }
                 }
                 node.fileId = fileId
-                functions.push(node)
+                // create new object to change identity, so redux subscriptions work as expected
+                functions.push({
+                    ...node
+                })
             }
         },
         leave(node) {
@@ -183,7 +186,10 @@ function createNewStateWithFile (oldState, file) {
     // update state identity, so change is triggered in redux
     return oldState.map(f => {
         if (f.id === file.id) {
-            return file
+            // create new object to change identity, so redux subscriptions work as expected
+            return {
+                ...file
+            }
         } else {
             return f
         }

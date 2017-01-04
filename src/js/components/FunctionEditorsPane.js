@@ -1,20 +1,14 @@
 import React from 'react';
-import FunctionEditor from './FunctionEditor'
-import R from 'ramda';
+import FunctionEditorContainer from './FunctionEditorContainer'
 
-const FunctionEditorsPane = ({functions, style, onFunctionTextChange, onFunctionActivity, onClose, onSwapWithParent, focusedFunctionEditor}) => {
+const FunctionEditorsPane = ({functions, style}) => {
     let items = functions.map((functionNode) => {
         let props = {
-            style: editorStyle,
-            functionNode: functionNode,
             key: functionNode.customId,
-            onFunctionTextChange,
-            onFunctionActivity,
-            onClose,
-            onSwapWithParent,
-            isFocused: R.equals(functionNode.customId, focusedFunctionEditor)
+            style: editorStyle,
+            functionNode
         }
-        return <FunctionEditor {...props} />
+        return <FunctionEditorContainer {...props} />
     })
     return <div style={ style }>
                <h2>Functions</h2>

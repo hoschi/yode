@@ -1,12 +1,9 @@
 import React from 'react';
-import FileEditor from './FileEditor'
-import R from 'ramda';
+import FileEditorContainer from './FileEditorContainer'
 
-const FileEditorsPane = ({files, style, onFileTextChange, onFileActivity, onClose, focusedFileEditor}) => {
+const FileEditorsPane = ({files, style}) => {
     let items = files.map((file) => {
-        let isFocused = R.equals(file.id, focusedFileEditor)
-        return <FileEditor style={ editorStyle } file={ file } key={ file.id } onFileTextChange={ onFileTextChange } onFileActivity={ onFileActivity }
-                   onClose={ onClose } isFocused={ isFocused } />
+        return <FileEditorContainer style={ editorStyle } file={ file } key={ file.id } />
     })
     return <div style={ style }>
                <h2>Files</h2>

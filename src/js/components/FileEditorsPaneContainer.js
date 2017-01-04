@@ -1,19 +1,11 @@
 import { connect } from 'react-redux'
 import FileEditorsPane from './FileEditorsPane'
-import { updateFileText, selectOpenFiles } from 'store/fileStorage'
-import { cursorPositionInFileEditorChanged, selectFocusedFileEditor, closeFileEditor } from 'store/editorReducer'
+import { selectOpenFiles } from 'store/fileStorage'
 
 let mapStateToProps = (state) => {
     return {
-        files: selectOpenFiles(state),
-        focusedFileEditor: selectFocusedFileEditor(state)
+        files: selectOpenFiles(state)
     }
 }
 
-let mapDispatchToProps = {
-    onFileTextChange: updateFileText,
-    onFileActivity: cursorPositionInFileEditorChanged,
-    onClose: closeFileEditor
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(FileEditorsPane)
+export default connect(mapStateToProps)(FileEditorsPane)

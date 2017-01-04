@@ -132,7 +132,7 @@ let cursorIsInNode = (cursor, node) => cursor > node.start && cursor < node.end
 let initialState = {
     focusedFunctionEditor: undefined,
     focusedFileEditor: undefined,
-    functionEditorIds: [2],
+    functionEditorIds: [3, 4, 2],
     fileEditorIds: ['foo/a.js'],
     cursor: undefined,
     fileStorage: fileStorage()
