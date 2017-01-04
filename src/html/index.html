@@ -18,6 +18,17 @@
             font-weight: 500;
         }
 
+        .react-grid-item > .react-resizable-handle {
+            /* move up to fix padding */
+            bottom: 28px !important;
+            /* move above highlighted editor */
+            z-index: 10;
+        }
+
+        .react-grid-item.react-grid-placeholder {
+            background-color: #009688 !important;
+        }
+
         .cm-s-mui-light .cm-quote {color: #090;}
         .cm-negative {color: #d44;}
         .cm-positive {color: #292;}
@@ -65,6 +76,11 @@
         .CodeMirror .CodeMirror-line.errorMarker {
             /* deepOrange200 */
             background-color: #FFAB91;
+        }
+
+        .CodeMirror .CodeMirror-hscrollbar {
+            /* hide scrollbar if not needed after resize */
+            overflow-x:auto;
         }
     </style>
 </head>

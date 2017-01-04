@@ -10,5 +10,7 @@ const MainSection = () => {
 export default MainSection;
 
 let mainContainerStyle = {
-    padding: 24
+    paddingTop: 12,
+    // from grid dragging
+    overflow: 'hidden'
 }

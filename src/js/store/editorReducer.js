@@ -3,6 +3,7 @@ import Profiler from '../Profiler'
 import fileStorage from './fileStorage'
 import parser from '../ast/parser-recast';
 import { getFunctionByText } from '../ast/functionHelper';
+import { editorLayoutCols } from '../constants'
 
 export const CURSOR_POSITION_IN_FILE_EDITOR_CHANGED = 'CURSOR_POSITION_IN_FILE_EDITOR_CHANGED '
 export const cursorPositionInFileEditorChanged = ({cursor, fileId}) => {
@@ -61,10 +62,28 @@ export const closeFileEditor = ({id}) => {
     }
 }
 
+export const EDITORS_LAYOUT_CHANGED = 'EDITORS_LAYOUT_CHANGED'
+export const editorsLayoutChanged = ({layout}) => {
+    return {
+        type: EDITORS_LAYOUT_CHANGED,
+        layout
+    }
+}
+
+export const EDITOR_HEIGHT_CHANGED = 'EDITOR_HEIGHT_CHANGED'
+export const editorHeightChanged = ({itemId, height}) => {
+    return {
+        type: EDITOR_HEIGHT_CHANGED,
+        itemId,
+        height
+    }
+}
+
 export let selectNoEditorIsFocused = (state) => R.isNil(state.editor.focusedFunctionEditor) && R.isNil(state.editor.focusedFileEditor)
 export let selectFocusedFunctionEditor = R.path(['editor', 'focusedFunctionEditor'])
 export let selectFocusedFileEditor = R.path(['editor', 'focusedFileEditor'])
 export let selectFileEditorIds = R.path(['editor', 'fileEditorIds'])
+export let selectEditorsLayout = R.path(['editor', 'editorsLayout'])
 
 let setProp = R.curry((prop, value, obj) => R.set(R.lensProp(prop), value, obj))
 
@@ -129,14 +148,44 @@ function getInnerMostFunctionNode (editorFunction, cursor) {
 
 let cursorIsInNode = (cursor, node) => cursor > node.start && cursor < node.end
 
+let defaultGridItemProps = {
+    h: 1,
+    w: editorLayoutCols / 2,
+    x: 0,
+    y: 0
+}
+
+function getInitialLayout (state) {
+    let itemIds = state.fileEditorIds.concat(state.functionEditorIds);
+    return itemIds.map((id, i) => ({
+        i: id.toString(),
+        ...defaultGridItemProps,
+        x: i % 2 === 0 ? 0 : editorLayoutCols / 2,
+        y: i % 2
+    }))
+}
+
+let shiftGridItem = R.curry((matcher, item) => {
+    if (matcher(item)) {
+        return {
+            ...item,
+            // shift current one a little bit down to make space for new editor
+            y: 5
+        }
+    } else {
+        return item;
+    }
+})
+
 let initialState = {
     focusedFunctionEditor: undefined,
     focusedFileEditor: undefined,
-    functionEditorIds: [3, 4, 2],
-    fileEditorIds: ['foo/a.js'],
+    functionEditorIds: [7, 6, 2, 5],
+    fileEditorIds: ['foo/b.js'],
     cursor: undefined,
     fileStorage: fileStorage()
 }
+initialState.editorsLayout = getInitialLayout(initialState)
 
 let actionObject = {
     [CURSOR_POSITION_IN_FILE_EDITOR_CHANGED]: (state, action) => {
@@ -171,9 +220,17 @@ let actionObject = {
     },
     [OPEN_FILE_EDITOR_BY_ID]: (state, action) => {
         const {id} = action;
+        let newLayout = R.map(shiftGridItem(R.allPass([
+            R.propEq('x', 0),
+            R.propEq('y', 0)
+        ])), state.editorsLayout)
         return {
             ...state,
-            fileEditorIds: R.prepend(id, state.fileEditorIds)
+            fileEditorIds: R.append(id, state.fileEditorIds),
+            editorsLayout: R.append({
+                ...defaultGridItemProps,
+                i: id
+            }, newLayout)
         }
     },
     [CLOSE_FILE_EDITOR]: (state, action) => {
@@ -188,9 +245,10 @@ let actionObject = {
             },
             setProp('fileEditorIds', R.filter((openFileId) => openFileId !== id, state.fileEditorIds))
         )(state);
-
     },
     [SWAP_WITH_PARENT_FUNCTION]: (state, action) => {
+        let parentLayoutItem,
+            layoutWithoutParent;
         const {id} = action;
         let {node} = getFileAndNodeForFunctionId(state, id);
         if (!node.parentFunction || node.parentFunction.isRoot) {
@@ -199,10 +257,33 @@ let actionObject = {
         }
         // remove parent, we insert it at another position later
         let editorIdsWithoutParent = R.filter((openFnId) => openFnId !== node.parentFunction.customId, state.functionEditorIds)
+        let parentPosition = R.findIndex(R.propEq('i', node.parentFunction.customId.toString()), state.editorsLayout)
+        if (parentPosition >= 0) {
+            parentLayoutItem = state.editorsLayout[parentPosition]
+            layoutWithoutParent = R.remove(parentPosition, 1, state.editorsLayout)
+        } else {
+            layoutWithoutParent = state.editorsLayout
+        }
         // get current position from updated list
-        let currentPosition = editorIdsWithoutParent.indexOf(id)
+        let currentPosition = R.findIndex(R.propEq('i', id.toString()), layoutWithoutParent)
+        let currentLayoutItem = layoutWithoutParent[currentPosition];
         // remove current editor
         let editorIdsWithoutCurrentEditor = R.filter((openFnId) => openFnId !== id, editorIdsWithoutParent)
+        let layoutWithoutCurrentEditor = R.filter(({i}) => i !== id, layoutWithoutParent)
+        // create new item with merged properties
+        let newLayoutItem = {
+            ...currentLayoutItem,
+            i: node.parentFunction.customId.toString()
+        }
+        if (parentLayoutItem) {
+            // copy height, because this is not calculated again when item is moved
+            newLayoutItem = R.merge(newLayoutItem, R.pick([
+                'h',
+                'minH',
+                'maxH'
+            ], parentLayoutItem))
+        }
+        // save modified data in state
         return R.pipe(
             (state) => {
                 if (state.focusedFunctionEditor === id) {
@@ -212,7 +293,8 @@ let actionObject = {
                 return state
             },
             // add parent editor at position of child editor
-            setProp('functionEditorIds', R.insert(currentPosition, node.parentFunction.customId, editorIdsWithoutCurrentEditor))
+            setProp('functionEditorIds', R.append(node.parentFunction.customId, editorIdsWithoutCurrentEditor)),
+            setProp('editorsLayout', R.insert(currentPosition, newLayoutItem, layoutWithoutCurrentEditor))
         )(state);
 
     },
@@ -239,11 +321,54 @@ let actionObject = {
         } else if (foundFunction !== undefined) {
             // open editor
             stop()
-            return setProp('functionEditorIds', R.uniq([foundFunction.customId].concat(state.functionEditorIds)), state);
+
+            return R.pipe(
+                (state) => {
+                    let newLayout = R.map(shiftGridItem(R.allPass([
+                        R.propEq('x', editorLayoutCols / 2),
+                        R.propEq('y', 0)
+                    ])), state.editorsLayout)
+                    return {
+                        ...state,
+                        editorsLayout: R.append({
+                            ...defaultGridItemProps,
+                            x: editorLayoutCols / 2,
+                            i: foundFunction.customId.toString()
+                        }, newLayout)
+                    }
+                },
+                setProp('functionEditorIds', R.uniq([foundFunction.customId].concat(state.functionEditorIds)))
+            )(state)
         } else {
             // nothing found
             stop()
             return state;
+        }
+    },
+    [EDITORS_LAYOUT_CHANGED]: (state, {layout}) => {
+        return {
+            ...state,
+            editorsLayout: layout
+        }
+    },
+    [EDITOR_HEIGHT_CHANGED]: (state, {itemId, height}) => {
+        let layout = state.editorsLayout;
+        let newLayout = layout.map((item) => {
+            if (item.i !== itemId) {
+                return item;
+            }
+
+            let itemHeight = height + 28;
+            return {
+                ...item,
+                h: itemHeight,
+                minH: itemHeight,
+                maxH: itemHeight
+            }
+        })
+        return {
+            ...state,
+            editorsLayout: newLayout
         }
     }
 }

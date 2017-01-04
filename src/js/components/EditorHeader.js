@@ -4,6 +4,7 @@ import * as palette from 'material-ui/styles/colors';
 import NodeEditorStateLabels from './NodeEditorStateLabels'
 import IconButton from 'material-ui/IconButton';
 import IconClose from 'material-ui/svg-icons/navigation/close';
+import { editorHeaderClsName } from '../constants'
 
 export let closeIconConfig = {
     tooltip: 'close editor',
@@ -29,7 +30,7 @@ const EditorHeader = ({titlePrefix, title, node, iconConfigs}) => {
         icons = getIcons(iconConfigs)
     }
     return <div style={ headerContainerStyle }>
-               <div style={ textAndLabelContainerStyle }>
+               <div style={ textAndLabelContainerStyle } className={ editorHeaderClsName }>
                    <span style={ subtleLabelStyle }>  { titlePrefix }  </span>
                    { ' ' }
                    { title }
@@ -47,7 +48,8 @@ let headerContainerStyle = {
 }
 
 let textAndLabelContainerStyle = {
-    flexGrow: 2
+    flexGrow: 2,
+    cursor: 'move'
 }
 
 let iconButtonStyle = {
