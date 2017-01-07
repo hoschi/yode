@@ -368,15 +368,20 @@ let fileStorage = {
         return state.map(file => {
             // format functions
             file.functions = file.functions.map(f => {
-                f.unformattedText = f.text
-                return f
+                return {
+                    ...f,
+                    unformattedText: f.text
+                }
             })
 
             if (isEditorDirty(file)) {
-                // generate formatted text
-                file.text = print(file.ast)
-                // set unformatted text to new text
-                file.unformattedText = file.text
+                return {
+                    ...file,
+                    // generate formatted text
+                    text: print(file.ast),
+                    // set unformatted text to new text
+                    unformattedText: file.text
+                }
             }
             return file
         })
@@ -399,8 +404,11 @@ let fileStorage = {
             file.functions = file.functions.map(f => {
                 if (f.customId === oldFunction.customId) {
                     // set new state for editor
-                    f.syntaxError = syntaxError
-                    f.unformattedText = newText
+                    return {
+                        ...f,
+                        syntaxError,
+                        unformattedText: newText
+                    }
                 }
                 return f
             })
