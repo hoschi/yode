@@ -248,16 +248,30 @@ let actionObject = {
     },
     [SWAP_WITH_PARENT_FUNCTION]: (state, action) => {
         let parentLayoutItem,
-            layoutWithoutParent;
+            parentLayoutItemId,
+            layoutWithoutParent
         const {id} = action;
         let {node} = getFileAndNodeForFunctionId(state, id);
-        if (!node.parentFunction || node.parentFunction.isRoot) {
-            // has no parent, or parent is the root. so, nothing to swap with
+
+        if (!node.parentFunction) {
+            // has no parent. so, nothing to swap with
             return state;
         }
+
+        if (node.parentFunction.isRoot) {
+            // swap with file editor
+            parentLayoutItemId = node.fileId;
+            // append file editor
+            state = setProp('fileEditorIds', R.uniq(R.append(node.fileId, state.fileEditorIds)), state)
+        } else {
+            // swap with parent function editor
+            parentLayoutItemId = node.parentFunction.customId.toString()
+            // append parent function editor
+            state = setProp('functionEditorIds', R.uniq(R.append(node.parentFunction.customId, state.functionEditorIds)), state)
+        }
+
         // remove parent, we insert it at another position later
-        let editorIdsWithoutParent = R.filter((openFnId) => openFnId !== node.parentFunction.customId, state.functionEditorIds)
-        let parentPosition = R.findIndex(R.propEq('i', node.parentFunction.customId.toString()), state.editorsLayout)
+        let parentPosition = R.findIndex(R.propEq('i', parentLayoutItemId), state.editorsLayout)
         if (parentPosition >= 0) {
             parentLayoutItem = state.editorsLayout[parentPosition]
             layoutWithoutParent = R.remove(parentPosition, 1, state.editorsLayout)
@@ -268,12 +282,11 @@ let actionObject = {
         let currentPosition = R.findIndex(R.propEq('i', id.toString()), layoutWithoutParent)
         let currentLayoutItem = layoutWithoutParent[currentPosition];
         // remove current editor
-        let editorIdsWithoutCurrentEditor = R.filter((openFnId) => openFnId !== id, editorIdsWithoutParent)
         let layoutWithoutCurrentEditor = R.filter(({i}) => i !== id, layoutWithoutParent)
         // create new item with merged properties
         let newLayoutItem = {
             ...currentLayoutItem,
-            i: node.parentFunction.customId.toString()
+            i: parentLayoutItemId
         }
         if (parentLayoutItem) {
             // copy height, because this is not calculated again when item is moved
@@ -283,20 +296,18 @@ let actionObject = {
                 'maxH'
             ], parentLayoutItem))
         }
-        // save modified data in state
-        return R.pipe(
-            (state) => {
-                if (state.focusedFunctionEditor === id) {
-                    // closed editor was focused, reset
-                    return setProp('focusedFunctionEditor', undefined, state)
-                }
-                return state
-            },
-            // add parent editor at position of child editor
-            setProp('functionEditorIds', R.append(node.parentFunction.customId, editorIdsWithoutCurrentEditor)),
-            setProp('editorsLayout', R.insert(currentPosition, newLayoutItem, layoutWithoutCurrentEditor))
-        )(state);
 
+        if (state.focusedFunctionEditor === id) {
+            // closed editor was focused, reset
+            state = setProp('focusedFunctionEditor', undefined, state)
+        }
+
+        // remove current function editor
+        state = setProp('functionEditorIds', R.filter((openFnId) => openFnId !== id, state.functionEditorIds), state)
+
+        // modify layout with to fix positioning
+        state = setProp('editorsLayout', R.insert(currentPosition, newLayoutItem, layoutWithoutCurrentEditor), state)
+        return state
     },
     [OPEN_FUNCTION_EDITOR_UNDER_CURSOR]: (state) => {
         let stop = Profiler.start('- open function editor for function under cursor')
