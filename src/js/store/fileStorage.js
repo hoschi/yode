@@ -1,9 +1,8 @@
 import createReducer from './createReducer'
 import R from 'ramda'
 import Profiler from '../Profiler'
-import parser from '../ast/parser-recast';
 //import parser from '../ast/parser-recast';
-//import parser from '../ast/parser-recast-jsx';
+import parser from '../ast/parser-recast-jsx';
 //import parser from '../ast/parser-acorn';
 //import parser from '../ast/parser-acorn-jsx';
 import { getFunctionIndexByText } from '../ast/functionHelper';
