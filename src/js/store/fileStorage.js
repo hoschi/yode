@@ -1,8 +1,10 @@
 import createReducer from './createReducer'
 import R from 'ramda'
 import Profiler from '../Profiler'
+// SWAP ALSO IN EDITOR REDUCER
 //import parser from '../ast/parser-recast';
 import parser from '../ast/parser-recast-jsx';
+//import parser from '../ast/parser-recast-babylon';
 //import parser from '../ast/parser-acorn';
 //import parser from '../ast/parser-acorn-jsx';
 import { getFunctionIndexByText } from '../ast/functionHelper';
@@ -271,11 +273,43 @@ export let selectFunctions = (state) => {
 }
 
 const initialState = [
-    createFileFromText('foo/b.js', `
-let test = (pA, pB) => {
-  return pA+pB
+    createFileFromText('foo/Shell.js', `
+import React from 'react';
+import muiThemeConfig from 'muiThemeConfig';
+import AppBar from 'material-ui/AppBar'
+import Paper from 'material-ui/Paper'
+import ControlsContainer from './ControlsContainer'
+
+const Shell = ({children}) => {
+    return <div>
+               <Paper style={ style.pinnedArea } zDepth={ 2 }>
+                   <AppBar title="NFBE Prototype" showMenuIconButton={ false } zDepth={ 0 } />
+                   <ControlsContainer />
+               </Paper>
+               <div style={ style.mainArea }>
+                   { children }
+               </div>
+           </div>
 }
-export default test
+
+export default Shell
+
+let style;
+{
+    let pinnedAreaHeight = 148;
+    style = {
+        pinnedArea: {
+            position: 'fixed',
+            top: 0,
+            width: '100%',
+            backgroundColor: muiThemeConfig.palette.primary1Color,
+            zIndex: 5
+        },
+        mainArea: {
+            marginTop: pinnedAreaHeight
+        }
+    }
+}
 `),
 
     createFileFromText('foo/a.js', `

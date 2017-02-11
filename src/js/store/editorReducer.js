@@ -1,7 +1,8 @@
 import R from 'ramda'
 import Profiler from '../Profiler'
 import fileStorage from './fileStorage'
-import parser from '../ast/parser-recast';
+//import parser from '../ast/parser-recast';
+import parser from '../ast/parser-recast-jsx';
 import { getFunctionByText } from '../ast/functionHelper';
 import { editorLayoutCols } from '../constants'
 
@@ -181,7 +182,7 @@ let initialState = {
     focusedFunctionEditor: undefined,
     focusedFileEditor: undefined,
     functionEditorIds: [7, 6, 2, 5],
-    fileEditorIds: ['foo/b.js'],
+    fileEditorIds: ['foo/Shell.js'],
     cursor: undefined,
     fileStorage: fileStorage()
 }

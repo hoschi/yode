@@ -26,6 +26,10 @@ module.exports = {
                 loader: 'style-loader!css-loader'
             },
             {
+                test: /\.json$/,
+                loader: 'json-loader'
+            },
+            {
                 loader: 'babel',
                 query: {
                     cacheDirectory: '.tmp-babel'
@@ -43,13 +47,13 @@ module.exports = {
     resolve: {
         extensions: ['', '.js'],
         modulesDirectories: ['src/js/', 'node_modules'],
-        root: dir_base,
+        root: dir_base
     },
     stats: {
         // Nice colored output
         colors: true
     },
     // didn't create mappable version in chrome
-    //devtool: 'cheap-module-eval-source-map'
-    devtool: 'eval-source-map'
+    devtool: 'eval'
+//devtool: 'eval-source-map'
 }
