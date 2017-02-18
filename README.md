@@ -1,19 +1,72 @@
 # NFBE - Non File Based Editing
 
-Edit AST Nodes instead of files for more focus and context.
+Edit smaller parts of a code base, so you can focus better on the important parts of a task.
+You can edit functions of JavaScript code as deeper level of a file.
+By focusing on functions of interest you can open an editor for each of it and
+arrange them to serve as context of your work. This frees you from the clutter
+of the rest of the file, containing this function.
+NFBE is designed as library, so it can be integrated in existing text editors
+([NeoVim](https://neovim.io/ ),
+[Atom](https://atom.io/  ), ...).
 
-> TODO short description was NFBE does, what's the goal
+## Motivation
 
-## Demo
+I love text editors and I am a Vim/NeoVim user for years now.
+The power you get from a modal editor and such memoizable commands like `ciw`
+(change inner word) is very usefull when writing code.
+There are more editors out there, for every kind of person at least one.
+So I don't want to write a new text editor, instead I want to give them even more power.
 
-> TODO link to hosted demo
+Code is saved in files and with your text editor of choice you edit them, fine.
+They even help you by recognizing patterns (text objects) like words, lines,
+paragraphs, blocks in brackets and so on, great.
+For soucre code there is a version which is even more descriptive, called
+[abstract syntax tree](https://en.wikipedia.org/wiki/Abstract_syntax_tree ).
+I want to bring this knowledge to text editors so they can make use of it.
+For some ideas what could be done with this knowledge just keep reading this document.
+When reading a file into the text editor it should be converted to an AST and from then this is the source of truth.
+This means when you change text of a node it gets converted back to an AST.
+Every time the AST or some part of it changed, the whole AST of the
+corresponding file gets written as text into the file, so the file is the
+destination of truth.
+This is important, because every other tool can still work with files and doesn't need to change anything.
+It also means you can still use features of your text editor which work on
+files like search/replace, removing files and so on.
+
+The smallest editable container in a text editor is a file.
+But files contain a lot of code, they group some kind of stuff together so you don't get too much files.
+This is a good thing, because you need an overview of your current code base.
+When you tackle a task you search the files you need to edit and then the parts of them which you need to change.
+At this point current text editors leave you a little bit alone when you want to
+[organize these parts](#Current state of screenspace management).
+My second major goal is to give you the possibillty to focus on smaller parts of code than "a file".
+This prototype adds another level of changabillty, function nodes of the AST.
+A function can have its own editor, which is just an instance of your text editor but editing not a whole file.
+This way you can still use the features of your text editor, but in a more focused way.
+By removing all other content of the file around the function of interest, you remove clutter.
+By removing clutter, you get more screen space for other parts of code you are interessted in.
+Editing AST nodes brings also another way to navigate.
+Instead of switching between files you can now switch between nodes in the hierarchy the tree represents.
+You can drill down deeper into a node when you are interessted in an even smaller part of the current code.
+The other way around, you can walk up the tree to get a better overview when you lost track.
 
 ## Features
 
-> TODO bullet list, see notes of demo
-> TODO implications (see notes of demo again) probably under its own heading
+Features of library accessible through prototype UI:
 
-## Workflow
+* open function under cursor in own editor
+* changes in function editor synced to file
+* changes in file editor synced to open function editor
+* state tracking for unparsable code
+* move up in code hierarchy to expand current scope of editor
+* new files can be created on the fly
+* simple layout logic
+    * open new function editor on right side so it doesn't botter left (main) side
+    * editor can be sized horizontally to fine tune screen space occupied
+    * vertical size of editor is given by content
+    * editor can be closed when not needed anymore
+
+## Example Workflow
 
 > TODO probably best done as video
 > TODO search content to in open souce projects, like TodoMVC
@@ -25,7 +78,11 @@ Edit AST Nodes instead of files for more focus and context.
 * editoren so anordnen das es sinn macht
 * jetzt ist man focusiert auf das was man braucht, sieht aber auch das sich die "outer" function live updated
 
-## Screenspace management
+## Demo
+
+> TODO link to hosted demo
+
+## Current state of screenspace management
 
 Splits are the current way to divide the editor screen into spaces which can show different parts.
 These parts can be different files or different parts of a file.
@@ -62,22 +119,123 @@ layout logic shifts these windows to top, where all other go below of them.
 After that this can be improved or the user can select different layout logics per tab.
 [As layouts used in Xmonad to manage window position in different ways](https://wiki.haskell.org/Xmonad/Screenshots#Tiled_layouts  )
 
-## Contribution
+## Implications
 
-> TODO describe what contribution is wanted
+The features of current state implicate additional ones for the mature version
+of the library integrated in a real editor:
+
+* save screen space
+    * vertical because function editor is as big as content, no space wasted
+    * horizontal for nested function, because indent level starts for each editor at zero
+    * open function editor for interessting function to keep context
+    * less scrolling, only one global scrollbar
+* text editor (NeoVim, Atom, ...) features can now work on a range easily
+    * search/replace
+    * remove a whole function
+    * relocate a whole function
+    * ...
+* functions are now an additional "context object"
+	* as autocompletion uses identifiers to give the user context
+	* function editors can be now used as context as well
+	* go crazy with machine learning here → e.g.
+		* show function editor for function under cursor automatically
+		* show last edited functions if there is space for it
+		* ...
+* editors are focused now
+	* the computer "knows" what one editor shows, because AST nodes has types e.g. "function" in prototype case
+	* editors are most of the time pretty small
+	* both can be used to automatically layout editors instead of manual splitting panes
+	* spawn editors for a logical group of code
+		* current function and all its test functions
+		* React dumb and smart component
+		* used selectors and action creators of a smart component
+        * ...
+* make other AST nodes editable
+    * proof of concept makes function nodes editable, this can be expanded to other node types
+	* Objects, to get editors for e.g. configs
+	* Arrays
+    * ...
+* use available AST for other things
+	* add imports automatically in file behind last import already existing
+	* add imported varible to already existing import
+	* linting without the need to parse file (for speed)
+	* probably snippets can work much better with AST
+	* pretty all stuff IDEs do already
+	* ...
+* use type of AST nodes as text objects in editors
+    * add new operations to work with them
+    * "change current function call" which changes called function but not the parameters
+    * "change function body" which puts cursor right into the curly brackets and deletes current body so you can start from scratch
+    * ...
+* hierarchy of function gets maintained
+	* navigate in this tree, like "swap with parent" button
+	* use as outline view
 
 ## Roadmap
 
-> TODO describe prototype: UI it is not here to stay
-> TODO list milestones with short description: refactoring, Nyaovim implementation, split up code into lib so it can be used in other editors
+This project is actively mantained and development.
+It is a side project, so don't expect a full time working pace.
+
+* [X] prototype
+    * check if the problem can be solved with a reasonable performance
+    * simple UI which mocks real editor (demo UI is not here to stay)
+    * gather not obvious problems
+* [ ] refactor prototype into library
+    * which can then be used to integrate in editor
+    * separate logic for demo UI from core logic
+    * separate parser from state logic where possible
+* [ ] integrate into NeoVim GUI
+    * search UI which is flexible enough to replace standard NeoVim window management which automatic (at least fixed height windows) one sketched above, e.g.:
+        * because normally window dimensions are set by user, but should now be set by content instead
+        * use [NyaoVim](https://github.com/rhysd/NyaoVim ) editor element and build tabs/windows arround it, backed by one headless NeoVim instance holding tab/buffer/... state
+        * checkout if window management can be replaced in [oni](https://github.com/extr0py/oni )
+        * ...
+    * build NeoVim plugin which acts as client
+        * sends current buffer content
+        * sends events like (cursor moved)
+        * ...
+    * build server around lib so it can communicate with editor integration
+        * one server instance should keep state (open files, functions, ...) regarding one editor instance
+        * protocol can be easy (e.g. JSON RPC) at this state and swapped with some more complex/faster/... (e.g. MessagePack) later
+    * \o/ when this milestone is done, it should be usable for every day work \o/
+        * start with small window management features
+        * keep performance issues till they lead to problems
+* [ ] search better solutions for known issues
 
 ## Additional docs
 
-* [Integration Tests](./docs/integration-tests.md)
-* [Development Environment](./docs/development.md)
+* [Integration Tests](./docs/integration-tests.md )
+* [Development Environment](./docs/development.md )
 
 ## Known issues
 
-> TODO problem with object methods
-> TODO works but not super performant: search for matching functions by text diffing
+TODO link zu issues aus nonFileBasedEditing-issues.md
 
+* big chunks of code changes
+    * like cut & paste or git operations which make bigger changes than a user while writing in an editor
+    * TODO lnik zu "slow text diffing" aus issues md datei
+    * it is hard in this cases to identify the function (and its properties) reliable
+* code duplication
+    * like copy & paste of a function to duplicate the overall logic and change
+      the details afterwards. Probably during a refactoring session.
+    * duplicated function should not overtake the properties of the existing (copied) function
+    * if the editor supports this, copy/paste events can handled separatly to change e.g. the function name of the duplicate before pasting it
+
+## Contribution
+
+Use the [issue tracker](link to github issues) for all kind of questions, bug
+reports, etc. I'll tag it then as needed.  As the project is fast moving at the
+moment, ideas, general discussion and resarch about the problem space are also
+a good way to contribute. I'll collect them and pick it up when it is
+appropriate.  As the current milestone is refactoring and the ideas for the
+next one are pretty roughly described, contributing with code is at the moment
+difficult.  Please create a ticket, before submitting a pull request.
+
+## Thanks
+
+These projects helped me *a lot* when developing this <3
+
+* [AST Explorer](https://astexplorer.net )
+* [Acorn](https://github.com/ternjs/acorn )
+* [Recast](https://github.com/benjamn/recast )
+* [CodeMirror](https://codemirror.net/index.html )
