@@ -82,6 +82,8 @@ Features of library accessible through prototype UI:
 
 > TODO link to hosted demo
 
+Sourcemaps are included, check console for profile logs which can be used as debugging entry point.
+
 ## Current state of screenspace management
 
 Splits are the current way to divide the editor screen into spaces which can show different parts.

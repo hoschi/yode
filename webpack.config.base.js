@@ -1,0 +1,66 @@
+/* global __dirname */
+
+var path = require('path')
+var webpack = require('webpack')
+var HtmlWebpackPlugin = require('html-webpack-plugin');
+
+var dir_js = path.resolve(__dirname, 'src/js')
+var dir_base = path.resolve(__dirname);
+var dir_build = path.resolve(__dirname, 'build')
+var dir_nodeModules = path.resolve(__dirname, 'node_modules')
+var file_indexHtml = path.resolve(__dirname, 'src/html/index.html')
+var file_favicon = path.resolve(__dirname, 'src/assets/favicon.ico')
+
+module.exports = {
+    entry: [
+        path.resolve(dir_js, 'index.js')
+    ],
+    output: {
+        path: dir_build,
+        filename: '[name].bundle.js',
+        sourceMapFilename: '[name].map',
+        publicPath: '/'
+    },
+    module: {
+        rules: [
+            {
+                test: /\.css$/,
+                use:[
+                    'style-loader',
+                    'css-loader'
+                ]
+            },
+            {
+                loader: 'babel-loader',
+                exclude: dir_nodeModules,
+                test: dir_js
+            }
+        ]
+    },
+    plugins: [
+        new webpack.NoEmitOnErrorsPlugin(),
+        new HtmlWebpackPlugin({
+            template: file_indexHtml,
+            hash: false,
+            favicon: file_favicon,
+            filename: 'index.html',
+            inject: 'body',
+            minify: {
+                collapseWhitespace: false,
+            },
+        }),
+    ],
+    // make absolute import statements possible, also for local modules
+    resolve: {
+        modules:[
+            dir_base,
+            dir_js,
+            'node_modules',
+        ]
+    },
+    stats: {
+        // Nice colored output
+        colors: true
+    },
+}
+

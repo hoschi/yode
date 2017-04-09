@@ -3,3 +3,5 @@ node_modules
 *.un~
 .sweetp/
 .tmp-babel
+build
+npm-debug.log
