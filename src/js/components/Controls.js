@@ -18,6 +18,7 @@ const Controls = ({onFormatClick, onOpenFunctionEditorUnderCursorClick, openFunc
         tooltip: 'opens function editor for function under cursor in focused editor'
     }
     return <div style={ containerStyle }>
+               <RaisedButtonWithTooltip {...openFunctionEditorButtonProps} />
                <OpenFileMenuContainer />
                <AddFileDialogContainer />
                <RaisedButtonWithTooltip {...formatButtonProps} />
