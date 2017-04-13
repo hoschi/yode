@@ -181,8 +181,8 @@ let shiftGridItem = R.curry((matcher, item) => {
 let initialState = {
     focusedFunctionEditor: undefined,
     focusedFileEditor: undefined,
-    functionEditorIds: [7, 6, 2, 5],
-    fileEditorIds: ['foo/Shell.js'],
+    functionEditorIds: [18],
+    fileEditorIds: ['Header.js'],
     cursor: undefined,
     fileStorage: fileStorage()
 }
