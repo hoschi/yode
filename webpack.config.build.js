@@ -3,5 +3,5 @@
 var base = require('./webpack.config.base');
 
 module.exports = Object.assign({}, base, {
-    devtool:'source-map'
+    devtool: 'source-map'
 })

@@ -8,7 +8,6 @@ var app = express()
 var compiler = webpack(config)
 var port = 9031
 
-
 var devMiddleware = webpackDevMiddleware(compiler, {
     noInfo: true,
     publicPath: config.output.publicPath

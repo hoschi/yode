@@ -25,7 +25,7 @@ module.exports = {
         rules: [
             {
                 test: /\.css$/,
-                use:[
+                use: [
                     'style-loader',
                     'css-loader'
                 ]
@@ -46,21 +46,20 @@ module.exports = {
             filename: 'index.html',
             inject: 'body',
             minify: {
-                collapseWhitespace: false,
-            },
-        }),
+                collapseWhitespace: false
+            }
+        })
     ],
     // make absolute import statements possible, also for local modules
     resolve: {
-        modules:[
+        modules: [
             dir_base,
             dir_js,
-            'node_modules',
+            'node_modules'
         ]
     },
     stats: {
         // Nice colored output
         colors: true
-    },
+    }
 }
-

@@ -10,9 +10,9 @@ const Shell = ({children}) => {
                <Paper style={ style.pinnedArea } zDepth={ 2 }>
                    <div style={ style.header }>
                        <AppBar title="NFBE Prototype" showMenuIconButton={ false } zDepth={ 0 } />
-                        <a href="https://github.com/hoschi/nfbe" title="Github project page">
-                            <img style={style.githubImg} src={githubMarkImg} alt="github mark"/>
-                        </a>
+                       <a href="https://github.com/hoschi/nfbe" title="Github project page">
+                           <img style={ style.githubImg } src={ githubMarkImg } alt="github mark" />
+                       </a>
                    </div>
                    <ControlsContainer />
                </Paper>
@@ -39,13 +39,13 @@ let style;
             marginTop: pinnedAreaHeight
         },
         header: {
-            display: 'flex',
+            display: 'flex'
         },
-        githubImg:{
-            height:24,
-            width:24,
-            margin:20,
-            marginRight:24
+        githubImg: {
+            height: 24,
+            width: 24,
+            margin: 20,
+            marginRight: 24
         }
     }
 }
