@@ -68,8 +68,7 @@ Features of library accessible through prototype UI:
 
 ## Example Workflow
 
-> TODO probably best done as video
-> TODO search content to in open souce projects, like TodoMVC
+> TODO video
 
 * datei editor öffnen
 * eine function öffnen die noch eine Kind function hat
@@ -215,7 +214,7 @@ TODO link zu issues aus nonFileBasedEditing-issues.md
 
 * big chunks of code changes
     * like cut & paste or git operations which make bigger changes than a user while writing in an editor
-    * TODO lnik zu "slow text diffing" aus issues md datei
+    * TODO link zu "slow text diffing" aus issues md datei
     * it is hard in this cases to identify the function (and its properties) reliable
 * code duplication
     * like copy & paste of a function to duplicate the overall logic and change
@@ -233,7 +232,7 @@ appropriate.  As the current milestone is refactoring and the ideas for the
 next one are pretty roughly described, contributing with code is at the moment
 difficult.  Please create a ticket, before submitting a pull request.
 
-## Thanks
+## Ressources
 
 These projects helped me *a lot* when developing this <3
 
