@@ -5,7 +5,7 @@
   "scripts": {
     "serve-dev": "node devServer.js",
     "serve-build": "cd build; python -m SimpleHTTPServer 9032",
-    "format": "jsfmt -w src/js && eslint --fix src/js",
+    "format": "jsfmt -w src/js webpack.config*.js devServer.js && eslint --fix src/js webpack.config*.js devServer.js",
     "build": "NODE_ENV=production webpack -p --config webpack.config.build.js"
   },
   "author": "Stefan Gojan",
