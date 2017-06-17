@@ -17,6 +17,7 @@ const Editor = React.createClass({
             lineNumbers: true,
             theme: 'mui-light'
         }
+        this.suspendEvents = false;
 
         this.codeMirror = CodeMirror(
             this.refs.container,
@@ -25,6 +26,9 @@ const Editor = React.createClass({
 
         if (this.props.onTextChange) {
             this._bindCMHandler('changes', () => {
+                if (this.suspendEvents) {
+                    return
+                }
                 clearTimeout(this._updateTimer)
                 this._updateTimer = setTimeout(this._onTextChange, 100)
             })
@@ -32,6 +36,9 @@ const Editor = React.createClass({
 
         if (this.props.onActivity) {
             this._bindCMHandler('cursorActivity', () => {
+                if (this.suspendEvents) {
+                    return
+                }
                 clearTimeout(this._updateTimer);
                 this._updateTimer = setTimeout(this._onActivity, 100);
             });
@@ -46,9 +53,13 @@ const Editor = React.createClass({
 
     componentWillReceiveProps(nextProps) {
         if (nextProps.text !== this.props.text) {
+            // suspend events, so programmatically changed cursor position
+            // doesn't get handles as an user action
+            this.suspendEvents = true;
             let cursor = this.codeMirror.getDoc().getCursor()
             this.codeMirror.setValue(nextProps.text)
             this.codeMirror.getDoc().setCursor(cursor)
+            this.suspendEvents = false;
         }
         this._setError(nextProps.error)
     },
