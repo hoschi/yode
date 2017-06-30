@@ -1,6 +1,7 @@
 import React from 'react'
 import * as palette from 'material-ui/styles/colors';
 import Paper from 'material-ui/Paper';
+import { defaultTransition } from './styles'
 import Editor from './Editor'
 
 const EditorPaper = ({header, style, isFocused, editorProps}) => {
@@ -9,6 +10,10 @@ const EditorPaper = ({header, style, isFocused, editorProps}) => {
         zDepth = 3
     } else {
         zDepth = 1
+    }
+    let editorContainerStyle = Object.assign({}, editorContainerStyleBase)
+    if (!editorProps.error && editorProps.hasConnectedError) {
+        editorContainerStyle.opacity = 0.65
     }
     return <Paper zDepth={ zDepth } style={ Object.assign({}, style, paperStyle) }>
                <div style={ headerStyle }>
@@ -29,6 +34,7 @@ let headerStyle = {
     padding: 16
 }
 
-let editorContainerStyle = {
-    marginRight: 1
+let editorContainerStyleBase = {
+    marginRight: 1,
+    transition: defaultTransition
 }

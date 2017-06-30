@@ -3,7 +3,7 @@ import EditorPaper from './EditorPaper'
 import EditorHeader, { closeIconConfig } from './EditorHeader'
 
 const FileEditor = ({file, onFileTextChange, onFileActivity, onClose, style, isFocused}) => {
-    const {unformattedText, id, path, syntaxError} = file
+    const {unformattedText, id, path, syntaxError, hasConnectedError} = file
 
     let onEditorTextChange = ({value}) => {
         if (value === unformattedText) {
@@ -26,6 +26,7 @@ const FileEditor = ({file, onFileTextChange, onFileActivity, onClose, style, isF
     }
     let editorProps = {
         error: syntaxError,
+        hasConnectedError,
         text: unformattedText,
         onTextChange: onEditorTextChange,
         onActivity: onEditorActivity
@@ -34,6 +35,7 @@ const FileEditor = ({file, onFileTextChange, onFileActivity, onClose, style, isF
         titlePrefix: 'path:',
         title: path,
         node: file,
+        hasConnectedError,
         iconConfigs: [
             {
                 ...closeIconConfig,

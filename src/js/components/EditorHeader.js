@@ -1,10 +1,10 @@
 import React from 'react'
 import R from 'ramda'
-import * as palette from 'material-ui/styles/colors';
 import NodeEditorStateLabels from './NodeEditorStateLabels'
 import IconButton from 'material-ui/IconButton';
 import IconClose from 'material-ui/svg-icons/navigation/close';
 import { editorHeaderClsName } from '../constants'
+import { subtleLabelStyle } from './styles'
 
 export let closeIconConfig = {
     tooltip: 'close editor',
@@ -24,7 +24,7 @@ function getIcons (iconConfigs) {
     )).concat(R.last(icons));
 }
 
-const EditorHeader = ({titlePrefix, title, node, iconConfigs}) => {
+const EditorHeader = ({titlePrefix, title, node, iconConfigs, hasConnectedError}) => {
     let icons;
     if (iconConfigs) {
         icons = getIcons(iconConfigs)
@@ -35,7 +35,7 @@ const EditorHeader = ({titlePrefix, title, node, iconConfigs}) => {
                    { ' ' }
                    { title }
                    { ' ' }
-                   <NodeEditorStateLabels node={ node } />
+                   <NodeEditorStateLabels node={ node } hasConnectedError={ hasConnectedError } />
                </div>
                { icons }
            </div>
@@ -61,8 +61,4 @@ let iconButtonStyle = {
 let iconStyle = {
     width: iconButtonStyle.width,
     height: iconButtonStyle.height
-}
-
-let subtleLabelStyle = {
-    color: palette.grey700
 }

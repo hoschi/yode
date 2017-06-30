@@ -8,11 +8,19 @@ const Editor = React.createClass({
         return false
     },
 
+    isReadOnly() {
+        if (!this.props.error && this.props.hasConnectedError) {
+            // we have no error to fix, but a connected error is present
+            return true;
+        }
+        return false;
+    },
+
     componentDidMount() {
         this._CMHandlers = []
         let config = {
             value: this.props.text,
-            readOnly: false,
+            readOnly: this.isReadOnly(),
             mode: 'javascript',
             lineNumbers: true,
             theme: 'mui-light'
@@ -62,6 +70,10 @@ const Editor = React.createClass({
             this.suspendEvents = false;
         }
         this._setError(nextProps.error)
+        if (!this.codeMirror) {
+            return
+        }
+        this.codeMirror.setOption('readOnly', this.isReadOnly())
     },
 
     _getErrorLine(error) {

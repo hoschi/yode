@@ -231,6 +231,7 @@ function createFileFromText (path, text) {
             isRoot: true
         }
         file.syntaxError = syntaxError
+        file.hasConnectedError = true
     }
 
     file.unformattedText = file.text
@@ -245,14 +246,14 @@ R.find(R.propEq('id', searchId), files)
 export let selectAllFiles = (state) => state.editor.fileStorage
 
 export let selectOpenFiles = (state) => {
-    let allFiles = state.editor.fileStorage
+    let allFiles = selectAllFiles(state)
     let openIds = state.editor.fileEditorIds
     let files = openIds.map(getFileById(allFiles))
     return files
 }
 
 export let selectFilesWithOpenState = (state) => {
-    let files = state.editor.fileStorage
+    let files = selectAllFiles(state)
     let openIds = state.editor.fileEditorIds
     let isFileWithIdOpen = R.contains(R.__, openIds)
     return R.map((file) => ({
@@ -270,6 +271,11 @@ export let selectFunctions = (state) => {
     let openIds = state.editor.functionEditorIds;
     let functions = openIds.map(getFunctionById(allFunctions))
     return functions
+}
+
+export let createSelectFileOfFunction = () => (state, {functionNode}) => {
+    let files = selectAllFiles(state)
+    return getFileById(files, functionNode.fileId)
 }
 
 const initialState = [
@@ -426,7 +432,7 @@ describe('components', () => {
     })
   })
 })
-`),
+`)
 
 ]
 
@@ -507,12 +513,17 @@ let fileStorage = {
                 }
                 return f
             })
+            file.hasConnectedError = true;
             newState = createNewStateWithFile(state, file)
             stop()
             return newState
         }
 
+        // error of this file is gone
         oldFunction.syntaxError = undefined
+        // error of the whole file is now gone, because this is the only editor which can be edited and change the error state
+        file.hasConnectedError = false;
+
         // ast parsing wraps text in other nodes, because it parses it standalone and out of context of original text
         estraverse.traverse(ast, {
             // search for node with same type as old function and save that one instead
@@ -578,11 +589,15 @@ let fileStorage = {
             // broken code, wait for working code
             file.syntaxError = syntaxError
             file.unformattedText = newText
+            file.hasConnectedError = true;
             newState = createNewStateWithFile(state, file)
             stop()
             return newState
         }
         file.syntaxError = undefined
+        // error of the whole file is now gone, because this is the only editor which can be edited and change the error state
+        file.hasConnectedError = false;
+
         file.ast = ast
         file.text = print(ast);
         // add unformatted text for editor

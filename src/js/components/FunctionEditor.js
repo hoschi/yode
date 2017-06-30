@@ -3,7 +3,7 @@ import IconUp from 'material-ui/svg-icons/navigation/arrow-upward';
 import EditorPaper from './EditorPaper'
 import EditorHeader, { closeIconConfig } from './EditorHeader'
 
-const FunctionEditor = ({functionNode, onFunctionTextChange, onFunctionActivity, onClose, onSwapWithParent, isFocused, style}) => {
+const FunctionEditor = ({functionNode, onFunctionTextChange, onFunctionActivity, onClose, onSwapWithParent, isFocused, style, hasConnectedError}) => {
     const {syntaxError, unformattedText, customId} = functionNode;
     const onEditorTextChange = ({value}) => {
         if (value === unformattedText) {
@@ -32,6 +32,7 @@ const FunctionEditor = ({functionNode, onFunctionTextChange, onFunctionActivity,
 
     let editorProps = {
         error: syntaxError,
+        hasConnectedError,
         text: unformattedText,
         onTextChange: onEditorTextChange,
         onActivity: onEditorActivity
@@ -41,6 +42,7 @@ const FunctionEditor = ({functionNode, onFunctionTextChange, onFunctionActivity,
         titlePrefix: 'id:',
         title: customId,
         node: functionNode,
+        hasConnectedError,
         iconConfigs: [
             {
                 tooltip: 'swap with parent function editor',
