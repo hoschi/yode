@@ -136,41 +136,41 @@ of the library integrated in a real editor:
     * relocate a whole function
     * ...
 * functions are now an additional "context object"
-	* as autocompletion uses identifiers to give the user context
-	* function editors can be now used as context as well
-	* go crazy with machine learning here → e.g.
-		* show function editor for function under cursor automatically
-		* show last edited functions if there is space for it
-		* ...
+    * as autocompletion uses identifiers to give the user context
+    * function editors can be now used as context as well
+    * go crazy with machine learning here → e.g.
+        * show function editor for function under cursor automatically
+        * show last edited functions if there is space for it
+        * ...
 * editors are focused now
-	* the computer "knows" what one editor shows, because AST nodes has types e.g. "function" in prototype case
-	* editors are most of the time pretty small
-	* both can be used to automatically layout editors instead of manual splitting panes
-	* spawn editors for a logical group of code
-		* current function and all its test functions
-		* React dumb and smart component
-		* used selectors and action creators of a smart component
+    * the computer "knows" what one editor shows, because AST nodes has types e.g. "function" in prototype case
+    * editors are most of the time pretty small
+    * both can be used to automatically layout editors instead of manual splitting panes
+    * spawn editors for a logical group of code
+        * current function and all its test functions
+        * React dumb and smart component
+        * used selectors and action creators of a smart component
         * ...
 * make other AST nodes editable
     * proof of concept makes function nodes editable, this can be expanded to other node types
-	* Objects, to get editors for e.g. configs
-	* Arrays
+    * Objects, to get editors for e.g. configs
+    * Arrays
     * ...
 * use available AST for other things
-	* add imports automatically in file behind last import already existing
-	* add imported varible to already existing import
-	* linting without the need to parse file (for speed)
-	* probably snippets can work much better with AST
-	* pretty all stuff IDEs do already
-	* ...
+    * add imports automatically in file behind last import already existing
+    * add imported varible to already existing import
+    * linting without the need to parse file (for speed)
+    * probably snippets can work much better with AST
+    * pretty all stuff IDEs do already
+    * ...
 * use type of AST nodes as text objects in editors
     * add new operations to work with them
     * "change current function call" which changes called function but not the parameters
     * "change function body" which puts cursor right into the curly brackets and deletes current body so you can start from scratch
     * ...
 * hierarchy of function gets maintained
-	* navigate in this tree, like "swap with parent" button
-	* use as outline view
+    * navigate in this tree, like "swap with parent" button
+    * use as outline view
 
 ## Roadmap
 
