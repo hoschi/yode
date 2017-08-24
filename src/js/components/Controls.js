@@ -6,9 +6,12 @@ import AddFileDialogContainer from './AddFileDialogContainer'
 const Controls = ({onFormatClick, onOpenFunctionEditorUnderCursorClick, openFunctionEditorDisabled}) => {
     let formatButtonProps = {
         label: 'format code',
-        style: buttonStyle,
-        onTouchTap: onFormatClick,
-        tooltip: 'Recast formats code mostly as you type it'
+        style: {
+            ...buttonStyle,
+            // just for playing around with AST + formatter instead of CST
+            display: 'none'
+        },
+        onTouchTap: onFormatClick
     }
     let openFunctionEditorButtonProps = {
         label: 'open function editor',
