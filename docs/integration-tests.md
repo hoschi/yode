@@ -16,14 +16,15 @@
     * remove the current editor
     * parent function editor moves at the list position of the closed child editor
 * when the user clicks the button, and the editor has no parent function
-    * nothing happens
+    * file editor gets opened, which hasn't this button
 
 ### "open function editor for function under cursor" button
 
 * when placing the cursor in a function editor, where the cursor is not in a child function, and users clicks on button
     * nothing happens, because the editor for this function is already open
 * when placing the cursor in a editor and the text of the editor is not parsable, and user clicks on button
-    * nothing happens, because the we can't build the AST to search in, of unparsable text
+    * an function editor for this function, of the least parsabale state, gets created and placed on the top of function editors on the right side of the app
+    * the new editor is in "connected error" mode and read only
 * when placing the cursor in a function editor, where the cursor is in a child function, and users clicks on button
     * an function editor for this function gets created and placed on the top of function editors on the right side of the app
 * when placing the cursor in a file editor, where the cursor is not in a child function, and users clicks on button
