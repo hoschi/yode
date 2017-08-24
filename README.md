@@ -1,11 +1,11 @@
-# NFBE - Non File Based Editing
+# Yode - Focused Code Editing
 
 Edit smaller parts of a code base, so you can focus better on the important parts of a task.
 You can edit functions of JavaScript code as deeper level of a file.
 By focusing on functions of interest you can open an editor for each of it and
 arrange them to serve as context of your work. This frees you from the clutter
 of the rest of the file, containing this function.
-NFBE is designed as library, so it can be integrated in existing text editors
+is designed as library, so it can be integrated in existing text editors
 ([NeoVim](https://neovim.io/ ),
 [Atom](https://atom.io/  ), ...).
 
@@ -106,7 +106,7 @@ Other editors e.g. Atom uses the split/tab model where you split the screen and 
 have tabs. Latter model is even more useless, because now the size of your split must fit the size of
 content showed in each tab.
 
-NFBE solves a bunch of these problems by creating view containes which have
+Yode solves a bunch of these problems by creating view containes which have
 their size connected to their content.
 This way you must not resize the view container you edit at the moment or other containers around.
 When more view containers visible then screen space availible, you still need to position them

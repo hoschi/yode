@@ -1,7 +1,7 @@
 {
-  "name": "nfbe-proto",
+  "name": "yode-proto",
   "version": "0.0.1",
-  "description": "prototype for non file based editing",
+  "description": "prototype for focused code editing",
   "scripts": {
     "serve-dev": "node devServer.js",
     "serve-build": "cd build; python -m SimpleHTTPServer 9032",

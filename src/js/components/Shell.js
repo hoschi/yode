@@ -9,8 +9,8 @@ const Shell = ({children}) => {
     return <div>
                <Paper style={ style.pinnedArea } zDepth={ 2 }>
                    <div style={ style.header }>
-                       <AppBar title="NFBE Prototype" showMenuIconButton={ false } zDepth={ 0 } />
-                       <a href="https://github.com/hoschi/nfbe" title="Github project page">
+                       <AppBar title="Yode Prototype" showMenuIconButton={ false } zDepth={ 0 } />
+                       <a href="https://github.com/hoschi/yode" title="Github project page">
                            <img style={ style.githubImg } src={ githubMarkImg } alt="github mark" />
                        </a>
                    </div>
