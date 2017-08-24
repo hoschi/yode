@@ -5,9 +5,9 @@ You can edit functions of JavaScript code as deeper level of a file.
 By focusing on functions of interest you can open an editor for each of it and
 arrange them to serve as context of your work. This frees you from the clutter
 of the rest of the file, containing this function.
-is designed as library, so it can be integrated in existing text editors
+Yode is designed as library, so it can be integrated in existing text editors
 ([NeoVim](https://neovim.io/ ),
-[Atom](https://atom.io/  ), ...).
+[Atom](https://atom.io/ ), ...).
 
 ## Motivation
 
@@ -23,7 +23,7 @@ paragraphs, blocks in brackets and so on, great.
 For soucre code there is a version which is even more descriptive, called
 [abstract syntax tree](https://en.wikipedia.org/wiki/Abstract_syntax_tree ).
 I want to bring this knowledge to text editors so they can make use of it.
-For some ideas what could be done with this knowledge just keep reading this document.
+For some ideas what could be done with this knowledge, just keep reading.
 When reading a file into the text editor it should be converted to an AST and from then this is the source of truth.
 This means when you change text of a node it gets converted back to an AST.
 Every time the AST or some part of it changed, the whole AST of the
@@ -31,7 +31,7 @@ corresponding file gets written as text into the file, so the file is the
 destination of truth.
 This is important, because every other tool can still work with files and doesn't need to change anything.
 It also means you can still use features of your text editor which work on
-files like search/replace, removing files and so on.
+files like search/replace, removing files from disk and so on.
 
 The smallest editable container in a text editor is a file.
 But files contain a lot of code, they group some kind of stuff together so you don't get too much files.
@@ -39,7 +39,7 @@ This is a good thing, because you need an overview of your current code base.
 When you tackle a task you search the files you need to edit and then the parts of them which you need to change.
 At this point current text editors leave you a little bit alone when you want to
 [organize these parts](#Current state of screenspace management).
-My second major goal is to give you the possibillty to focus on smaller parts of code than "a file".
+Yode gives you the possibillty to focus on smaller parts of code than "a file".
 This prototype adds another level of changabillty, function nodes of the AST.
 A function can have its own editor, which is just an instance of your text editor but editing not a whole file.
 This way you can still use the features of your text editor, but in a more focused way.
@@ -61,7 +61,7 @@ Features of library accessible through prototype UI:
 * move up in code hierarchy to expand current scope of editor
 * new files can be created on the fly
 * simple layout logic
-    * open new function editor on right side so it doesn't botter left (main) side
+    * open new function editor on right side so it doesn't bother left (main) side
     * editor can be sized horizontally to fine tune screen space occupied
     * vertical size of editor is given by content
     * editor can be closed when not needed anymore
@@ -96,7 +96,7 @@ Unfortunately the position gets lost easily:
 * changing the size of the split e.g. by maximize it
 * add/remove a split which forces other splits to shrink/expand
 * add more text in the split so the text you want to see extends the size of your split, they don't resize to content
-* some opperations e.g. Gread to discard changes since last (git) commit
+* some opperations e.g. `Gread` to discard changes since last git commit
 
 This makes the split useless, because you aren't looking at what you want to see anymore.
 You can close the split or manually reposition its content to show what you want to see.
@@ -106,15 +106,15 @@ Other editors e.g. Atom uses the split/tab model where you split the screen and 
 have tabs. Latter model is even more useless, because now the size of your split must fit the size of
 content showed in each tab.
 
-Yode solves a bunch of these problems by creating view containes which have
+Yode solves a bunch of these problems by creating view containers which have
 their size connected to their content.
 This way you must not resize the view container you edit at the moment or other containers around.
 When more view containers visible then screen space availible, you still need to position them
 to view what is important to you at the very moment.
-Even the current implementation of the prototype can be changed, so you can dip out of the
-"size of function editor is size of content" model.
+In addition the current implementation of the prototype could be changed, so you can dip out of the
+"size of function editor is size of content" model, if you prefer this.
 
-A first implementation of layout logic should help you with positioning by moving to top(/left)
+A first implementation of layout logic should help you with positioning by e.g. moving to top(/left)
 what is most important for you. You just mark the editors which you want to focus and
 layout logic shifts these windows to top, where all other go below of them.
 After that this can be improved or the user can select different layout logics per tab.
@@ -143,7 +143,7 @@ of the library integrated in a real editor:
         * show last edited functions if there is space for it
         * ...
 * editors are focused now
-    * the computer "knows" what one editor shows, because AST nodes has types e.g. "function" in prototype case
+    * the computer "knows" what one editor shows, because AST nodes has types e.g. "function" in prototypes case
     * editors are most of the time pretty small
     * both can be used to automatically layout editors instead of manual splitting panes
     * spawn editors for a logical group of code
@@ -157,7 +157,7 @@ of the library integrated in a real editor:
     * Arrays
     * ...
 * use available AST for other things
-    * add imports automatically in file behind last import already existing
+    * add `import` statements automatically in file below last `import` already existing
     * add imported varible to already existing import
     * linting without the need to parse file (for speed)
     * probably snippets can work much better with AST
@@ -185,23 +185,24 @@ It is a side project, so don't expect a full time working pace.
     * which can then be used to integrate in editor
     * separate logic for demo UI from core logic
     * separate parser from state logic where possible
-* [ ] integrate into NeoVim GUI
-    * search UI which is flexible enough to replace standard NeoVim window management which automatic (at least fixed height windows) one sketched above, e.g.:
-        * because normally window dimensions are set by user, but should now be set by content instead
-        * use [NyaoVim](https://github.com/rhysd/NyaoVim ) editor element and build tabs/windows arround it, backed by one headless NeoVim instance holding tab/buffer/... state
-        * checkout if window management can be replaced in [oni](https://github.com/extr0py/oni )
-        * ...
-    * build NeoVim plugin which acts as client
+* [ ] integrate into [Oni](https://github.com/extr0py/oni ) (NeoVim GUI)
+    * build Oni plugin which glues Oni and Yode together
+        * [see discussion](https://github.com/extr0py/oni/issues/362#issuecomment-320433400 )
         * sends current buffer content
         * sends events like (cursor moved)
+        * implements layouting logic as in prototype
         * ...
-    * build server around lib so it can communicate with editor integration
-        * one server instance should keep state (open files, functions, ...) regarding one editor instance
-        * protocol can be easy (e.g. JSON RPC) at this state and swapped with some more complex/faster/... (e.g. MessagePack) later
     * \o/ when this milestone is done, it should be usable for every day work \o/
         * start with small window management features
         * keep performance issues till they lead to problems
 * [ ] search better solutions for known issues
+* [ ] build server around lib so it can communicate with editor integration which can't execute JavaScript
+    * one server instance should keep state (open files, functions, ...) regarding one editor instance
+    * protocol can be easy (e.g. JSON RPC) at this state and swapped with some more complex/faster/... (e.g. MessagePack) later
+
+## Name
+
+"Yode" comes from the english word "node", because you edit (AST) nodes. I swapped the letter "n" with a "y". Y you ask? Y not :D
 
 ## Additional docs
 
@@ -225,12 +226,12 @@ TODO link zu issues aus nonFileBasedEditing-issues.md
 ## Contribution
 
 Use the [issue tracker](link to github issues) for all kind of questions, bug
-reports, etc. I'll tag it then as needed.  As the project is fast moving at the
-moment, ideas, general discussion and resarch about the problem space are also
+reports, etc. I'll tag it then as needed. As the project is fast moving at the
+moment, ideas, general discussion and research about the problem space are also
 a good way to contribute. I'll collect them and pick it up when it is
-appropriate.  As the current milestone is refactoring and the ideas for the
+appropriate. As the current milestone is refactoring and the ideas for the
 next one are pretty roughly described, contributing with code is at the moment
-difficult.  Please create a ticket, before submitting a pull request.
+difficult. Please create a ticket, before submitting a pull request.
 
 ## Ressources
 
