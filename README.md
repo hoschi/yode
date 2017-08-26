@@ -9,6 +9,10 @@ Yode is designed as library, so it can be integrated in existing text editors
 ([NeoVim](https://neovim.io/ ),
 [Atom](https://atom.io/ ), ...).
 
+## Introduction
+
+[![Yode Introduction Video](https://img.youtube.com/vi/3H8MqT2OgkA/0.jpg)](https://www.youtube.com/watch?v=3H8MqT2OgkA)
+
 ## Motivation
 
 I love text editors and I am a Vim/NeoVim user for years now.
@@ -38,7 +42,7 @@ But files contain a lot of code, they group some kind of stuff together so you d
 This is a good thing, because you need an overview of your current code base.
 When you tackle a task you search the files you need to edit and then the parts of them which you need to change.
 At this point current text editors leave you a little bit alone when you want to
-[organize these parts](#Current state of screenspace management).
+[organize these parts](#current-state-of-screenspace-management).
 Yode gives you the possibillty to focus on smaller parts of code than "a file".
 This prototype adds another level of changabillty, function nodes of the AST.
 A function can have its own editor, which is just an instance of your text editor but editing not a whole file.
@@ -65,17 +69,6 @@ Features of library accessible through prototype UI:
     * editor can be sized horizontally to fine tune screen space occupied
     * vertical size of editor is given by content
     * editor can be closed when not needed anymore
-
-## Example Workflow
-
-> TODO video
-
-* datei editor öffnen
-* eine function öffnen die noch eine Kind function hat
-* eine fucntion öffnen die keine kind function hat
-* file editor schließen
-* editoren so anordnen das es sinn macht
-* jetzt ist man focusiert auf das was man braucht, sieht aber auch das sich die "outer" function live updated
 
 ## Demo
 
@@ -211,7 +204,7 @@ It is a side project, so don't expect a full time working pace.
 
 ## Known issues
 
-TODO link zu issues aus nonFileBasedEditing-issues.md
+As this is a prototype, the list is not complete.
 
 * big chunks of code changes
     * like cut & paste or git operations which make bigger changes than a user while writing in an editor
@@ -225,7 +218,7 @@ TODO link zu issues aus nonFileBasedEditing-issues.md
 
 ## Contribution
 
-Use the [issue tracker](link to github issues) for all kind of questions, bug
+Use the [issue tracker](https://github.com/hoschi/yode/issues ) for all kind of questions, bug
 reports, etc. I'll tag it then as needed. As the project is fast moving at the
 moment, ideas, general discussion and research about the problem space are also
 a good way to contribute. I'll collect them and pick it up when it is
@@ -235,7 +228,7 @@ difficult. Please create a ticket, before submitting a pull request.
 
 ## Ressources
 
-These projects helped me *a lot* when developing this <3
+These projects helped me *a lot* when developing this :heart:
 
 * [AST Explorer](https://astexplorer.net )
 * [Acorn](https://github.com/ternjs/acorn )
