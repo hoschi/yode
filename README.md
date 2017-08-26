@@ -201,6 +201,7 @@ It is a side project, so don't expect a full time working pace.
 
 * [Integration Tests](./docs/integration-tests.md )
 * [Development Environment](./docs/development.md )
+* development happens on [develop branch](https://github.com/hoschi/yode/tree/develop )
 
 ## Known issues
 
