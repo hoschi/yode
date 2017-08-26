@@ -4,7 +4,7 @@
   "description": "prototype for focused code editing",
   "scripts": {
     "serve-dev": "node devServer.js",
-    "serve-build": "cd build; python -m SimpleHTTPServer 9032",
+    "serve-build": "node build-server.js",
     "format": "jsfmt -w src/js webpack.config*.js devServer.js && eslint --fix src/js webpack.config*.js devServer.js",
     "build": "NODE_ENV=production webpack -p --config webpack.config.build.js"
   },
