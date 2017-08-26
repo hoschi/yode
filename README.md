@@ -195,7 +195,7 @@ It is a side project, so don't expect a full time working pace.
 
 ## Name
 
-"Yode" comes from the english word "node", because you edit (AST) nodes. I swapped the letter "n" with a "y". Y you ask? Y not :sob:
+"Yode" comes from the english word "node", because you edit (AST) nodes. I swapped the letter "n" with a "y". Y you ask? Y not! :sob:
 
 ## Additional docs
 
@@ -208,7 +208,6 @@ As this is a prototype, the list is not complete.
 
 * big chunks of code changes
     * like cut & paste or git operations which make bigger changes than a user while writing in an editor
-    * TODO link zu "slow text diffing" aus issues md datei
     * it is hard in this cases to identify the function (and its properties) reliable
 * code duplication
     * like copy & paste of a function to duplicate the overall logic and change
