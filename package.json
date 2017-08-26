@@ -1,7 +1,7 @@
 {
-  "name": "yode-proto",
+  "name": "yode",
   "version": "0.0.1",
-  "description": "prototype for focused code editing",
+  "description": "library for focused code editing",
   "scripts": {
     "serve-dev": "node devServer.js",
     "serve-build": "node build-server.js",
