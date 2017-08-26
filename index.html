@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Yode Prototype</title>
+    <base href="/">
+    <meta name="viewport" content="width=device-width">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,500" rel="stylesheet" type="text/css">
+    <style type="text/css">
+        body {
+            font-family: 'Roboto', sans-serif;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        h2 {
+            font-weight: 500;
+        }
+
+        .react-grid-item > .react-resizable-handle {
+            /* move up to fix padding */
+            bottom: 28px !important;
+            /* move above highlighted editor */
+            z-index: 10;
+        }
+
+        .react-grid-item.react-grid-placeholder {
+            background-color: #009688 !important;
+        }
+
+        .cm-s-mui-light .cm-quote {color: #090;}
+        .cm-negative {color: #d44;}
+        .cm-positive {color: #292;}
+        .cm-header, .cm-strong {font-weight: bold;}
+        .cm-em {font-style: italic;}
+        .cm-link {text-decoration: underline;}
+        .cm-strikethrough {text-decoration: line-through;}
+        .cm-s-mui-light .cm-atom {color: #219;}
+        .cm-s-mui-light .cm-variable,
+        .cm-s-mui-light .cm-punctuation,
+        .cm-s-mui-light .cm-property,
+        .cm-s-mui-light .cm-operator {}
+        .cm-s-mui-light .cm-variable-3 {color: #085;}
+        .cm-s-mui-light .cm-comment {color: #a50;}
+        .cm-s-mui-light .cm-string-2 {color: #f50;}
+        .cm-s-mui-light .cm-meta {color: #555;}
+        .cm-s-mui-light .cm-qualifier {color: #555;}
+        .cm-s-mui-light .cm-builtin {color: #30a;}
+        .cm-s-mui-light .cm-bracket {color: #997;}
+        .cm-s-mui-light .cm-tag {color: #170;}
+        .cm-s-mui-light .cm-attribute {color: #00c;}
+        .cm-s-mui-light .cm-hr {color: #999;}
+        .cm-s-mui-light .cm-link {color: #00c;}
+        .cm-s-mui-light .cm-error {color: #f00;}
+
+        /* changed to match MD colors */
+        .cm-s-mui-light .cm-header {color: #3f51b5;}
+        .cm-s-mui-light .cm-def {color: #3f51b5;}
+        .cm-s-mui-light .cm-keyword {color: #9c27b0;}
+        .cm-s-mui-light .cm-variable-2 {color: #009688;}
+        .cm-s-mui-light .cm-string {color: #B71C1C;}
+        .cm-s-mui-light .cm-number {color: #1B5E20;}
+
+        .editor .CodeMirror {
+            height:100%;
+            width:100%;
+        }
+
+        .CodeMirror .CodeMirror-gutters,
+        .CodeMirror .CodeMirror-linenumbers,
+        .CodeMirror .CodeMirror-linenumber {
+            /* grey200 */
+            background-color:#EEEEEE;
+        }
+        .CodeMirror .CodeMirror-line.errorMarker {
+            /* deepOrange200 */
+            background-color: #FFAB91;
+        }
+
+        .CodeMirror .CodeMirror-hscrollbar {
+            /* hide scrollbar if not needed after resize */
+            overflow-x:auto;
+        }
+    </style>
+<link rel="shortcut icon" href="/favicon.ico"></head>
+<body>
+
+<div id="main"></div>
+
+<script type="text/javascript" src="/main.bundle.js"></script></body>
+</html>
