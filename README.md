@@ -72,7 +72,7 @@ Features of library accessible through prototype UI:
 
 ## Demo
 
-> TODO link to hosted demo
+https://hoschi.github.io/yode/
 
 Sourcemaps are included, check console for profile logs which can be used as debugging entry point.
 
