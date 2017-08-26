@@ -195,7 +195,7 @@ It is a side project, so don't expect a full time working pace.
 
 ## Name
 
-"Yode" comes from the english word "node", because you edit (AST) nodes. I swapped the letter "n" with a "y". Y you ask? Y not :D
+"Yode" comes from the english word "node", because you edit (AST) nodes. I swapped the letter "n" with a "y". Y you ask? Y not :sob:
 
 ## Additional docs
 
