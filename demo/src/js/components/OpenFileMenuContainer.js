@@ -1,8 +1,7 @@
 import { connect } from 'react-redux'
 import OpenFileMenu from './OpenFileMenu'
 import { setIsOpenFileMenuOpen, selectIsOpenFileMenuOpen } from 'store/fileManagement'
-import { selectFilesWithOpenState } from 'store/fileStorage'
-import { openFileEditorById } from 'store/editorReducer'
+import { selectFilesWithOpenState, openEditorById } from 'store/editorReducer'
 
 let mapStateToProps = (state) => {
     return {
@@ -13,7 +12,7 @@ let mapStateToProps = (state) => {
 
 let mapDispatchToProps = {
     setMenuIsOpen: setIsOpenFileMenuOpen,
-    openFileEditorById
+    openEditorById
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(OpenFileMenu);

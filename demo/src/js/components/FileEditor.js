@@ -2,22 +2,23 @@ import React from 'react'
 import EditorPaper from './EditorPaper'
 import EditorHeader, { closeIconConfig } from './EditorHeader'
 
-const FileEditor = ({file, onFileTextChange, onFileActivity, onClose, style, isFocused}) => {
-    const {unformattedText, id, path, syntaxError, hasConnectedError} = file
+const FileEditor = ({buffer, onTextChanged, onFileActivity, onClose, style, isFocused}) => {
+    const {id, path, text:bufferText, metaData} = buffer
+    const {syntaxError, hasConnectedError} = metaData;
 
     let onEditorTextChange = ({value}) => {
-        if (value === unformattedText) {
+        if (value === bufferText) {
             // text was changed by store
             return
         }
-        onFileTextChange({
-            file: file,
+        onTextChanged({
+            buffer,
             newText: value
         })
     }
     let onEditorActivity = (cursor) => onFileActivity({
         cursor,
-        fileId: id
+        buffer
     })
     let onCloseClick = () => {
         onClose({
@@ -27,14 +28,14 @@ const FileEditor = ({file, onFileTextChange, onFileActivity, onClose, style, isF
     let editorProps = {
         error: syntaxError,
         hasConnectedError,
-        text: unformattedText,
+        text: bufferText,
         onTextChange: onEditorTextChange,
         onActivity: onEditorActivity
     }
     let headerProps = {
         titlePrefix: 'path:',
         title: path,
-        node: file,
+        node: buffer,
         hasConnectedError,
         iconConfigs: [
             {
@@ -48,8 +49,8 @@ const FileEditor = ({file, onFileTextChange, onFileActivity, onClose, style, isF
 }
 
 FileEditor.propTypes = {
-    file: React.PropTypes.object.isRequired,
-    onFileTextChange: React.PropTypes.func.isRequired,
+    buffer: React.PropTypes.object.isRequired,
+    onTextChanged: React.PropTypes.func.isRequired,
     onFileActivity: React.PropTypes.func.isRequired
 }
 

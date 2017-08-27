@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 import AddFileDialog from './AddFileDialog'
 import { setIsOpenOfAddDialog, setContentOfAddDialog, setFileNameOfAddDialog, resetAddDialog, selectIsOpenAddFileDialog, selectContentOfAddDialog, selectFileNameOfAddDialog } from 'store/fileManagement'
-import { selectAllFiles, addFileToStorage } from 'store/fileStorage'
+import { selectAllFiles, addFileToStorage } from 'store/editorReducer'
 
 let mapStateToProps = (state) => {
     return {

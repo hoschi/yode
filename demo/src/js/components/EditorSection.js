@@ -1,4 +1,5 @@
 import React from 'react'
+import R from 'ramda'
 import ReactGridLayoutOrig, { WidthProvider } from 'react-grid-layout'
 import FunctionEditorContainer from './FunctionEditorContainer'
 import FileEditorContainer from './FileEditorContainer'
@@ -7,28 +8,24 @@ import { editorLayoutCols, editorHeaderClsName } from '../constants'
 
 let ReactGridLayout = WidthProvider(ReactGridLayoutOrig)
 
-let createFunctionEditor = (functionNode) => (
-    <div key={ functionNode.customId }>
-        <div>
-            <EditorGridItemContainer itemId={ functionNode.customId.toString() }>
-                <FunctionEditorContainer functionNode={ functionNode } />
-            </EditorGridItemContainer>
-        </div>
-    </div>
-)
-let createFileEditor = (file) => (
-    <div key={ file.id }>
-        <div>
-            <EditorGridItemContainer itemId={ file.id }>
-                <FileEditorContainer file={ file } />
-            </EditorGridItemContainer>
-        </div>
-    </div>
-)
+let registeredEditorTypes = {
+    FileEditorContainer,
+    FunctionEditorContainer
+}
 
-const EditorSection = ({files, functions, layout, onLayoutChanged}) => {
-    let functionEls = functions.map(createFunctionEditor)
-    let fileEls = files.map(createFileEditor)
+let createBufferEditor = (buffer) => {
+    let EditorType = registeredEditorTypes[buffer.editorType] || FileEditorContainer;
+    return <div key={ buffer.id }>
+               <div>
+                   <EditorGridItemContainer itemId={ buffer.id }>
+                       <EditorType buffer={ buffer } />
+                   </EditorGridItemContainer>
+               </div>
+           </div>
+}
+
+const EditorSection = ({buffers, layout, onLayoutChanged}) => {
+    let bufferEls = R.values(buffers).map(createBufferEditor)
 
     let gridProps = {
         cols: editorLayoutCols,
@@ -45,8 +42,7 @@ const EditorSection = ({files, functions, layout, onLayoutChanged}) => {
     }
 
     return <ReactGridLayout {...gridProps}>
-               { fileEls }
-               { functionEls }
+               { bufferEls }
            </ReactGridLayout>
 }
 

@@ -11,6 +11,7 @@ const Controls = ({onFormatClick, onOpenFunctionEditorUnderCursorClick, openFunc
             // just for playing around with AST + formatter instead of CST
             display: 'none'
         },
+        tooltip: 'Recast formats code mostly as you type it',
         onTouchTap: onFormatClick
     }
     let openFunctionEditorButtonProps = {

@@ -1,12 +1,10 @@
 import { connect } from 'react-redux'
 import EditorSection from './EditorSection'
-import { selectOpenFiles, selectFunctions } from 'store/fileStorage'
-import { selectEditorsLayout, editorsLayoutChanged } from 'store/editorReducer'
+import { selectEditorsLayout, selectVisibleBuffers, editorsLayoutChanged } from 'store/editorReducer'
 
 let mapStateToProps = (state) => {
     return {
-        files: selectOpenFiles(state),
-        functions: selectFunctions(state),
+        buffers: selectVisibleBuffers(state),
         layout: selectEditorsLayout(state)
     }
 }
