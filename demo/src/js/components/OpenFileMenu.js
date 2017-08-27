@@ -7,7 +7,7 @@ import MenuItem from 'material-ui/MenuItem';
 const OpenFileMenu = React.createClass({
     anchorEl: undefined,
     render() {
-        const {isMenuOpen, setMenuIsOpen, filesWithOpenState, openFileEditorById} = this.props;
+        const {isMenuOpen, setMenuIsOpen, filesWithOpenState, openEditorById} = this.props;
 
         let openButtonProps = {
             label: 'open file editor',
@@ -19,7 +19,7 @@ const OpenFileMenu = React.createClass({
         }
 
         let menuItems = filesWithOpenState.map(({isOpen, file}) => {
-            let onTouchTap = () => openFileEditorById({
+            let onTouchTap = () => openEditorById({
                 id: file.id
             })
             let props = {

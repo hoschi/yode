@@ -11,8 +11,8 @@ const Shell = ({children}) => {
                    <div style={ style.header }>
                        <AppBar title="Yode Prototype" showMenuIconButton={ false } zDepth={ 0 } />
                        <a href="https://github.com/hoschi/yode" title="Github project page">
-                           <img style={ style.githubImg } src={ githubMarkImg } alt="github mark" />
-                       </a>
+                                                                       <img style={ style.githubImg } src={ githubMarkImg } alt="github mark" />
+                                                                   </a>
                    </div>
                    <ControlsContainer />
                </Paper>
