@@ -1,5 +1,5 @@
 export default {
     magic() {
-        console.log('magic')
+        console.log('it is magic')
     }
 }

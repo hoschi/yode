@@ -2,7 +2,7 @@
 export let otherTest = (base) => {
     console.log({
         ...base,
-        foo:'bar'
+        foo: 'bar'
     })
 }
 
