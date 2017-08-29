@@ -1,0 +1,18 @@
+{
+  "name": "yode-core",
+  "version": "0.0.1",
+  "description": "yode core",
+  "author": "Stefan Gojan",
+  "license": "MIT",
+  "main":"src/index.js",
+  "dependencies": {
+    "acorn": "4.0.11",
+    "acorn-jsx": "3.0.1",
+    "babel-traverse": "6.22.1",
+    "babylon": "6.15.0",
+    "difflib": "0.2.4",
+    "estraverse-fb": "1.3.1",
+    "ramda": "0.19.1",
+    "recast": "0.11.21"
+  }
+}

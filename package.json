@@ -5,9 +5,18 @@
   "author": "Stefan Gojan",
   "license": "MIT",
   "scripts": {
-    "format": "jsfmt -w demo/src/js demo/webpack.config*.js demo/devServer.js && eslint --fix demo/src/js demo/webpack.config*.js demo/devServer.js"
+    "format": "jsfmt -w packages/*/src/*.js packages/*/*.js && eslint --fix packages/*/src/*.js packages/*/*.js"
   },
   "devDependencies": {
+    "babel-core": "6.14.0",
+    "babel-loader": "6.4.1",
+    "babel-plugin-dev-expression": "0.2.1",
+    "babel-plugin-transform-react-constant-elements": "6.23.0",
+    "babel-plugin-transform-react-inline-elements": "6.8.0",
+    "babel-plugin-transform-react-remove-prop-types": "0.2.9",
+    "babel-plugin-transform-object-rest-spread": "6.8.0",
+    "babel-preset-es2015": "6.22.0",
+    "babel-preset-es2015-node6": "0.4.0",
     "esformatter-jsx": "7.0.1",
     "esformatter-limit-linebreaks": "0.0.3",
     "esformatter-remove-trailing-commas": "1.0.1",

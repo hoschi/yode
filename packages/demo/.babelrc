@@ -7,7 +7,7 @@
         "development": {
             "presets": [[ "es2015", {modules:false} ], "react-hmre"],
         },
-        "production": {
+        "DEMO_PROD": {
             "presets": [[ "es2015", {modules:false} ]],
             "plugins":[
                 "transform-react-remove-prop-types",
