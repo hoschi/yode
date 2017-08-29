@@ -7,6 +7,7 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 var dir_js = path.resolve(__dirname, 'src/js')
 var dir_base = path.resolve(__dirname);
 var dir_build = path.resolve(__dirname, 'build')
+var dir_core = path.resolve(__dirname, '../core/')
 var dir_nodeModules = path.resolve(__dirname, 'node_modules')
 var file_indexHtml = path.resolve(__dirname, 'src/html/index.html')
 var file_favicon = path.resolve(__dirname, 'src/assets/favicon.ico')
@@ -56,7 +57,10 @@ module.exports = {
             dir_base,
             dir_js,
             'node_modules'
-        ]
+        ],
+        alias:{
+            'yode-core':dir_core
+        }
     },
     stats: {
         // Nice colored output
