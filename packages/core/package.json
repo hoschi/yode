@@ -4,8 +4,9 @@
   "description": "yode core",
   "author": "Stefan Gojan",
   "license": "MIT",
-  "main":"src/index.js",
+  "main": "src/index.js",
   "dependencies": {
+    "@stamp/it": "^1.0.1",
     "acorn": "4.0.11",
     "acorn-jsx": "3.0.1",
     "babel-traverse": "6.22.1",

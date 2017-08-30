@@ -160,13 +160,13 @@ let reducerFunctions = {
         }
     },
     [ADD_FILE_TO_STORAGE]: (state, {path, text}) => {
-        return {
-            ...state,
-            buffers: state.buffers.concat([createFileFromText({
+        return setProp('buffers', {
+            ...state.buffers,
+            [path]: createFileFromText({
                 path,
                 text
-            })])
-        }
+            })
+        }, state)
     },
     [OPEN_EDITOR_BY_ID]: (state, action) => {
         const {id} = action;
