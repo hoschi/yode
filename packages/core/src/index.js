@@ -1,3 +1,3 @@
-export default () => {
-    console.log('implement core')
-}
+import FileManager from './FileManager'
+
+export default FileManager
