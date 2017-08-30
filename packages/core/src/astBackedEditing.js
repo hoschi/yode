@@ -27,6 +27,8 @@ function isEditorDirty (node) {
     return node.text !== node.unformattedText
 }
 
+let cursorIsInNode = (cursor, node) => cursor > node.start && cursor < node.end
+
 export function parseCode (text) {
     let stop = profiler.start('-- code to ast')
     let ast
@@ -173,4 +175,27 @@ export function getFunctionsFromAst (ast, fileId, functionsToCompare) {
         functions,
         functionsTreeRoot
     }
+}
+
+export function getInnerMostFunctionNode (sourceNode, cursor) {
+    let ast,
+        foundNode
+    try {
+        ast = parser.parse(sourceNode.unformattedText)
+    } /* eslint-disable */ catch ( error ) /* eslint-enable */ {
+        console.log(error)
+        return;
+    }
+    parser.estraverse.traverse(ast, {
+        leave(node) {
+            // code generated from FunctionExpression are not parseable again, skip for now
+            if (node.type === 'FunctionDeclaration' || node.type === 'ArrowFunctionExpression') {
+                if (cursorIsInNode(cursor, node)) {
+                    foundNode = node;
+                    this.break()
+                }
+            }
+        }
+    })
+    return foundNode;
 }

@@ -1,6 +1,7 @@
 import { createStore, compose, applyMiddleware } from 'redux'
 import {emitterMiddleware} from 'plugin/emitter'
 import initPlugin from 'plugin/YodeDemoPlugin'
+import EditorApi from 'plugin/EditorApi'
 
 const rootReducer = require('./rootReducer').default
 
@@ -16,7 +17,9 @@ const finalCreateStore = compose.apply(this, modifiers)(createStore)
 // create store from reducers bundled in root reducer
 const store = finalCreateStore(rootReducer)
 
-initPlugin(store.getState())
+let editorApi = EditorApi.create()
+editorApi.init(store.dispatch)
+initPlugin(store.getState(), editorApi)
 
 // enable hot module reloading for reducers
 if (module.hot) {
