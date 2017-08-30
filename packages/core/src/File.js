@@ -1,5 +1,5 @@
 import stampit from '@stamp/it';
-import { parseCode, getFunctionsFromAst } from './astBackedEditing'
+import { parseCode, getFunctionsFromAst, printAst } from './astBackedEditing'
 
 let File = stampit().deepProps({
     id: undefined,
@@ -17,7 +17,7 @@ let File = stampit().deepProps({
         // create formatted code
         let {error: syntaxError, ast} = parseCode(unformattedText)
         if (ast) {
-            this.text = print(ast)
+            this.text = printAst(ast)
             // refresh ast from formatted code
             let {ast: astFormatted} = parseCode(this.text)
             this.ast = astFormatted
@@ -26,7 +26,7 @@ let File = stampit().deepProps({
                 // create text for each function at start, because recast can't
                 // keep all formatting when parsing code snippets instead of code
                 // in file
-                node.text = print(node);
+                node.text = printAst(node);
                 // and use this as editor text, so we don't start with "dirty" editors
                 node.unformattedText = node.text
             });

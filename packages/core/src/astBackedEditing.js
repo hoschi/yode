@@ -1,4 +1,4 @@
-import Profiler from 'Profiler'
+import profiler from './profiler'
 import parser from 'ast/parser-recast-jsx';
 import { getFunctionIndexByText } from 'ast/compareFunctions'
 
@@ -6,21 +6,21 @@ let id = 1
 
 let {estraverse} = parser;
 function parse (...args) {
-    //let stop = Profiler.start('parse', true);
+    //let stop = profiler.start('parse', true);
     let r = parser.parse.apply(parser, args);
     //stop();
     return r;
 }
 
-function print (...args) {
-    //let stop = Profiler.start('--- print', true);
-    let r = parser.print.apply(parser, args);
+export function printAst (...args) {
+    //let stop = profiler.start('--- printAst', true);
+    let r = parser.printAst.apply(parser, args);
     //stop();
     return r;
 }
 
 function addTextToNode (ast) {
-    ast.text = print(ast)
+    ast.text = printAst(ast)
 }
 
 function isEditorDirty (node) {
@@ -28,7 +28,7 @@ function isEditorDirty (node) {
 }
 
 export function parseCode (text) {
-    let stop = Profiler.start('-- code to ast')
+    let stop = profiler.start('-- code to ast')
     let ast
     try {
         ast = parse(text)
@@ -46,7 +46,7 @@ export function parseCode (text) {
 }
 
 export function getFunctionsFromAst (ast, fileId, functionsToCompare) {
-    let stop = Profiler.start('-- ast to functions')
+    let stop = profiler.start('-- ast to functions')
     let functions = []
     let functionsToCompareLeft
 

@@ -1,16 +1,30 @@
 {
     "plugins": [
         "transform-object-rest-spread",
-        ["module-resolver", {
-            "root": ["./src"],
-            "alias":{
-                "lib":"./lib"
-            }
-        }]
     ],
     "env": {
         "DEMO_PROD": {
             "presets": [[ "es2015", {modules:false} ]],
+            "plugins":[
+                ["module-resolver", {
+                    // paths are relative do "<root>/packages/demo"
+                    "root":["../core/src"],
+                    "alias":{
+                        "lib":"../core/lib"
+                    }
+                }]
+            ]
+        },
+        "DEMO_DEV": {
+            "plugins":[
+                ["module-resolver", {
+                    // paths are relative do "<root>/packages/demo"
+                    "root":["../core/src"],
+                    "alias":{
+                        "lib":"../core/lib"
+                    }
+                }]
+            ]
         }
     }
 }

@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "demo for yode",
   "scripts": {
-    "serve-dev": "node devServer.js",
+    "serve-dev": "NODE_ENV=DEMO_DEV node devServer.js",
     "serve-build": "node build-server.js",
     "build": "NODE_ENV=DEMO_PROD webpack -p --config webpack.config.build.js"
   },

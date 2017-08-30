@@ -43,7 +43,7 @@ let parser = {
         }
         return result;
     },
-    print(ast) {
+    printAst(ast) {
         return recast.print(ast).code;
     }
 }
