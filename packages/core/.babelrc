@@ -1,6 +1,12 @@
 {
     "plugins": [
-        "transform-object-rest-spread"
+        "transform-object-rest-spread",
+        ["module-resolver", {
+            "root": ["./src"],
+            "alias":{
+                "lib":"./lib"
+            }
+        }]
     ],
     "env": {
         "DEMO_PROD": {

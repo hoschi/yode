@@ -2,7 +2,7 @@ import recast from 'recast';
 import * as acornBase from 'acorn'
 import inject from 'acorn-jsx/inject'
 import jsxKeys from 'estraverse-fb/keys';
-import estraverseOrig from '../../../lib/estraverse'
+import estraverseOrig from 'lib/estraverse'
 
 let acorn = inject(acornBase)
 

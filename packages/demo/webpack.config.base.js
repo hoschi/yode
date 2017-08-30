@@ -10,6 +10,7 @@ var dir_root = path.resolve(__dirname, '../../')
 var dir_build = path.resolve(__dirname, 'build')
 var dir_core = path.resolve(dir_root, 'packages/core/')
 var dir_nodeModules = path.resolve(__dirname, 'node_modules')
+var dir_coreNodeModules = path.resolve(dir_root, 'packages/core/node_modules')
 var file_indexHtml = path.resolve(__dirname, 'src/index.html')
 var file_favicon = path.resolve(__dirname, 'src/assets/favicon.ico')
 
@@ -57,7 +58,8 @@ module.exports = {
         modules: [
             dir_base,
             dir_js,
-            'node_modules'
+            'node_modules',
+            dir_coreNodeModules
         ],
         alias: {
             'yode-core': dir_core
