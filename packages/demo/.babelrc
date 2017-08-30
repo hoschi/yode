@@ -4,7 +4,7 @@
         "transform-object-rest-spread"
     ],
     "env": {
-        "development": {
+        "DEMO_DEV": {
             "presets": [[ "es2015", {modules:false} ], "react-hmre"],
         },
         "DEMO_PROD": {
