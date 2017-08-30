@@ -4,13 +4,19 @@ import { editorLayoutCols } from '../constants'
 import { setProp, setPath } from 'helper'
 import demoFiles from './demoFiles'
 
-function createFileFromText ({path, text}) {
+function createBufferFromText (id, text) {
     return {
-        id: path,
+        id,
         // FIXME can we do it this way? Can we save meta data from core into editor or must even FileEditor a special UI in Oni?
         metaData: {},
-        path,
         text
+    }
+}
+
+function createFileFromText (path, text) {
+    return {
+        ...createBufferFromText(path, text),
+        path,
     }
 }
 
@@ -32,7 +38,7 @@ export const editorHeightChanged = ({itemId, height}) => {
 }
 
 export const ADD_FILE_TO_STORAGE = 'ADD_FILE_TO_STORAGE'
-export const addFileToStorage = (path, text) => ({
+export const addFileToStorage = ({ path, text }) => ({
     type: ADD_FILE_TO_STORAGE,
     path,
     text
@@ -72,9 +78,19 @@ export const bufferTextChanged = ({buffer, newText}) => {
     }
 }
 
+export const CREATE_BUFFER = 'CREATE_BUFFER'
+export const createBuffer = ({id, text}) => {
+    return {
+        type: CREATE_BUFFER,
+        id,
+        text
+    }
+}
+
 export let selectNoEditorIsFocused = (state) => R.isNil(state.editor.focusedEditorId)
 export let selectFocusedEditorId = R.path(['editor', 'focusedEditorId'])
 export let selectEditorsLayout = R.path(['editor', 'editorsLayout'])
+export let selectCursor = R.path(['editor', 'cursor'])
 export let selectAllFiles = R.pipe(
     R.path(['editor', 'buffers']),
     R.values,
@@ -122,7 +138,7 @@ let shiftGridItem = R.curry((matcher, item) => {
     }
 })
 
-const fileBuffers = demoFiles.map(createFileFromText)
+const fileBuffers = demoFiles.map(({path, text}) => createFileFromText(path, text))
 let initialState = {
     focusedEditorId: undefined,
     visibleEditorIds: ['actions.js'],
@@ -159,13 +175,18 @@ let reducerFunctions = {
             editorsLayout: newLayout
         }
     },
-    [ADD_FILE_TO_STORAGE]: (state, {path, text}) => {
+    [ADD_FILE_TO_STORAGE]: (state, action) => {
+        const {path, text} = action
         return setProp('buffers', {
             ...state.buffers,
-            [path]: createFileFromText({
-                path,
-                text
-            })
+            [path]: createFileFromText(                path, text)
+        }, state)
+    },
+    [CREATE_BUFFER]: (state, action) => {
+        const {id, text} = action
+        return setProp('buffers', {
+            ...state.buffers,
+            [id]: createBufferFromText(                id, text)
         }, state)
     },
     [OPEN_EDITOR_BY_ID]: (state, action) => {

@@ -2,6 +2,7 @@ import { connect } from 'react-redux'
 import Controls from './Controls'
 import { createNotImplementedActionCreator } from 'helper'
 import { selectNoEditorIsFocused } from 'store/editorReducer'
+import {openFunctionEditorUnderCursor} from 'plugin/yodeActions'
 
 let mapStateToProps = (state) => {
     return {
@@ -11,7 +12,7 @@ let mapStateToProps = (state) => {
 
 let mapDispatchToProps = {
     onFormatClick: createNotImplementedActionCreator('format code'),
-    onOpenFunctionEditorUnderCursorClick: createNotImplementedActionCreator('open function editor under cursor')
+    onOpenFunctionEditorUnderCursorClick: openFunctionEditorUnderCursor
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Controls);

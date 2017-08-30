@@ -1,5 +1,6 @@
 import stampit from '@stamp/it';
-import { parseCode, getFunctionsFromAst, printAst } from './astBackedEditing'
+import { parseCode, getFunctionsFromAst, printAst, getInnerMostFunctionNode } from './astBackedEditing'
+import { getFunctionByText } from 'ast/compareFunctions'
 
 let File = stampit().deepProps({
     id: undefined,
@@ -46,6 +47,16 @@ let File = stampit().deepProps({
         }
 
         this.unformattedText = this.text
+    },
+    findFunctionAroundCursor(node, cursor) {
+        let innerFunctionNode = getInnerMostFunctionNode(node, cursor)
+        if (!innerFunctionNode) {
+            // can't find inner most function node, perhaps because code is not parsable
+            return
+        }
+        let innerFunctionText = printAst(innerFunctionNode);
+        let foundFunction = getFunctionByText(innerFunctionText, this.functions);
+        return foundFunction
     }
 })
 
