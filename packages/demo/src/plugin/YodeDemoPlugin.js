@@ -14,6 +14,8 @@ const handlers = {
             id: path,
             text
         })
+        // FIXME set file text in demo
+        // FIXME handle syntax error case
     }
 }
 
