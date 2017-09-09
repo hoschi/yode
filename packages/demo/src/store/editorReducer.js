@@ -141,7 +141,7 @@ let shiftGridItem = R.curry((matcher, item) => {
 const fileBuffers = demoFiles.map(({path, text}) => createFileFromText(path, text))
 let initialState = {
     focusedEditorId: undefined,
-    visibleEditorIds: ['actions.js'],
+    visibleEditorIds: ['Header.spec.js'],
     // when a buffer object has a prop 'path' it is a file
     buffers: R.zipObj(fileBuffers.map(R.prop('id')), fileBuffers),
     cursor: undefined
