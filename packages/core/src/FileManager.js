@@ -43,6 +43,10 @@ let FileManager = stampit().deepProps({
         }
         return { file, node }
     },
+    getBufferIdForFunctionId(customId) {
+        let foundBuffer = R.find(R.propEq('customId', customId), R.values(this.functionBuffers)) || {}
+        return foundBuffer.id
+    },
     openFunctionUnderCursor(bufferId, cursor) {
         const stop = profiler.start('- open function editor for function under cursor')
 
@@ -68,15 +72,23 @@ let FileManager = stampit().deepProps({
             // Yode is done, tell editor to open found node
             stop()
 
-            // FIXME check if buffer exists and focus it instead of creating it again
-            let bufferId = this.editorApi.createBuffer(foundFunction.unformattedText)
-            let functionBuffer = FunctionBuffer.create()
-            functionBuffer.init({
-                customId:foundFunction.customId,
-                fileId:file.id
-            })
-            this.functionBuffers[bufferId] = functionBuffer
-            this.editorApi.openBuffer(bufferId)
+            let existingBufferId = this.getBufferIdForFunctionId(foundFunction.customId)
+            if (existingBufferId) {
+                // buffer already exists, no need to create one
+                if (!this.editorApi.isBufferVisible(existingBufferId)) {
+                    this.editorApi.openBuffer(existingBufferId)
+                }
+            } else {
+                let newBufferId = this.editorApi.createBuffer(foundFunction.unformattedText)
+                let functionBuffer = FunctionBuffer.create()
+                functionBuffer.init({
+                    customId:foundFunction.customId,
+                    fileId:file.id,
+                    id:newBufferId
+                })
+                this.functionBuffers[newBufferId] = functionBuffer
+                this.editorApi.openBuffer(newBufferId)
+            }
         }
     }
 })

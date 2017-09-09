@@ -18,7 +18,7 @@ const finalCreateStore = compose.apply(this, modifiers)(createStore)
 const store = finalCreateStore(rootReducer)
 
 let editorApi = EditorApi.create()
-editorApi.init(store.dispatch)
+editorApi.init({dispatch:store.dispatch.bind(store), getState:store.getState.bind(store)})
 initPlugin(store.getState(), editorApi)
 
 // enable hot module reloading for reducers
