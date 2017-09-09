@@ -1,6 +1,6 @@
 import R from 'ramda'
 import Core from 'core'
-import { selectAllFiles, ADD_FILE_TO_STORAGE, CLOSE_EDITOR, selectFocusedEditorId, selectCursor } from 'store/editorReducer'
+import { selectAllFiles, ADD_FILE_TO_STORAGE, DELETE_BUFFER, selectFocusedEditorId, selectCursor } from 'store/editorReducer'
 import {OPEN_FUNCTION_EDITOR_UNDER_CURSOR} from './yodeActions.js'
 import emitter from './emitter'
 
@@ -29,8 +29,8 @@ const handlers = {
 
         core.openFunctionUnderCursor(focusedEditorId, cursor)
     },
-    [CLOSE_EDITOR]:({action}) => {
-        core.removeFunctionBuffer(action.id)
+    [DELETE_BUFFER]:({action}) => {
+        core.deleteBuffer(action.id)
     }
 }
 

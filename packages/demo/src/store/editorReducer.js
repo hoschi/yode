@@ -87,6 +87,14 @@ export const createBuffer = ({id, text}) => {
     }
 }
 
+export const DELETE_BUFFER = 'DELETE_BUFFER'
+export const deleteBuffer = ({id}) => {
+    return {
+        type: DELETE_BUFFER,
+        id
+    }
+}
+
 export let selectNoEditorIsFocused = (state) => R.isNil(state.editor.focusedEditorId)
 export let selectFocusedEditorId = R.path(['editor', 'focusedEditorId'])
 export let selectEditorsLayout = R.path(['editor', 'editorsLayout'])
@@ -215,7 +223,13 @@ let reducerFunctions = {
                 }
                 return state
             },
-            // close anonymous buffer
+            setProp('visibleEditorIds', R.filter(R.complement(R.equals(id)), state.visibleEditorIds))
+        )(state);
+    },
+    [DELETE_BUFFER]: (state, action) => {
+        const {id} = action;
+        return R.pipe(
+            // delete buffer
             (state) => {
                 if (id.startsWith(anonymousBufferPrefix)) {
                     // remove anonymous buffer when editor closes
