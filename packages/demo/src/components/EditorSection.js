@@ -4,7 +4,7 @@ import ReactGridLayoutOrig, { WidthProvider } from 'react-grid-layout'
 import FunctionEditorContainer from './FunctionEditorContainer'
 import FileEditorContainer from './FileEditorContainer'
 import EditorGridItemContainer from './EditorGridItemContainer'
-import { editorLayoutCols, editorHeaderClsName } from '../constants'
+import { editorLayoutCols, editorHeaderClsName } from 'consts'
 
 let ReactGridLayout = WidthProvider(ReactGridLayoutOrig)
 

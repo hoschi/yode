@@ -3,7 +3,7 @@ import R from 'ramda'
 import NodeEditorStateLabels from './NodeEditorStateLabels'
 import IconButton from 'material-ui/IconButton';
 import IconClose from 'material-ui/svg-icons/navigation/close';
-import { editorHeaderClsName } from '../constants'
+import { editorHeaderClsName } from 'consts'
 import { subtleLabelStyle } from './styles'
 
 export let closeIconConfig = {

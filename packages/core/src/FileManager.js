@@ -31,6 +31,9 @@ let FileManager = stampit().deepProps({
         let file = initInputFile(inputFile)
         this.files[file.id] = file;
     },
+    removeFunctionBuffer(id) {
+        delete this.functionBuffers[id]
+    },
     getFileAndNodeForBufferId(bufferId) {
         let file, node
         if (this.functionBuffers[bufferId]) {
