@@ -8,4 +8,3 @@ let FunctionBuffer = stampit().deepProps({
 }).compose(CopyOnInit)
 
 export default FunctionBuffer
-
