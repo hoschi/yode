@@ -1,6 +1,6 @@
 import R from 'ramda'
 import createReducer from './createReducer'
-import { editorLayoutCols } from '../constants'
+import { editorLayoutCols, anonymousBufferPrefix } from 'consts'
 import { setProp, setPath } from 'helper'
 import demoFiles from './demoFiles'
 
@@ -207,10 +207,19 @@ let reducerFunctions = {
     [CLOSE_EDITOR]: (state, action) => {
         const {id} = action;
         return R.pipe(
+            // reset focus
             (state) => {
                 if (state.focusedEditorId === id) {
                     // closed editor was focused, reset
                     return setProp('focusedEditorId', undefined, state)
+                }
+                return state
+            },
+            // close anonymous buffer
+            (state) => {
+                if (id.startsWith(anonymousBufferPrefix)) {
+                    // remove anonymous buffer when editor closes
+                    return R.dissocPath(['buffers', id], state)
                 }
                 return state
             },

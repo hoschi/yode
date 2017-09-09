@@ -1,9 +1,10 @@
 import stampit from '@stamp/it';
 import {createBuffer, openEditorById, selectVisibleBuffers} from 'store/editorReducer'
+import {anonymousBufferPrefix} from 'consts'
 
 let id = 1;
 function getNextBufferId () {
-    return 'genBufferId-' + id++
+    return anonymousBufferPrefix + '-' + id++
 }
 
 let EditorApi = stampit().deepProps({
