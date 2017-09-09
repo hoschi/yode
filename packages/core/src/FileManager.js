@@ -35,7 +35,8 @@ let FileManager = stampit().deepProps({
         delete this.functionBuffers[id]
     },
     getFileAndNodeForBufferId(bufferId) {
-        let file, node
+        let file,
+            node
         if (this.functionBuffers[bufferId]) {
             let buffer = this.functionBuffers[bufferId]
             file = this.files[buffer.fileId]
@@ -44,7 +45,10 @@ let FileManager = stampit().deepProps({
             file = this.files[bufferId]
             node = file.ast;
         }
-        return { file, node }
+        return {
+            file,
+            node
+        }
     },
     getBufferIdForFunctionId(customId) {
         let foundBuffer = R.find(R.propEq('customId', customId), R.values(this.functionBuffers)) || {}
@@ -85,9 +89,9 @@ let FileManager = stampit().deepProps({
                 let newBufferId = this.editorApi.createBuffer(foundFunction.unformattedText)
                 let functionBuffer = FunctionBuffer.create()
                 functionBuffer.init({
-                    customId:foundFunction.customId,
-                    fileId:file.id,
-                    id:newBufferId
+                    customId: foundFunction.customId,
+                    fileId: file.id,
+                    id: newBufferId
                 })
                 this.functionBuffers[newBufferId] = functionBuffer
                 this.editorApi.openBuffer(newBufferId)

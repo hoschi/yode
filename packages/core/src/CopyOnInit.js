@@ -6,8 +6,7 @@ let CopyOnInit = stampit().methods({
         R.mapObjIndexed((value, key) => {
             this[key] = value;
         }, params)
-    },
+    }
 })
 
 export default CopyOnInit
-
