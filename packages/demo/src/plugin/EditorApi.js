@@ -1,6 +1,6 @@
 import stampit from '@stamp/it';
 import {createBuffer, openEditorById, selectVisibleBuffers} from 'store/editorReducer'
-import {anonymousBufferPrefix} from 'consts'
+import {anonymousBufferPrefix, functionEditorType} from 'consts'
 
 let id = 1;
 function getNextBufferId () {
@@ -15,9 +15,14 @@ let EditorApi = stampit().deepProps({
         this.dispatch = dispatch;
         this.getState = getState
     },
-    createBuffer(text) {
+    createFileBuffer(text) {
         let id = getNextBufferId();
-        this.dispatch(createBuffer({ id, text }))
+        this.dispatch(createBuffer({ id, text}))
+        return id
+    },
+    createFunctionBuffer(text) {
+        let id = getNextBufferId();
+        this.dispatch(createBuffer({ id, text, editorType:functionEditorType}))
         return id
     },
     openBuffer(id) {

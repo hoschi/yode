@@ -15,8 +15,6 @@ const handlers = {
             id: path,
             text
         })
-        // FIXME set file text in demo
-        // FIXME handle syntax error case
     },
     [OPEN_FUNCTION_EDITOR_UNDER_CURSOR]: ({state}) => {
         let cursor = selectCursor(state)

@@ -12,7 +12,7 @@ let makeMapStateToProps = () => (state, ownProps) => {
 
 let mapDispatchToProps = {
     onTextChanged: bufferTextChanged,
-    onFileActivity: cursorPositionChanged,
+    onCursorActivity: cursorPositionChanged,
     onClose: closeEditor
 };
 

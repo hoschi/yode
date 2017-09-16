@@ -84,10 +84,12 @@ let FileManager = stampit().deepProps({
             if (existingBufferId) {
                 // buffer already exists, no need to create one
                 if (!this.editorApi.isBufferVisible(existingBufferId)) {
+                    // buffer not visible, open it
                     this.editorApi.openBuffer(existingBufferId)
                 }
             } else {
-                let newBufferId = this.editorApi.createBuffer(foundFunction.unformattedText)
+                // buffer doesn't exist yet, create and open it
+                let newBufferId = this.editorApi.createFunctionBuffer(foundFunction.unformattedText)
                 let functionBuffer = FunctionBuffer.create()
                 functionBuffer.init({
                     customId: foundFunction.customId,
