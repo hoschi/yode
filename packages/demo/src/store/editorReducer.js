@@ -7,7 +7,6 @@ import demoFiles from './demoFiles'
 function createBufferFromText (id, text) {
     return {
         id,
-        // FIXME can we do it this way? Can we save meta data from core into editor or must even FileEditor a special UI in Oni?
         metaData: {},
         text
     }
@@ -79,11 +78,12 @@ export const bufferTextChanged = ({buffer, newText}) => {
 }
 
 export const CREATE_BUFFER = 'CREATE_BUFFER'
-export const createBuffer = ({id, text}) => {
+export const createBuffer = ({id, text, editorType}) => {
     return {
         type: CREATE_BUFFER,
         id,
-        text
+        text,
+        editorType
     }
 }
 
@@ -191,10 +191,13 @@ let reducerFunctions = {
         }, state)
     },
     [CREATE_BUFFER]: (state, action) => {
-        const {id, text} = action
+        const {id, text, editorType} = action
         return setProp('buffers', {
             ...state.buffers,
-            [id]: createBufferFromText(                id, text)
+            [id]: {
+                ...createBufferFromText(                id, text),
+                editorType
+            }
         }, state)
     },
     [OPEN_EDITOR_BY_ID]: (state, action) => {

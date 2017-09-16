@@ -2,7 +2,7 @@ import React from 'react'
 import EditorPaper from './EditorPaper'
 import EditorHeader, { closeIconConfig } from './EditorHeader'
 
-const FileEditor = ({buffer, onTextChanged, onFileActivity, onClose, style, isFocused}) => {
+const FileEditor = ({buffer, onTextChanged, onCursorActivity, onClose, style, isFocused}) => {
     const {id, path, text:bufferText, metaData} = buffer
     const {syntaxError, hasConnectedError} = metaData;
 
@@ -16,7 +16,7 @@ const FileEditor = ({buffer, onTextChanged, onFileActivity, onClose, style, isFo
             newText: value
         })
     }
-    let onEditorActivity = (cursor) => onFileActivity({
+    let onEditorActivity = (cursor) => onCursorActivity({
         cursor,
         buffer
     })
@@ -51,7 +51,7 @@ const FileEditor = ({buffer, onTextChanged, onFileActivity, onClose, style, isFo
 FileEditor.propTypes = {
     buffer: React.PropTypes.object.isRequired,
     onTextChanged: React.PropTypes.func.isRequired,
-    onFileActivity: React.PropTypes.func.isRequired
+    onCursorActivity: React.PropTypes.func.isRequired
 }
 
 export default FileEditor

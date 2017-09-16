@@ -3,45 +3,47 @@ import IconUp from 'material-ui/svg-icons/navigation/arrow-upward';
 import EditorPaper from './EditorPaper'
 import EditorHeader, { closeIconConfig } from './EditorHeader'
 
-const FunctionEditor = ({functionNode, onFunctionTextChange, onFunctionActivity, onClose, onSwapWithParent, isFocused, style, hasConnectedError}) => {
-    const {syntaxError, unformattedText, customId} = functionNode;
-    const onEditorTextChange = ({value}) => {
-        if (value === unformattedText) {
-            // text was changed by setting reformatted text
+const FunctionEditor = ({buffer, onTextChanged, onCursorActivity, onSwapWithParent, onClose, style, isFocused}) => {
+    const {id, text:bufferText, metaData} = buffer
+    const {syntaxError, hasConnectedError} = metaData;
+
+    let onEditorTextChange = ({value}) => {
+        if (value === bufferText) {
+            // text was changed by store
             return
         }
-        onFunctionTextChange({
-            oldFunction: functionNode,
+        onTextChanged({
+            buffer,
             newText: value
         })
     }
-    let onEditorActivity = (cursor) => onFunctionActivity({
+    let onEditorActivity = (cursor) => onCursorActivity({
         cursor,
-        node: functionNode
+        buffer
     })
     let onCloseClick = () => {
         onClose({
-            id: customId
+            id
         })
     }
     let onSwapWithParentClick = () => {
         onSwapWithParent({
-            id: customId
+            id
         })
     }
 
     let editorProps = {
         error: syntaxError,
         hasConnectedError,
-        text: unformattedText,
+        text: bufferText,
         onTextChange: onEditorTextChange,
         onActivity: onEditorActivity
     }
 
     let headerProps = {
-        titlePrefix: 'id:',
-        title: customId,
-        node: functionNode,
+        titlePrefix: 'buffer:',
+        title:id,
+        node: buffer,
         hasConnectedError,
         iconConfigs: [
             {
