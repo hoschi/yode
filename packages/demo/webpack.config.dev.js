@@ -21,7 +21,5 @@ module.exports = Object.assign({}, base, {
     plugins: [
         new webpack.HotModuleReplacementPlugin()
     ].concat(base.plugins),
-    // didn't create mappable version in chrome
-    devtool: 'eval'
-//devtool: 'inline-source-map'
+    devtool: 'cheap-module-source-map'
 })

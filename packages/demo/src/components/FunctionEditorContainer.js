@@ -1,8 +1,7 @@
 import { connect } from 'react-redux'
 import R from 'ramda';
 import FunctionEditor from './FunctionEditor'
-import { createNotImplementedActionCreator } from 'helper'
-import { selectFocusedEditorId, cursorPositionChanged, closeEditor, bufferTextChanged } from 'store/editorReducer'
+import { selectFocusedEditorId, cursorPositionChanged, closeEditor, bufferTextChanged, swapWithParentFunction } from 'store/editorReducer'
 
 let makeMapStateToProps = () => (state, ownProps) => {
     let focusedEditorId = selectFocusedEditorId(state)
@@ -15,7 +14,7 @@ let mapDispatchToProps = {
     onTextChanged: bufferTextChanged,
     onCursorActivity: cursorPositionChanged,
     onClose: closeEditor,
-    onSwapWithParent: createNotImplementedActionCreator('function: swap with parent')
+    onSwapWithParent: swapWithParentFunction,
 };
 
 export default connect(makeMapStateToProps, mapDispatchToProps)(FunctionEditor)
