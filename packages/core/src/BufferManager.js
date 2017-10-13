@@ -14,8 +14,7 @@ function initInputFile (inputFile) {
     return file;
 }
 
-// FIXME this is a buffer manager as it also stores function buffers to match buffer id from editor to function and its file
-let FileManager = stampit().deepProps({
+let BufferManager = stampit().deepProps({
     files: undefined,
     functionBuffers: undefined,
     editorApi: undefined
@@ -103,4 +102,4 @@ let FileManager = stampit().deepProps({
     }
 })
 
-export default FileManager
+export default BufferManager
