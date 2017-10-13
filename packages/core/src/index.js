@@ -1,3 +1,3 @@
-import FileManager from './FileManager'
+import BufferManager from './BufferManager'
 
-export default FileManager
+export default BufferManager
