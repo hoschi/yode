@@ -95,6 +95,23 @@ export const deleteBuffer = ({id}) => {
     }
 }
 
+export const SWAP_WITH_PARENT_FUNCTION = 'SWAP_WITH_PARENT_FUNCTION '
+export const swapWithParentFunction = ({id}) => {
+    return {
+        type: SWAP_WITH_PARENT_FUNCTION,
+        id
+    }
+}
+
+export const SWAP_BUFFER_EDITORS = 'SWAP_BUFFER_EDITORS'
+export const swapBufferEditors = ({oldId, newId}) => {
+    return {
+        type:SWAP_BUFFER_EDITORS,
+        oldId,
+        newId
+    }
+}
+
 export let selectNoEditorIsFocused = (state) => R.isNil(state.editor.focusedEditorId)
 export let selectFocusedEditorId = R.path(['editor', 'focusedEditorId'])
 export let selectEditorsLayout = R.path(['editor', 'editorsLayout'])
@@ -243,6 +260,44 @@ let reducerFunctions = {
             setProp('visibleEditorIds', R.filter(R.complement(R.equals(id)), state.visibleEditorIds))
         )(state);
     },
+    [SWAP_BUFFER_EDITORS]: (state, action) => {
+        const {oldId, newId} = action;
+
+        // remove new item when it is visible, we insert it at another position later
+        let {item:existingNewItem, layout:layoutWithoutNewItem} = getLayoutWithoutItem(state.editorsLayout, newId)
+
+        // remove old item, but remember position
+        let {item:oldLayoutItem, layout:layoutCleared, position:oldItemPos} = getLayoutWithoutItem(layoutWithoutNewItem, oldId)
+
+        // create new item with merged properties
+        let newLayoutItem = {
+            ...oldLayoutItem,
+            i: newId
+        }
+        if (existingNewItem) {
+            // copy height, because this is not calculated again when item is moved
+            newLayoutItem = R.merge(newLayoutItem, R.pick([
+                'h',
+                'minH',
+                'maxH'
+            ], existingNewItem))
+        }
+
+        return R.evolve({
+            focusedEditorId:R.ifElse(
+                // closed editor focused?
+                R.equals(oldId),
+                // it was! reset focus
+                R.always(undefined),
+                R.identity
+            ),
+            visibleEditorIds:R.pipe(
+                R.reject(R.equals(oldId)),
+                R.append(newId)
+            ),
+            editorsLayout:R.always(R.insert(oldItemPos, newLayoutItem, layoutCleared))
+        }, state)
+    },
     [CURSOR_POSITION_CHANGED]: (state, action) => {
         const {cursor, buffer} = action
         return R.pipe(
@@ -253,7 +308,19 @@ let reducerFunctions = {
     [BUFFER_TEXT_CHANGED]: (state, action) => {
         const {buffer, newText} = action;
         return setPath(['buffers', buffer.id, 'text'], newText, state)
-    }
+    },
+}
+
+let getLayoutWithoutItem = (layout, id) => {
+    let layoutItem, layoutWithoutItem
+        let position = R.findIndex(R.propEq('i', id), layout)
+        if (position >= 0) {
+            layoutItem = layout[position]
+            layoutWithoutItem = R.remove(position, 1, layout)
+        } else {
+            layoutWithoutItem = layout
+        }
+    return {layout:layoutWithoutItem, item:layoutItem, position}
 }
 
 let reducer = createReducer(initialState, reducerFunctions)

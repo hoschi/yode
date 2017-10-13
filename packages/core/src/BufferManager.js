@@ -19,21 +19,9 @@ let BufferManager = stampit().deepProps({
     functionBuffers: undefined,
     editorApi: undefined
 }).methods({
-    init(editorApi, inputFiles = []) {
-        this.editorApi = editorApi
-        let files = inputFiles.map(initInputFile)
-        this.files = R.zipObj(files.map(R.prop('id')), files)
-
-        this.functionBuffers = {}
-    },
-    addFile(inputFile) {
-        let file = initInputFile(inputFile)
-        this.files[file.id] = file;
-    },
-    deleteBuffer(id) {
-        delete this.functionBuffers[id]
-        delete this.files[id]
-    },
+    ////////////////////////////////////////////////////////////////////////////////
+    // helpers
+    ////////////////////////////////////////////////////////////////////////////////
     getFileAndNodeForBufferId(bufferId) {
         let file,
             node
@@ -53,6 +41,42 @@ let BufferManager = stampit().deepProps({
     getBufferIdForFunctionId(customId) {
         let foundBuffer = R.find(R.propEq('customId', customId), R.values(this.functionBuffers)) || {}
         return foundBuffer.id
+    },
+    createFunctionBufferIfNeeded(file, node) {
+        let existingBufferId = this.getBufferIdForFunctionId(node.customId)
+        if (existingBufferId) {
+            // buffer already exists, no need to create one
+            return existingBufferId
+        } else {
+            // buffer doesn't exist yet, create it
+            let newBufferId = this.editorApi.createFunctionBuffer(node.unformattedText)
+            let functionBuffer = FunctionBuffer.create()
+            functionBuffer.init({
+                customId: node.customId,
+                fileId: file.id,
+                id: newBufferId
+            })
+            this.functionBuffers[newBufferId] = functionBuffer
+            return newBufferId
+        }
+    },
+    ////////////////////////////////////////////////////////////////////////////////
+    // public API
+    ////////////////////////////////////////////////////////////////////////////////
+    init(editorApi, inputFiles = []) {
+        this.editorApi = editorApi
+        let files = inputFiles.map(initInputFile)
+        this.files = R.zipObj(files.map(R.prop('id')), files)
+
+        this.functionBuffers = {}
+    },
+    addFile(inputFile) {
+        let file = initInputFile(inputFile)
+        this.files[file.id] = file;
+    },
+    deleteBuffer(id) {
+        delete this.functionBuffers[id]
+        delete this.files[id]
     },
     openFunctionUnderCursor(bufferId, cursor) {
         const stop = profiler.start('- open function editor for function under cursor')
@@ -79,26 +103,29 @@ let BufferManager = stampit().deepProps({
             // Yode is done, tell editor to open found node
             stop()
 
-            let existingBufferId = this.getBufferIdForFunctionId(foundFunction.customId)
-            if (existingBufferId) {
-                // buffer already exists, no need to create one
-                if (!this.editorApi.isBufferVisible(existingBufferId)) {
-                    // buffer not visible, open it
-                    this.editorApi.openBuffer(existingBufferId)
-                }
-            } else {
-                // buffer doesn't exist yet, create and open it
-                let newBufferId = this.editorApi.createFunctionBuffer(foundFunction.unformattedText)
-                let functionBuffer = FunctionBuffer.create()
-                functionBuffer.init({
-                    customId: foundFunction.customId,
-                    fileId: file.id,
-                    id: newBufferId
-                })
-                this.functionBuffers[newBufferId] = functionBuffer
-                this.editorApi.openBuffer(newBufferId)
+            let bufferIdToOpen = this.createFunctionBufferIfNeeded(file, foundFunction)
+            if (!this.editorApi.isBufferVisible(bufferIdToOpen)) {
+                // buffer not visible, open it
+                this.editorApi.openBuffer(bufferIdToOpen)
             }
         }
+    },
+    swapWithParentFunction(bufferId) {
+        const {node, file} = this.getFileAndNodeForBufferId(bufferId)
+
+        if (!node || !node.parentFunction) {
+            // has no parent, nothing to swap with
+        }
+
+        let parentNode = node.parentFunction
+
+        if (parentNode.isRoot) {
+            this.editorApi.swapBufferEditors(bufferId, file.id)
+        } else {
+            let parentBufferId = this.createFunctionBufferIfNeeded(file, parentNode)
+            this.editorApi.swapBufferEditors(bufferId, parentBufferId)
+        }
+
     }
 })
 

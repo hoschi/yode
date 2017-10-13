@@ -1,10 +1,8 @@
 import R from 'ramda'
 import Core from 'core'
-import { selectAllFiles, ADD_FILE_TO_STORAGE, DELETE_BUFFER, selectFocusedEditorId, selectCursor } from 'store/editorReducer'
+import { selectAllFiles, ADD_FILE_TO_STORAGE, DELETE_BUFFER, SWAP_WITH_PARENT_FUNCTION, selectFocusedEditorId, selectCursor } from 'store/editorReducer'
 import {OPEN_FUNCTION_EDITOR_UNDER_CURSOR} from './yodeActions.js'
 import emitter from './emitter'
-
-//let withoutType = R.omit(['type'])
 
 const core = Core.create();
 
@@ -29,7 +27,10 @@ const handlers = {
     },
     [DELETE_BUFFER]:({action}) => {
         core.deleteBuffer(action.id)
-    }
+    },
+    [SWAP_WITH_PARENT_FUNCTION]: ({action}) => {
+        core.swapWithParentFunction(action.id)
+    },
 }
 
 let initPlugin = (initialState, editorApi) => {
