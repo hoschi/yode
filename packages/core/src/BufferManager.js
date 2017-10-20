@@ -60,6 +60,15 @@ let BufferManager = stampit().deepProps({
             return newBufferId
         }
     },
+    changeBufferTextOfNodes(nodes) {
+        nodes.forEach((node) => {
+            let bufferId = this.getBufferIdForFunctionId(node.customId)
+            if (!R.isNil(bufferId)) {
+                // buffer exists in editor, update it
+                this.editorApi.changeBufferText(bufferId, node.text)
+            }
+        })
+    },
     ////////////////////////////////////////////////////////////////////////////////
     // public API
     ////////////////////////////////////////////////////////////////////////////////
@@ -126,6 +135,19 @@ let BufferManager = stampit().deepProps({
             this.editorApi.swapBufferEditors(bufferId, parentBufferId)
         }
 
+    },
+    updateBufferAst(bufferId, newText) {
+        const {node, file} = this.getFileAndNodeForBufferId(bufferId)
+        if (R.isNil(node.customId)) {
+            file.updateFileAst(newText)
+            this.changeBufferTextOfNodes(file.functions)
+        } else {
+            let nodesToUpdate = file.updateFunctionAst(newText, node)
+            this.changeBufferTextOfNodes(nodesToUpdate)
+        }
+        this.editorApi.changeBufferText(file.id, file.text)
+
+    // TODO update meta data in UI
     }
 })
 

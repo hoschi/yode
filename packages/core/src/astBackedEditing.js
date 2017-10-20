@@ -1,4 +1,5 @@
 import profiler from './profiler'
+import R from 'ramda'
 import parser from 'ast/parser-recast-jsx'
 import { getFunctionIndexByText } from 'ast/compareFunctions'
 
@@ -19,12 +20,57 @@ export function printAst (...args) {
     return r
 }
 
-function addTextToNode (ast) {
+export function addTextToNode (ast) {
     ast.text = printAst(ast)
 }
 
-function isEditorDirty (node) {
+export function isNodeDirty (node) {
     return node.text !== node.unformattedText
+}
+
+export function getNodeForFirstFoundType (type, ast) {
+    let found
+    estraverse.traverse(ast, {
+        // search for node with same type as old function and save that one instead
+        enter(node) {
+            if (node.type === type) {
+                found = node
+                this.break()
+            }
+        }
+    })
+    return found
+}
+
+export function replaceNodeInAst (replacementNode, ast) {
+    let modifiedAst = estraverse.replace(ast, {
+        enter(node) {
+            if (node.customId === replacementNode.customId) {
+                return replacementNode
+            }
+        }
+    })
+    return modifiedAst
+}
+
+export function getAllContainerNodesRecursive (node, collected = []) {
+    if (!node || node.isRoot) {
+        return collected
+    }
+    return getAllContainerNodesRecursive(node.parentFunction, collected.concat([node]))
+}
+
+export function getAllChildrenNodesRecursive (nodes, collected = []) {
+    if (R.isEmpty(nodes)) {
+        return collected
+    }
+
+    return R.concat(
+        nodes,
+        R.chain((node) => {
+            return getAllChildrenNodesRecursive(node.children, nodes.children)
+        }, nodes)
+    )
 }
 
 let cursorIsInNode = (cursor, node) => cursor > node.start && cursor < node.end
@@ -73,6 +119,9 @@ export function getFunctionsFromAst (ast, fileId, functionsToCompare) {
             }
         }
         currentFunc = node
+        if (!currentFunc.children) {
+            currentFunc.children = []
+        }
         node.parentFunction = parentFunc
     }
 
@@ -138,7 +187,7 @@ export function getFunctionsFromAst (ast, fileId, functionsToCompare) {
                         let foundFunction = functionsToCompareLeft[foundFunctionIndex]
                         node.customId = foundFunction.customId
                         // restore dirty editor state if needed
-                        if (isEditorDirty(foundFunction)) {
+                        if (isNodeDirty(foundFunction)) {
                             node.unformattedText = foundFunction.unformattedText
                             node.syntaxError = foundFunction.syntaxError
                         }

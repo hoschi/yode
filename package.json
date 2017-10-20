@@ -5,7 +5,8 @@
   "author": "Stefan Gojan",
   "license": "MIT",
   "scripts": {
-    "format": "jsfmt -w packages/*/src/*.js packages/*/*.js && eslint --fix packages/*/src/*.js packages/*/*.js"
+    "format": "jsfmt -w packages/*/src/*.js packages/*/*.js && eslint --fix packages/*/src/*.js packages/*/*.js",
+    "lint": "eslint packages/*/src/*.js packages/*/*.js"
   },
   "devDependencies": {
     "babel-core": "6.14.0",
