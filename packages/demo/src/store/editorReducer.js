@@ -77,6 +77,15 @@ export const bufferTextChanged = ({buffer, newText}) => {
     }
 }
 
+export const CHANGE_BUFFER_TEXT = 'CHANGE_BUFFER_TEXT'
+export const changeBufferText = ({id, newText}) => {
+    return {
+        type: CHANGE_BUFFER_TEXT,
+        id,
+        newText
+    }
+}
+
 export const CREATE_BUFFER = 'CREATE_BUFFER'
 export const createBuffer = ({id, text, editorType}) => {
     return {
@@ -136,7 +145,8 @@ export let selectVisibleBuffers = (state) => {
 
 let defaultGridItemProps = {
     h: 1,
-    w: editorLayoutCols / 2,
+    //w: editorLayoutCols / 2,
+    w: editorLayoutCols,
     x: 0,
     y: 0
 }
@@ -308,6 +318,10 @@ let reducerFunctions = {
     [BUFFER_TEXT_CHANGED]: (state, action) => {
         const {buffer, newText} = action;
         return setPath(['buffers', buffer.id, 'text'], newText, state)
+    },
+    [CHANGE_BUFFER_TEXT]: (state, action) => {
+        const {id, newText} = action;
+        return setPath(['buffers', id, 'text'], newText, state)
     },
 }
 
