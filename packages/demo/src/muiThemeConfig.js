@@ -1,4 +1,4 @@
-import * as palette from 'material-ui/styles/colors';
+import * as palette from 'material-ui/styles/colors'
 
 export default {
     palette: {

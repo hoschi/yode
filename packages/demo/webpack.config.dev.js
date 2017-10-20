@@ -1,7 +1,7 @@
 /* global __dirname */
 
 var webpack = require('webpack')
-var base = require('./webpack.config.base');
+var base = require('./webpack.config.base')
 
 module.exports = Object.assign({}, base, {
     entry: base.entry.concat([

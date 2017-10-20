@@ -3,11 +3,11 @@ import { render } from 'react-dom'
 import store from './store/store'
 import { Provider } from 'react-redux'
 import App from './components/app'
-import injectTapEventPlugin from 'react-tap-event-plugin';
+import injectTapEventPlugin from 'react-tap-event-plugin'
 require('react-grid-layout/css/styles.css')
 require('react-resizable/css/styles.css')
 
-injectTapEventPlugin();
+injectTapEventPlugin()
 
 render((
     <Provider store={ store }>

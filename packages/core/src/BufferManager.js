@@ -1,17 +1,17 @@
-import stampit from '@stamp/it';
+import stampit from '@stamp/it'
 import R from 'ramda'
 import profiler from './profiler'
 import File from './File'
 import FunctionBuffer from './FunctionBuffer'
 
 function initInputFile (inputFile) {
-    const {id, text} = inputFile;
-    let file = File.create();
+    const {id, text} = inputFile
+    let file = File.create()
     file.init({
         id,
         unformattedText: text
     })
-    return file;
+    return file
 }
 
 let BufferManager = stampit().deepProps({
@@ -31,7 +31,7 @@ let BufferManager = stampit().deepProps({
             node = R.find(R.propEq('customId', buffer.customId), file.functions)
         } else {
             file = this.files[bufferId]
-            node = file.ast;
+            node = file.ast
         }
         return {
             file,
@@ -72,7 +72,7 @@ let BufferManager = stampit().deepProps({
     },
     addFile(inputFile) {
         let file = initInputFile(inputFile)
-        this.files[file.id] = file;
+        this.files[file.id] = file
     },
     deleteBuffer(id) {
         delete this.functionBuffers[id]

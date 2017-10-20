@@ -1,4 +1,4 @@
-import stampit from '@stamp/it';
+import stampit from '@stamp/it'
 import { parseCode, getFunctionsFromAst, printAst, getInnerMostFunctionNode } from './astBackedEditing'
 import { getFunctionByText } from 'ast/compareFunctions'
 
@@ -27,14 +27,14 @@ let File = stampit().deepProps({
                 // create text for each function at start, because recast can't
                 // keep all formatting when parsing code snippets instead of code
                 // in file
-                node.text = printAst(node);
+                node.text = printAst(node)
                 // and use this as editor text, so we don't start with "dirty" editors
                 node.unformattedText = node.text
-            });
-            this.functions = functions;
+            })
+            this.functions = functions
             this.functionsTreeRoot = functionsTreeRoot
             // set text in node
-            this.ast.text = this.ast.unformattedText = this.text;
+            this.ast.text = this.ast.unformattedText = this.text
         } else {
             this.text = unformattedText
             this.functions = []
@@ -54,8 +54,8 @@ let File = stampit().deepProps({
             // can't find inner most function node, perhaps because code is not parsable
             return
         }
-        let innerFunctionText = printAst(innerFunctionNode);
-        let foundFunction = getFunctionByText(innerFunctionText, this.functions);
+        let innerFunctionText = printAst(innerFunctionNode)
+        let foundFunction = getFunctionByText(innerFunctionText, this.functions)
         return foundFunction
     }
 })

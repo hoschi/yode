@@ -2,7 +2,7 @@ var path = require('path')
 var express = require('express')
 var webpack = require('webpack')
 var config = require('./webpack.config.dev')
-var webpackDevMiddleware = require('webpack-dev-middleware');
+var webpackDevMiddleware = require('webpack-dev-middleware')
 
 var app = express()
 var compiler = webpack(config)
@@ -18,9 +18,9 @@ app.use(devMiddleware)
 app.use(require('webpack-hot-middleware')(compiler))
 
 app.get('*', (req, res) => {
-    const index = devMiddleware.fileSystem.readFileSync(path.join(config.output.path, 'index.html'));
-    res.end(index);
-});
+    const index = devMiddleware.fileSystem.readFileSync(path.join(config.output.path, 'index.html'))
+    res.end(index)
+})
 
 app.listen(port, '0.0.0.0', function (err) {
     if (err) {
