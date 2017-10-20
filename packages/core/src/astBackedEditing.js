@@ -1,22 +1,22 @@
 import profiler from './profiler'
-import parser from 'ast/parser-recast-jsx';
+import parser from 'ast/parser-recast-jsx'
 import { getFunctionIndexByText } from 'ast/compareFunctions'
 
 let id = 1
 
-let {estraverse} = parser;
+let {estraverse} = parser
 function parse (...args) {
     //let stop = profiler.start('parse', true);
-    let r = parser.parse.apply(parser, args);
+    let r = parser.parse.apply(parser, args)
     //stop();
-    return r;
+    return r
 }
 
 export function printAst (...args) {
     //let stop = profiler.start('--- printAst', true);
-    let r = parser.printAst.apply(parser, args);
+    let r = parser.printAst.apply(parser, args)
     //stop();
-    return r;
+    return r
 }
 
 function addTextToNode (ast) {
@@ -56,32 +56,32 @@ export function getFunctionsFromAst (ast, fileId, functionsToCompare) {
         functionsToCompareLeft = [].concat(functionsToCompare)
     }
 
-    let parentFunc;
+    let parentFunc
     let currentFunc = {
         children: [],
         isRoot: true
-    };
-    let functionsTreeRoot = currentFunc;
+    }
+    let functionsTreeRoot = currentFunc
 
     let addNodeToParent = (node) => {
-        parentFunc = currentFunc;
+        parentFunc = currentFunc
         if (parentFunc) {
             if (parentFunc.children) {
-                parentFunc.children.push(node);
+                parentFunc.children.push(node)
             } else {
-                parentFunc.children = [node];
+                parentFunc.children = [node]
             }
         }
-        currentFunc = node;
-        node.parentFunction = parentFunc;
+        currentFunc = node
+        node.parentFunction = parentFunc
     }
 
     let leaveFunctionNode = () => {
-        currentFunc = parentFunc;
+        currentFunc = parentFunc
         if (currentFunc) {
-            parentFunc = currentFunc.parentFunction;
+            parentFunc = currentFunc.parentFunction
         } else {
-            parentFunc = undefined;
+            parentFunc = undefined
         }
     }
 
@@ -89,7 +89,7 @@ export function getFunctionsFromAst (ast, fileId, functionsToCompare) {
         enter(node) {
             // code generated from FunctionExpression are not parseable again, skip for now
             if (node.type === 'FunctionDeclaration' || node.type === 'ArrowFunctionExpression') {
-                addNodeToParent(node);
+                addNodeToParent(node)
                 if (node.unformattedText === node.text) {
                     // update both, because this can't disturb user input.
                     // Editor text and generated text are in sync. This is
@@ -184,18 +184,18 @@ export function getInnerMostFunctionNode (sourceNode, cursor) {
         ast = parser.parse(sourceNode.unformattedText)
     } /* eslint-disable */ catch ( error ) /* eslint-enable */ {
         console.log(error)
-        return;
+        return
     }
     parser.estraverse.traverse(ast, {
         leave(node) {
             // code generated from FunctionExpression are not parseable again, skip for now
             if (node.type === 'FunctionDeclaration' || node.type === 'ArrowFunctionExpression') {
                 if (cursorIsInNode(cursor, node)) {
-                    foundNode = node;
+                    foundNode = node
                     this.break()
                 }
             }
         }
     })
-    return foundNode;
+    return foundNode
 }

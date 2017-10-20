@@ -2,10 +2,10 @@
 
 var path = require('path')
 var webpack = require('webpack')
-var HtmlWebpackPlugin = require('html-webpack-plugin');
+var HtmlWebpackPlugin = require('html-webpack-plugin')
 
 var dir_js = path.resolve(__dirname, 'src/')
-var dir_base = path.resolve(__dirname);
+var dir_base = path.resolve(__dirname)
 var dir_root = path.resolve(__dirname, '../../')
 var dir_build = path.resolve(__dirname, 'build')
 var dir_core = path.resolve(dir_root, 'packages/core/')

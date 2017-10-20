@@ -1,4 +1,4 @@
-import stampit from '@stamp/it';
+import stampit from '@stamp/it'
 import CopyOnInit from './CopyOnInit'
 
 let FunctionBuffer = stampit().deepProps({

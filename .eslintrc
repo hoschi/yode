@@ -18,10 +18,11 @@
         "eslint:recommended",
         "plugin:react/recommended"
     ],
-	"rules":{
-		"space-before-function-paren":0,
+    "rules":{
+        "semi": [1, "never"],
+        "space-before-function-paren":0,
         "no-console": 0,
         "indent": "off",
         "react/prop-types":0
-	}
+    }
 }
