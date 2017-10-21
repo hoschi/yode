@@ -44,6 +44,7 @@ const FunctionEditor = ({buffer, onTextChanged, onCursorActivity, onSwapWithPare
         titlePrefix: 'buffer:',
         title:id,
         node: buffer,
+        error: syntaxError,
         hasConnectedError,
         iconConfigs: [
             {

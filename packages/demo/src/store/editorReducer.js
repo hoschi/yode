@@ -86,6 +86,15 @@ export const changeBufferText = ({id, newText}) => {
     }
 }
 
+export const CHANGE_META_DATA = 'CHANGE_META_DATA'
+export const changeMetaData = ({id, newMetaData}) => {
+    return {
+        type: CHANGE_META_DATA,
+        id,
+        newMetaData
+    }
+}
+
 export const CREATE_BUFFER = 'CREATE_BUFFER'
 export const createBuffer = ({id, text, editorType}) => {
     return {
@@ -322,6 +331,10 @@ let reducerFunctions = {
     [CHANGE_BUFFER_TEXT]: (state, action) => {
         const {id, newText} = action;
         return setPath(['buffers', id, 'text'], newText, state)
+    },
+    [CHANGE_META_DATA]: (state, action) => {
+        const {id, newMetaData} = action;
+        return setPath(['buffers', id, 'metaData'], newMetaData, state)
     },
 }
 

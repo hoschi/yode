@@ -37,6 +37,7 @@ const FileEditor = ({buffer, onTextChanged, onCursorActivity, onClose, style, is
         title: path,
         node: buffer,
         hasConnectedError,
+        error: syntaxError,
         iconConfigs: [
             {
                 ...closeIconConfig,

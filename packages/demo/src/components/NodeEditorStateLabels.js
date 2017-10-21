@@ -2,7 +2,7 @@ import React from 'react'
 import * as palette from 'material-ui/styles/colors';
 import { subtleLabelStyle } from './styles'
 
-const NodeEditorStateLabels = ({node, hasConnectedError}) => {
+const NodeEditorStateLabels = ({node, error, hasConnectedError}) => {
     let errorMessage,
         errorType
     const labelStyle = {
@@ -25,8 +25,8 @@ const NodeEditorStateLabels = ({node, hasConnectedError}) => {
         dirtyLabelStyle.display = 'none'
     }
 
-    if (node.syntaxError) {
-        errorMessage = node.syntaxError.message
+    if (error) {
+        errorMessage = error.message
         errorType = 'unparsable'
     } else if (hasConnectedError) {
         errorType = 'connected error'
