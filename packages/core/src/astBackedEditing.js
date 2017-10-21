@@ -20,6 +20,8 @@ export function printAst (...args) {
     return r
 }
 
+export let getMetaData = R.pick(['hasConnectedError', 'syntaxError'])
+
 export function addTextToNode (ast) {
     ast.text = printAst(ast)
 }

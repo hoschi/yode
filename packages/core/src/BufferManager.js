@@ -1,8 +1,10 @@
 import stampit from '@stamp/it'
+import deepEquals from 'deep-equal'
 import R from 'ramda'
 import profiler from './profiler'
 import File from './File'
 import FunctionBuffer from './FunctionBuffer'
+import { getMetaData } from './astBackedEditing'
 
 function initInputFile (inputFile) {
     const {id, text} = inputFile
@@ -17,7 +19,19 @@ function initInputFile (inputFile) {
 let BufferManager = stampit().deepProps({
     files: undefined,
     functionBuffers: undefined,
-    editorApi: undefined
+    editorApi: undefined,
+    options: {
+        /**
+         * If true we do a string equality check to prevent pushing useless
+         * updates to editor when buffer text changed. This can happen
+         * wen user edits text, but through Recasts formatting their are small
+         * changes, e.g. removed new line at top of file. Disable this check
+         * when the underlying editor does this by itself already and in the
+         * editor `buffer.updateText(allTextInFile)` is faster than JS string
+         * equality when `allTextInFile` contains the same as rendered buffer.
+         */
+        guardFileUpdateWithDirtyCheck: true
+    }
 }).methods({
     ////////////////////////////////////////////////////////////////////////////////
     // helpers
@@ -60,14 +74,36 @@ let BufferManager = stampit().deepProps({
             return newBufferId
         }
     },
-    changeBufferTextOfNodes(nodes) {
-        nodes.forEach((node) => {
-            let bufferId = this.getBufferIdForFunctionId(node.customId)
-            if (!R.isNil(bufferId)) {
-                // buffer exists in editor, update it
-                this.editorApi.changeBufferText(bufferId, node.text)
-            }
-        })
+    isFile(bufferId) {
+        if (R.isNil(this.files[bufferId])) {
+            return false
+        } else {
+            return true
+        }
+    },
+    changeFunctionBufferText(file, node) {
+        let bufferId = this.getBufferIdForFunctionId(node.customId)
+        if (R.isNil(bufferId)) {
+            // doesn't exist in editor
+            return
+        }
+        if (!file.hasConnectedError) {
+            this.editorApi.changeBufferText(bufferId, node.text)
+        }
+    },
+    changeFunctionMetaData(file, oldFileErrorState, oldFunctionsMetaData, node) {
+        let bufferId = this.getBufferIdForFunctionId(node.customId)
+        if (R.isNil(bufferId)) {
+            // doesn't exist in editor
+            return
+        }
+        let currentMetaData = getMetaData(node)
+        if (!deepEquals(currentMetaData, oldFunctionsMetaData[node.customId]) || oldFileErrorState !== file.hasConnectedError) {
+            this.editorApi.changeMetaData(bufferId, {
+                hasConnectedError: file.hasConnectedError,
+                syntaxError: node.syntaxError
+            })
+        }
     },
     ////////////////////////////////////////////////////////////////////////////////
     // public API
@@ -122,7 +158,11 @@ let BufferManager = stampit().deepProps({
     swapWithParentFunction(bufferId) {
         const {node, file} = this.getFileAndNodeForBufferId(bufferId)
 
-        if (!node || !node.parentFunction) {
+        if (!file || !node) {
+            // can't find file or node for unmanaged buffer
+        }
+
+        if (!node.parentFunction) {
             // has no parent, nothing to swap with
         }
 
@@ -138,16 +178,54 @@ let BufferManager = stampit().deepProps({
     },
     updateBufferAst(bufferId, newText) {
         const {node, file} = this.getFileAndNodeForBufferId(bufferId)
-        if (R.isNil(node.customId)) {
-            file.updateFileAst(newText)
-            this.changeBufferTextOfNodes(file.functions)
-        } else {
-            let nodesToUpdate = file.updateFunctionAst(newText, node)
-            this.changeBufferTextOfNodes(nodesToUpdate)
-        }
-        this.editorApi.changeBufferText(file.id, file.text)
 
-    // TODO update meta data in UI
+        if (!file || !node) {
+            // can't find file or node for unmanaged buffer
+        }
+
+        let oldFileMetaData = file.getMetaData()
+        let oldFunctionsMetaData = R.map(getMetaData, file.functionsMap)
+
+        let changeFunctionBufferText = this.changeFunctionBufferText.bind(this, file)
+        let changeFunctionMetaData = this.changeFunctionMetaData.bind(this, file, oldFileMetaData.hasConnectedError, oldFunctionsMetaData)
+
+        if (this.isFile(bufferId)) {
+            file.updateFileAst(newText)
+            file.functions.forEach(changeFunctionBufferText)
+            if (!file.hasConnectedError) {
+                // files has no error, so recast has put text into `text` property
+                if (this.options.guardFileUpdateWithDirtyCheck) {
+                    // send update only when generated text from recast (text) differs from editor text (unformatted)
+                    if (file.text !== file.unformattedText) {
+                        this.editorApi.changeBufferText(file.id, file.text)
+                    }
+                } else {
+                    // send always
+                    this.editorApi.changeBufferText(file.id, file.text)
+                }
+            }
+        } else {
+            let {nodesToUpdate, node:newNode} = file.updateFunctionAst(newText, node)
+            if (this.options.guardFileUpdateWithDirtyCheck) {
+                // check if need to update current edited node also
+                if (newNode.text !== newNode.unformattedText) {
+                    // was formatted by Recast, update current node and others
+                    [newNode, ...nodesToUpdate].forEach(changeFunctionBufferText)
+                } else {
+                    // only update other nodes
+                    nodesToUpdate.forEach(changeFunctionBufferText)
+                }
+            } else {
+                // without gard, send always all nodes
+                [newNode, ...nodesToUpdate].forEach(changeFunctionBufferText)
+            }
+            this.editorApi.changeBufferText(file.id, file.text)
+        }
+
+        if (!deepEquals(oldFileMetaData, file.getMetaData())) {
+            this.editorApi.changeMetaData(file.id, file.getMetaData())
+        }
+        file.functions.forEach(changeFunctionMetaData)
     }
 })
 

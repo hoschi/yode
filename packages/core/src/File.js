@@ -1,6 +1,7 @@
 import stampit from '@stamp/it'
+import R from 'ramda'
 import profiler from './profiler'
-import { parseCode, getFunctionsFromAst, getAllContainerNodesRecursive, getAllChildrenNodesRecursive, printAst, addTextToNode, replaceNodeInAst, getNodeForFirstFoundType, isNodeDirty, getInnerMostFunctionNode } from './astBackedEditing'
+import { parseCode, getFunctionsFromAst, getAllContainerNodesRecursive, getAllChildrenNodesRecursive, printAst, addTextToNode, replaceNodeInAst, getNodeForFirstFoundType, isNodeDirty, getInnerMostFunctionNode, getMetaData } from './astBackedEditing'
 import { getFunctionByText } from 'ast/compareFunctions'
 
 let File = stampit().deepProps({
@@ -11,6 +12,7 @@ let File = stampit().deepProps({
     ast: undefined,
     hasConnectedError: undefined,
     functions: undefined,
+    functionsMap: undefined,
     functionsTreeRoot: undefined
 }).methods({
     init({id, unformattedText}) {
@@ -32,13 +34,13 @@ let File = stampit().deepProps({
                 // and use this as editor text, so we don't start with "dirty" editors
                 node.unformattedText = node.text
             })
-            this.functions = functions
+            this.setFunctions(functions)
             this.functionsTreeRoot = functionsTreeRoot
             // set text in node
             this.ast.text = this.ast.unformattedText = this.text
         } else {
             this.text = unformattedText
-            this.functions = []
+            this.setFunctions([])
             this.functionsTreeRoot = {
                 children: [],
                 isRoot: true
@@ -48,6 +50,13 @@ let File = stampit().deepProps({
         }
 
         this.unformattedText = this.text
+    },
+    getMetaData() {
+        return getMetaData(this)
+    },
+    setFunctions(functions) {
+        this.functions = functions
+        this.functionsMap = R.zipObj(functions.map(R.prop('customId')), functions)
     },
     updateFileAst(newText) {
         let stop = profiler.start('- file text update')
@@ -72,7 +81,7 @@ let File = stampit().deepProps({
         this.ast.unformattedText = newText
 
         let {functions, functionsTreeRoot} = getFunctionsFromAst(this.ast, this.id, this.functions)
-        this.functions = functions
+        this.setFunctions(functions)
         this.functionsTreeRoot = functionsTreeRoot
         stop()
     },
@@ -82,21 +91,26 @@ let File = stampit().deepProps({
         let stop = profiler.start('- text update')
         let {error: syntaxError, ast} = parseCode(newText)
         if (syntaxError) {
+            let oldFunctionWithError = {
+                ...oldFunction,
+                syntaxError,
+                unformattedText: newText
+            }
             // broken code, wait for working code
-            this.functions = this.functions.map(f => {
+            let updatedFunctions = this.functions.map(f => {
                 if (f.customId === oldFunction.customId) {
-                    // set new state for editor
-                    return {
-                        ...f,
-                        syntaxError,
-                        unformattedText: newText
-                    }
+                    // update node with new created one
+                    return oldFunctionWithError
                 }
                 return f
             })
+            this.setFunctions(updatedFunctions)
             this.hasConnectedError = true
             stop()
-            return
+            return {
+                nodesToUpdate: [oldFunctionWithError],
+                node: oldFunctionWithError
+            }
         }
 
         // error of this file is gone
@@ -138,7 +152,7 @@ let File = stampit().deepProps({
         let functionsToCompare = this.functions.filter(f => newFunction.customId !== f.customId)
         // update functions and port props from already known functions
         let {functions, functionsTreeRoot} = getFunctionsFromAst(this.ast, this.id, functionsToCompare)
-        this.functions = functions
+        this.setFunctions(functions)
         this.functionsTreeRoot = functionsTreeRoot
 
         // collect function nodes to update by walking up the linked list of
@@ -149,7 +163,10 @@ let File = stampit().deepProps({
         let nodesToUpdate = containerNodesToUpdate.concat(childrenNodesToUpdate)
 
         stop()
-        return nodesToUpdate
+        return {
+            nodesToUpdate,
+            node: newFunction
+        }
     },
     findFunctionAroundCursor(node, cursor) {
         let innerFunctionNode = getInnerMostFunctionNode(node, cursor)

@@ -1,5 +1,5 @@
 import stampit from '@stamp/it';
-import {createBuffer, openEditorById, selectVisibleBuffers, swapBufferEditors, changeBufferText} from 'store/editorReducer'
+import {createBuffer, openEditorById, selectVisibleBuffers, swapBufferEditors, changeBufferText, changeMetaData} from 'store/editorReducer'
 import {anonymousBufferPrefix, functionEditorType} from 'consts'
 
 let id = 1;
@@ -37,6 +37,9 @@ let EditorApi = stampit().deepProps({
     },
     changeBufferText(id, newText) {
         this.dispatch(changeBufferText({id, newText}))
+    },
+    changeMetaData(id, newMetaData) {
+        this.dispatch(changeMetaData({id, newMetaData}))
     }
 })
 
