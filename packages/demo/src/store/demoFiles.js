@@ -1,8 +1,7 @@
 export default [
     {
         path: 'actions.js',
-        text: `
-// copied from https://github.com/reactjs/redux/blob/d5d1572cba55942d571b4b52cd12e5045142b9ff/examples/todomvc/src/actions/index.js
+        text: `// copied from https://github.com/reactjs/redux/blob/d5d1572cba55942d571b4b52cd12e5045142b9ff/examples/todomvc/src/actions/index.js
 import * as types from '../constants/ActionTypes'
 
 export const addTodo = (text) => ({
@@ -33,8 +32,7 @@ export const clearCompleted = () => ({
 
     {
         path: 'actions.spec.js',
-        text: `
-// copied from https://github.com/reactjs/redux/blob/d5d1572cba55942d571b4b52cd12e5045142b9ff/examples/todomvc/src/actions/index.spec.js
+        text: `// copied from https://github.com/reactjs/redux/blob/d5d1572cba55942d571b4b52cd12e5045142b9ff/examples/todomvc/src/actions/index.spec.js
 import * as types from '../constants/ActionTypes'
 import * as actions from './index'
 
@@ -85,8 +83,7 @@ describe('todo actions', () => {
 
     {
         path: 'Header.js',
-        text: `
-// copied from https://github.com/reactjs/redux/blob/d5d1572cba55942d571b4b52cd12e5045142b9ff/examples/todomvc/src/components/Header.js
+        text: `// copied from https://github.com/reactjs/redux/blob/d5d1572cba55942d571b4b52cd12e5045142b9ff/examples/todomvc/src/components/Header.js
 // modified to use arrow functions instead of class syntax
 import React, { PropTypes, Component } from 'react'
 import TodoTextInput from './TodoTextInput'
@@ -112,8 +109,7 @@ export default ({addTodo}) => {
 
     {
         path: 'Header.spec.js',
-        text: `
-// copied from https://github.com/reactjs/redux/blob/d5d1572cba55942d571b4b52cd12e5045142b9ff/examples/todomvc/src/components/Header.spec.js
+        text: `// copied from https://github.com/reactjs/redux/blob/d5d1572cba55942d571b4b52cd12e5045142b9ff/examples/todomvc/src/components/Header.spec.js
 import React from 'react'
 import TestUtils from 'react-addons-test-utils'
 import Header from './Header'
