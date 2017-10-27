@@ -3,7 +3,7 @@ import R from 'ramda'
 import ReactGridLayoutOrig, { WidthProvider } from 'react-grid-layout'
 import BufferEditorContainer from './BufferEditorContainer'
 import EditorGridItemContainer from './EditorGridItemContainer'
-import { editorLayoutCols, editorHeaderClsName } from 'consts'
+import { EDITOR_LAYOUT_COLS, EDITOR_HEADER_CLS_NAME } from 'consts'
 
 let ReactGridLayout = WidthProvider(ReactGridLayoutOrig)
 
@@ -22,8 +22,8 @@ const EditorSection = ({buffers, layout, onLayoutChanged}) => {
     let bufferEls = R.values(buffers).map(createBufferEditor)
 
     let gridProps = {
-        cols: editorLayoutCols,
-        draggableHandle: '.' + editorHeaderClsName,
+        cols: EDITOR_LAYOUT_COLS,
+        draggableHandle: '.' + EDITOR_HEADER_CLS_NAME,
         rowHeight: 1,
         isResizable: true,
         margin: [24, 0],
