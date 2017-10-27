@@ -1,6 +1,6 @@
 import mitt from 'mitt'
 
-const emitter = mitt();
+const emitter = mitt()
 
 export const emitterMiddleware = store => next => action => {
     let result = next(action)

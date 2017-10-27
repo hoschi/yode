@@ -4,11 +4,11 @@ import { selectAllFiles, ADD_FILE_TO_STORAGE, DELETE_BUFFER, SWAP_WITH_PARENT_FU
 import { OPEN_FUNCTION_EDITOR_UNDER_CURSOR } from './yodeActions.js'
 import emitter from './emitter'
 
-const core = Core.create();
+const core = Core.create()
 
 const handlers = {
     [ADD_FILE_TO_STORAGE]: ({action}) => {
-        const {path, text} = action;
+        const {path, text} = action
         core.addFile({
             id: path,
             text
@@ -45,7 +45,7 @@ let initPlugin = (initialState, editorApi) => {
     emitter.on('*', (eventName, ev) => {
         if (!R.has(eventName, handlers)) {
             // not handled by plugin
-            return;
+            return
         }
         console.log(eventName, ev, core)
     })

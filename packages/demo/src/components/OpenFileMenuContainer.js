@@ -13,6 +13,6 @@ let mapStateToProps = (state) => {
 let mapDispatchToProps = {
     setMenuIsOpen: setIsOpenFileMenuOpen,
     openEditorById
-};
+}
 
-export default connect(mapStateToProps, mapDispatchToProps)(OpenFileMenu);
+export default connect(mapStateToProps, mapDispatchToProps)(OpenFileMenu)

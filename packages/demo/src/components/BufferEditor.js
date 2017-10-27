@@ -1,11 +1,11 @@
 import React from 'react'
-import IconUp from 'material-ui/svg-icons/navigation/arrow-upward';
+import IconUp from 'material-ui/svg-icons/navigation/arrow-upward'
 import EditorPaper from './EditorPaper'
 import EditorHeader, { closeIconConfig } from './EditorHeader'
 
 const BufferEditor = ({buffer, onTextChanged, onCursorActivity, onSwapWithParent, onClose, style, isFocused}) => {
     const {id, text:bufferText, metaData} = buffer
-    const {syntaxError, hasConnectedError} = metaData;
+    const {syntaxError, hasConnectedError} = metaData
 
     let onEditorTextChange = ({value}) => {
         if (value === bufferText) {
@@ -40,7 +40,7 @@ const BufferEditor = ({buffer, onTextChanged, onCursorActivity, onSwapWithParent
         onActivity: onEditorActivity
     }
 
-    let title = buffer.path || metaData.title;
+    let title = buffer.path || metaData.title
     let headerProps = {
         titlePrefix: 'buffer:',
         title,

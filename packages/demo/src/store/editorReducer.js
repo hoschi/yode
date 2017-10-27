@@ -15,7 +15,7 @@ function createBufferFromText (id, text) {
 function createFileFromText (path, text) {
     return {
         ...createBufferFromText(path, text),
-        path,
+        path
     }
 }
 
@@ -37,7 +37,7 @@ export const editorHeightChanged = ({itemId, height}) => {
 }
 
 export const ADD_FILE_TO_STORAGE = 'ADD_FILE_TO_STORAGE'
-export const addFileToStorage = ({ path, text }) => ({
+export const addFileToStorage = ({path, text}) => ({
     type: ADD_FILE_TO_STORAGE,
     path,
     text
@@ -100,7 +100,7 @@ export const createBuffer = ({id, text}) => {
     return {
         type: CREATE_BUFFER,
         id,
-        text,
+        text
     }
 }
 
@@ -123,7 +123,7 @@ export const swapWithParentFunction = ({id}) => {
 export const SWAP_BUFFER_EDITORS = 'SWAP_BUFFER_EDITORS'
 export const swapBufferEditors = ({oldId, newId}) => {
     return {
-        type:SWAP_BUFFER_EDITORS,
+        type: SWAP_BUFFER_EDITORS,
         oldId,
         newId
     }
@@ -177,7 +177,7 @@ let shiftGridItem = R.curry((matcher, item) => {
             y: 5
         }
     } else {
-        return item;
+        return item
     }
 })
 
@@ -199,13 +199,13 @@ let reducerFunctions = {
         }
     },
     [EDITOR_HEIGHT_CHANGED]: (state, {itemId, height}) => {
-        let layout = state.editorsLayout;
+        let layout = state.editorsLayout
         let newLayout = layout.map((item) => {
             if (item.i !== itemId) {
-                return item;
+                return item
             }
 
-            let itemHeight = height + 28;
+            let itemHeight = height + 28
             return {
                 ...item,
                 h: itemHeight,
@@ -230,12 +230,12 @@ let reducerFunctions = {
         return setProp('buffers', {
             ...state.buffers,
             [id]: {
-                ...createBufferFromText(id, text),
+                ...createBufferFromText(id, text)
             }
         }, state)
     },
     [OPEN_EDITOR_BY_ID]: (state, action) => {
-        const {id} = action;
+        const {id} = action
         let newLayout = R.map(shiftGridItem(R.allPass([
             R.propEq('x', 0),
             R.propEq('y', 0)
@@ -250,7 +250,7 @@ let reducerFunctions = {
         }
     },
     [CLOSE_EDITOR]: (state, action) => {
-        const {id} = action;
+        const {id} = action
         return R.pipe(
             // reset focus
             (state) => {
@@ -261,10 +261,10 @@ let reducerFunctions = {
                 return state
             },
             setProp('visibleEditorIds', R.filter(R.complement(R.equals(id)), state.visibleEditorIds))
-        )(state);
+        )(state)
     },
     [DELETE_BUFFER]: (state, action) => {
-        const {id} = action;
+        const {id} = action
         return R.pipe(
             // delete buffer
             (state) => {
@@ -275,10 +275,10 @@ let reducerFunctions = {
                 return state
             },
             setProp('visibleEditorIds', R.filter(R.complement(R.equals(id)), state.visibleEditorIds))
-        )(state);
+        )(state)
     },
     [SWAP_BUFFER_EDITORS]: (state, action) => {
-        const {oldId, newId} = action;
+        const {oldId, newId} = action
 
         // remove new item when it is visible, we insert it at another position later
         let {item:existingNewItem, layout:layoutWithoutNewItem} = getLayoutWithoutItem(state.editorsLayout, newId)
@@ -301,18 +301,18 @@ let reducerFunctions = {
         }
 
         return R.evolve({
-            focusedEditorId:R.ifElse(
+            focusedEditorId: R.ifElse(
                 // closed editor focused?
                 R.equals(oldId),
                 // it was! reset focus
                 R.always(undefined),
                 R.identity
             ),
-            visibleEditorIds:R.pipe(
+            visibleEditorIds: R.pipe(
                 R.reject(R.equals(oldId)),
                 R.append(newId)
             ),
-            editorsLayout:R.always(R.insert(oldItemPos, newLayoutItem, layoutCleared))
+            editorsLayout: R.always(R.insert(oldItemPos, newLayoutItem, layoutCleared))
         }, state)
     },
     [CURSOR_POSITION_CHANGED]: (state, action) => {
@@ -323,30 +323,35 @@ let reducerFunctions = {
         )(state)
     },
     [BUFFER_TEXT_CHANGED]: (state, action) => {
-        const {buffer, newText} = action;
+        const {buffer, newText} = action
         return setPath(['buffers', buffer.id, 'text'], newText, state)
     },
     [CHANGE_BUFFER_TEXT]: (state, action) => {
-        const {id, newText} = action;
+        const {id, newText} = action
         return setPath(['buffers', id, 'text'], newText, state)
     },
     [CHANGE_META_DATA]: (state, action) => {
-        const {id, newMetaData} = action;
+        const {id, newMetaData} = action
         return setPath(['buffers', id, 'metaData'], newMetaData, state)
-    },
+    }
 }
 
 let getLayoutWithoutItem = (layout, id) => {
-    let layoutItem, layoutWithoutItem
-        let position = R.findIndex(R.propEq('i', id), layout)
-        if (position >= 0) {
-            layoutItem = layout[position]
-            layoutWithoutItem = R.remove(position, 1, layout)
-        } else {
-            layoutWithoutItem = layout
-        }
-    return {layout:layoutWithoutItem, item:layoutItem, position}
+    let layoutItem,
+        layoutWithoutItem
+    let position = R.findIndex(R.propEq('i', id), layout)
+    if (position >= 0) {
+        layoutItem = layout[position]
+        layoutWithoutItem = R.remove(position, 1, layout)
+    } else {
+        layoutWithoutItem = layout
+    }
+    return {
+        layout: layoutWithoutItem,
+        item: layoutItem,
+        position
+    }
 }
 
 let reducer = createReducer(initialState, reducerFunctions)
-export default reducer;
+export default reducer

@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 import EditorSectionContainer from './EditorSectionContainer'
 
 const MainSection = () => {
@@ -7,7 +7,7 @@ const MainSection = () => {
            </div>
 }
 
-export default MainSection;
+export default MainSection
 
 let mainContainerStyle = {
     paddingTop: 12,

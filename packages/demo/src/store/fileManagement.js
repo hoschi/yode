@@ -30,10 +30,10 @@ export let resetAddDialog = () => ({
     type: RESET_ADD_DIALOG
 })
 
-export let selectIsOpenFileMenuOpen = R.path(['fileManagement', 'isOpenFileMenuOpen']);
-export let selectIsOpenAddFileDialog = R.path(['fileManagement', 'addFile', 'isOpen']);
-export let selectFileNameOfAddDialog = R.path(['fileManagement', 'addFile', 'fileName']);
-export let selectContentOfAddDialog = R.path(['fileManagement', 'addFile', 'content']);
+export let selectIsOpenFileMenuOpen = R.path(['fileManagement', 'isOpenFileMenuOpen'])
+export let selectIsOpenAddFileDialog = R.path(['fileManagement', 'addFile', 'isOpen'])
+export let selectFileNameOfAddDialog = R.path(['fileManagement', 'addFile', 'fileName'])
+export let selectContentOfAddDialog = R.path(['fileManagement', 'addFile', 'content'])
 
 let initialState = {
     isOpenFileMenuOpen: false,

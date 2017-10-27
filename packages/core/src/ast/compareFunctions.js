@@ -1,4 +1,4 @@
-import R from 'ramda';
+import R from 'ramda'
 import * as difflib from 'difflib'
 
 export function getClosestMatchIndex (searchTerm, possibilities) {
@@ -56,6 +56,6 @@ export function getFunctionIndexByText (searchTerm, functions) {
 export function getFunctionByText (searchTerm, functions) {
     let index = getClosestMatchIndex(searchTerm, functions.map(f => f.text))
     if (index >= 0) {
-        return functions[index];
+        return functions[index]
     }
 }

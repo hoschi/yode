@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import R from 'ramda';
+import R from 'ramda'
 import BufferEditor from './BufferEditor'
 import { selectFocusedEditorId, cursorPositionChanged, closeEditor, bufferTextChanged, swapWithParentFunction } from 'store/editorReducer'
 
@@ -14,7 +14,7 @@ let mapDispatchToProps = {
     onTextChanged: bufferTextChanged,
     onCursorActivity: cursorPositionChanged,
     onClose: closeEditor,
-    onSwapWithParent: swapWithParentFunction,
-};
+    onSwapWithParent: swapWithParentFunction
+}
 
 export default connect(makeMapStateToProps, mapDispatchToProps)(BufferEditor)

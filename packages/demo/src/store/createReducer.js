@@ -1,6 +1,6 @@
 export default function createReducer (initialState, actionObject) {
     return function (state = initialState, action) {
-        let actionFunction;
+        let actionFunction
         if (action && action.type) {
             actionFunction = actionObject[action.type]
         }

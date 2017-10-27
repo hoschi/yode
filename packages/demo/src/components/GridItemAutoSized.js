@@ -9,7 +9,7 @@ let isNilOrZero = R.anyPass([
 
 const GridItemAutoSized = React.createClass({
     componentWillReceiveProps(nextProps) {
-        const {size, itemId, onHeightChanged} = this.props;
+        const {size, itemId, onHeightChanged} = this.props
         if (!isNilOrZero(nextProps.size.height) &&
             size.height !== nextProps.size.height) {
             onHeightChanged({
@@ -19,7 +19,7 @@ const GridItemAutoSized = React.createClass({
         }
     },
     render() {
-        const {children} = this.props;
+        const {children} = this.props
         return <div>
                    { children }
                </div>
