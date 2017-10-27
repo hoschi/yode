@@ -62,8 +62,12 @@ let BufferManager = stampit().deepProps({
             // buffer already exists, no need to create one
             return existingBufferId
         } else {
+            let metaData = {
+                ...getMetaData(node),
+                hasConnectedError: file.hasConnectedError
+            }
             // buffer doesn't exist yet, create it
-            let newBufferId = this.editorApi.createFunctionBuffer(node.unformattedText)
+            let newBufferId = this.editorApi.createFunctionBuffer(node.unformattedText, metaData)
             let functionBuffer = FunctionBuffer.create()
             functionBuffer.init({
                 customId: node.customId,
@@ -101,7 +105,8 @@ let BufferManager = stampit().deepProps({
         if (!deepEquals(currentMetaData, oldFunctionsMetaData[node.customId]) || oldFileErrorState !== file.hasConnectedError) {
             this.editorApi.changeMetaData(bufferId, {
                 hasConnectedError: file.hasConnectedError,
-                syntaxError: node.syntaxError
+                syntaxError: node.syntaxError,
+                title: node.customId
             })
         }
     },

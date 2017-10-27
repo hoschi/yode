@@ -40,9 +40,10 @@ const BufferEditor = ({buffer, onTextChanged, onCursorActivity, onSwapWithParent
         onActivity: onEditorActivity
     }
 
+    let title = buffer.path || metaData.title;
     let headerProps = {
         titlePrefix: 'buffer:',
-        title:id,
+        title,
         node: buffer,
         error: syntaxError,
         hasConnectedError,
