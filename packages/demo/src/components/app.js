@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
-import muiThemeConfig from 'muiThemeConfig';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import muiThemeConfig from 'muiThemeConfig'
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
+import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import MainSection from './MainSection'
 import Shell from './Shell'
 
-const theme = getMuiTheme(muiThemeConfig);
+const theme = getMuiTheme(muiThemeConfig)
 
 // needs to be a real react component to make hot reloading work
 class App extends Component {

@@ -18,6 +18,6 @@ let mapDispatchToProps = {
     onFileNameChange: setFileNameOfAddDialog,
     reset: resetAddDialog,
     addFile: addFileToStorage
-};
+}
 
-export default connect(mapStateToProps, mapDispatchToProps)(AddFileDialog);
+export default connect(mapStateToProps, mapDispatchToProps)(AddFileDialog)

@@ -1,5 +1,5 @@
 import React from 'react'
-import * as palette from 'material-ui/styles/colors';
+import * as palette from 'material-ui/styles/colors'
 import { subtleLabelStyle } from './styles'
 
 const NodeEditorStateLabels = ({node, error, hasConnectedError}) => {
@@ -18,7 +18,7 @@ const NodeEditorStateLabels = ({node, error, hasConnectedError}) => {
     })
     const errorMessageStyle = Object.assign({}, labelStyle, {
         backgroundColor: palette.deepOrange200
-    });
+    })
 
     if (node.text === node.unformattedText) {
         // hide, editor and ast generated text are the same

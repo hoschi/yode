@@ -17,7 +17,10 @@ const AddFileDialog = ({isOpen, setDialogIsOpen, content, fileName, onContentCha
     }
 
     let addClick = () => {
-        addFile({ path:fileName, text:content })
+        addFile({
+            path: fileName,
+            text: content
+        })
         closeAndReset()
     }
 

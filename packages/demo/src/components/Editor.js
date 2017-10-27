@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 require('codemirror/mode/javascript/javascript')
 require('codemirror/lib/codemirror.css')
 import CodeMirror from 'codemirror'
@@ -11,9 +11,9 @@ const Editor = React.createClass({
     isReadOnly() {
         if (!this.props.error && this.props.hasConnectedError) {
             // we have no error to fix, but a connected error is present
-            return true;
+            return true
         }
-        return false;
+        return false
     },
 
     componentDidMount() {
@@ -25,7 +25,7 @@ const Editor = React.createClass({
             lineNumbers: true,
             theme: 'mui-light'
         }
-        this.suspendEvents = false;
+        this.suspendEvents = false
 
         this.codeMirror = CodeMirror(
             this.refs.container,
@@ -47,9 +47,9 @@ const Editor = React.createClass({
                 if (this.suspendEvents) {
                     return
                 }
-                clearTimeout(this._updateTimer);
-                this._updateTimer = setTimeout(this._onActivity, 100);
-            });
+                clearTimeout(this._updateTimer)
+                this._updateTimer = setTimeout(this._onActivity, 100)
+            })
         }
     },
 
@@ -63,11 +63,11 @@ const Editor = React.createClass({
         if (nextProps.text !== this.props.text) {
             // suspend events, so programmatically changed cursor position
             // doesn't get handles as an user action
-            this.suspendEvents = true;
+            this.suspendEvents = true
             let cursor = this.codeMirror.getDoc().getCursor()
             this.codeMirror.setValue(nextProps.text)
             this.codeMirror.getDoc().setCursor(cursor)
-            this.suspendEvents = false;
+            this.suspendEvents = false
         }
         this._setError(nextProps.error)
         if (!this.codeMirror) {
@@ -80,10 +80,10 @@ const Editor = React.createClass({
         if (error.loc && error.loc.line) {
             return error.loc.line
         } else if (error.lineNumber) {
-            return error.lineNumber;
+            return error.lineNumber
         }
-        console.warning('no error line');
-        return 0;
+        console.warning('no error line')
+        return 0
     },
 
     _setError(error) {

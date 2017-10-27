@@ -1,13 +1,13 @@
 import React from 'react'
 import RaisedButton from 'material-ui/RaisedButton'
-import Popover from 'material-ui/Popover';
-import Menu from 'material-ui/Menu';
-import MenuItem from 'material-ui/MenuItem';
+import Popover from 'material-ui/Popover'
+import Menu from 'material-ui/Menu'
+import MenuItem from 'material-ui/MenuItem'
 
 const OpenFileMenu = React.createClass({
     anchorEl: undefined,
     render() {
-        const {isMenuOpen, setMenuIsOpen, filesWithOpenState, openEditorById} = this.props;
+        const {isMenuOpen, setMenuIsOpen, filesWithOpenState, openEditorById} = this.props
 
         let openButtonProps = {
             label: 'open file editor',

@@ -1,9 +1,9 @@
-import React from 'react';
-import muiThemeConfig from 'muiThemeConfig';
+import React from 'react'
+import muiThemeConfig from 'muiThemeConfig'
 import AppBar from 'material-ui/AppBar'
 import Paper from 'material-ui/Paper'
 import ControlsContainer from './ControlsContainer'
-import githubMarkImg from 'file-loader!src/assets/GitHub-Mark.png';
+import githubMarkImg from 'file-loader!src/assets/GitHub-Mark.png'
 
 const Shell = ({children}) => {
     return <div>
@@ -11,8 +11,8 @@ const Shell = ({children}) => {
                    <div style={ style.header }>
                        <AppBar title="Yode Prototype" showMenuIconButton={ false } zDepth={ 0 } />
                        <a href="https://github.com/hoschi/yode" title="Github project page">
-                                                                       <img style={ style.githubImg } src={ githubMarkImg } alt="github mark" />
-                                                                   </a>
+                                                                                  <img style={ style.githubImg } src={ githubMarkImg } alt="github mark" />
+                                                                              </a>
                    </div>
                    <ControlsContainer />
                </Paper>
@@ -24,9 +24,9 @@ const Shell = ({children}) => {
 
 export default Shell
 
-let style;
+let style
 {
-    let pinnedAreaHeight = 148;
+    let pinnedAreaHeight = 148
     style = {
         pinnedArea: {
             position: 'fixed',

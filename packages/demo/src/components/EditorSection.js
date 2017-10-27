@@ -3,7 +3,7 @@ import R from 'ramda'
 import ReactGridLayoutOrig, { WidthProvider } from 'react-grid-layout'
 import BufferEditorContainer from './BufferEditorContainer'
 import EditorGridItemContainer from './EditorGridItemContainer'
-import { editorLayoutCols, editorHeaderClsName, functionEditorType, fileEditorType } from 'consts'
+import { editorLayoutCols, editorHeaderClsName } from 'consts'
 
 let ReactGridLayout = WidthProvider(ReactGridLayoutOrig)
 

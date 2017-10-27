@@ -1,6 +1,6 @@
 import React from 'react'
-import * as palette from 'material-ui/styles/colors';
-import Paper from 'material-ui/Paper';
+import * as palette from 'material-ui/styles/colors'
+import Paper from 'material-ui/Paper'
 import { defaultTransition } from './styles'
 import Editor from './Editor'
 
