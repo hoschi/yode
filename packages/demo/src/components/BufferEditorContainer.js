@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 import R from 'ramda';
-import FunctionEditor from './FunctionEditor'
+import BufferEditor from './BufferEditor'
 import { selectFocusedEditorId, cursorPositionChanged, closeEditor, bufferTextChanged, swapWithParentFunction } from 'store/editorReducer'
 
 let makeMapStateToProps = () => (state, ownProps) => {
@@ -17,4 +17,4 @@ let mapDispatchToProps = {
     onSwapWithParent: swapWithParentFunction,
 };
 
-export default connect(makeMapStateToProps, mapDispatchToProps)(FunctionEditor)
+export default connect(makeMapStateToProps, mapDispatchToProps)(BufferEditor)

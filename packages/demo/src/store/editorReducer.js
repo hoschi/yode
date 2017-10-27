@@ -96,12 +96,11 @@ export const changeMetaData = ({id, newMetaData}) => {
 }
 
 export const CREATE_BUFFER = 'CREATE_BUFFER'
-export const createBuffer = ({id, text, editorType}) => {
+export const createBuffer = ({id, text}) => {
     return {
         type: CREATE_BUFFER,
         id,
         text,
-        editorType
     }
 }
 
@@ -223,16 +222,15 @@ let reducerFunctions = {
         const {path, text} = action
         return setProp('buffers', {
             ...state.buffers,
-            [path]: createFileFromText(                path, text)
+            [path]: createFileFromText(path, text)
         }, state)
     },
     [CREATE_BUFFER]: (state, action) => {
-        const {id, text, editorType} = action
+        const {id, text} = action
         return setProp('buffers', {
             ...state.buffers,
             [id]: {
-                ...createBufferFromText(                id, text),
-                editorType
+                ...createBufferFromText(id, text),
             }
         }, state)
     },

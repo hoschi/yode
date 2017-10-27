@@ -3,7 +3,7 @@ import IconUp from 'material-ui/svg-icons/navigation/arrow-upward';
 import EditorPaper from './EditorPaper'
 import EditorHeader, { closeIconConfig } from './EditorHeader'
 
-const FunctionEditor = ({buffer, onTextChanged, onCursorActivity, onSwapWithParent, onClose, style, isFocused}) => {
+const BufferEditor = ({buffer, onTextChanged, onCursorActivity, onSwapWithParent, onClose, style, isFocused}) => {
     const {id, text:bufferText, metaData} = buffer
     const {syntaxError, hasConnectedError} = metaData;
 
@@ -62,4 +62,4 @@ const FunctionEditor = ({buffer, onTextChanged, onCursorActivity, onSwapWithPare
     return <EditorPaper style={ style } header={ header } editorProps={ editorProps } isFocused={ isFocused } />
 }
 
-export default FunctionEditor
+export default BufferEditor

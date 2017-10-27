@@ -160,10 +160,12 @@ let BufferManager = stampit().deepProps({
 
         if (!file || !node) {
             // can't find file or node for unmanaged buffer
+            return
         }
 
         if (!node.parentFunction) {
             // has no parent, nothing to swap with
+            return
         }
 
         let parentNode = node.parentFunction

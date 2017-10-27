@@ -22,7 +22,7 @@ let EditorApi = stampit().deepProps({
     },
     createFunctionBuffer(text) {
         let id = getNextBufferId();
-        this.dispatch(createBuffer({ id, text, editorType:functionEditorType}))
+        this.dispatch(createBuffer({ id, text}))
         return id
     },
     openBuffer(id) {
