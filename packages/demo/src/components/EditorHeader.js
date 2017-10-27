@@ -3,7 +3,7 @@ import R from 'ramda'
 import NodeEditorStateLabels from './NodeEditorStateLabels'
 import IconButton from 'material-ui/IconButton'
 import IconClose from 'material-ui/svg-icons/navigation/close'
-import { editorHeaderClsName } from 'consts'
+import { EDITOR_HEADER_CLS_NAME } from 'consts'
 import { subtleLabelStyle } from './styles'
 
 export let closeIconConfig = {
@@ -30,7 +30,7 @@ const EditorHeader = ({titlePrefix, title, node, iconConfigs, hasConnectedError,
         icons = getIcons(iconConfigs)
     }
     return <div style={ headerContainerStyle }>
-               <div style={ textAndLabelContainerStyle } className={ editorHeaderClsName }>
+               <div style={ textAndLabelContainerStyle } className={ EDITOR_HEADER_CLS_NAME }>
                    <span style={ subtleLabelStyle }>  { titlePrefix }  </span>
                    { ' ' }
                    { title }

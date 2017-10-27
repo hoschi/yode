@@ -1,6 +1,6 @@
 import R from 'ramda'
 import createReducer from './createReducer'
-import { editorLayoutCols, anonymousBufferPrefix } from 'consts'
+import { EDITOR_LAYOUT_COLS, ANONYMOUS_BUFFER_PREFIX } from 'consts'
 import { setProp, setPath } from 'helper'
 import demoFiles from './demoFiles'
 
@@ -153,8 +153,8 @@ export let selectVisibleBuffers = (state) => {
 
 let defaultGridItemProps = {
     h: 1,
-    //w: editorLayoutCols / 2,
-    w: editorLayoutCols,
+    //w: EDITOR_LAYOUT_COLS / 2,
+    w: EDITOR_LAYOUT_COLS,
     x: 0,
     y: 0
 }
@@ -164,7 +164,7 @@ function getInitialLayout (state) {
     return itemIds.map((id, i) => ({
         i: id.toString(),
         ...defaultGridItemProps,
-        x: i % 2 === 0 ? 0 : editorLayoutCols / 2,
+        x: i % 2 === 0 ? 0 : EDITOR_LAYOUT_COLS / 2,
         y: i % 2
     }))
 }
@@ -268,7 +268,7 @@ let reducerFunctions = {
         return R.pipe(
             // delete buffer
             (state) => {
-                if (id.startsWith(anonymousBufferPrefix)) {
+                if (id.startsWith(ANONYMOUS_BUFFER_PREFIX)) {
                     // remove anonymous buffer when editor closes
                     return R.dissocPath(['buffers', id], state)
                 }
