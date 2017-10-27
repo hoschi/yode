@@ -20,7 +20,10 @@ export function printAst (...args) {
     return r
 }
 
-export let getMetaData = R.pick(['hasConnectedError', 'syntaxError'])
+export let getMetaData = (node) => ({
+    ...R.pick(['hasConnectedError', 'syntaxError'], node),
+    title: 'node-' + node.customId
+})
 
 export function addTextToNode (ast) {
     ast.text = printAst(ast)
