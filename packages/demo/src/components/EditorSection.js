@@ -1,20 +1,14 @@
 import React from 'react'
 import R from 'ramda'
 import ReactGridLayoutOrig, { WidthProvider } from 'react-grid-layout'
-import FunctionEditorContainer from './FunctionEditorContainer'
-import FileEditorContainer from './FileEditorContainer'
+import BufferEditorContainer from './BufferEditorContainer'
 import EditorGridItemContainer from './EditorGridItemContainer'
 import { editorLayoutCols, editorHeaderClsName, functionEditorType, fileEditorType } from 'consts'
 
 let ReactGridLayout = WidthProvider(ReactGridLayoutOrig)
 
-let registeredEditorTypes = {
-    [fileEditorType]:FileEditorContainer,
-    [functionEditorType]:FunctionEditorContainer
-}
-
 let createBufferEditor = (buffer) => {
-    let EditorType = registeredEditorTypes[buffer.editorType] || FileEditorContainer;
+    let EditorType = BufferEditorContainer
     return <div key={ buffer.id }>
                <div>
                    <EditorGridItemContainer itemId={ buffer.id }>
