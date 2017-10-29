@@ -6,6 +6,13 @@ import File from './File'
 import FunctionBuffer from './FunctionBuffer'
 import { getMetaData } from './astBackedEditing'
 
+function areTextsEqual (unformattedParam, formattedParam) {
+    let unformatted = unformattedParam ? R.trim(unformattedParam) : undefined
+    let formatted = formattedParam ? R.trim(formattedParam) : undefined
+
+    return unformatted === formatted
+}
+
 let BufferManager = stampit().deepProps({
     files: undefined,
     functionBuffers: undefined,
@@ -203,7 +210,7 @@ let BufferManager = stampit().deepProps({
                 // files has no error, so recast has put text into `text` property
                 if (this.options.guardFileUpdateWithDirtyCheck) {
                     // send update only when generated text from recast (text) differs from editor text (unformatted)
-                    if (file.text !== file.unformattedText) {
+                    if (!areTextsEqual(file.unformattedText, file.text)) {
                         this.editorApi.changeBufferText(file.id, file.text)
                     }
                 } else {
@@ -215,7 +222,7 @@ let BufferManager = stampit().deepProps({
             let {nodesToUpdate, node:newNode} = file.updateFunctionAst(newText, node)
             if (this.options.guardFileUpdateWithDirtyCheck) {
                 // check if need to update current edited node also
-                if (newNode.text !== newNode.unformattedText) {
+                if (!areTextsEqual(newNode.unformattedText, newNode.text)) {
                     // was formatted by Recast, update current node and others
                     [newNode, ...nodesToUpdate].forEach(changeFunctionBufferText)
                 } else {
