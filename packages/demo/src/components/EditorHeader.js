@@ -24,7 +24,7 @@ function getIcons (iconConfigs) {
     )).concat(R.last(icons))
 }
 
-const EditorHeader = ({titlePrefix, title, node, iconConfigs, hasConnectedError, error}) => {
+const EditorHeader = ({titlePrefix, title, iconConfigs, hasConnectedError, error}) => {
     let icons
     if (iconConfigs) {
         icons = getIcons(iconConfigs)
@@ -35,7 +35,7 @@ const EditorHeader = ({titlePrefix, title, node, iconConfigs, hasConnectedError,
                    { ' ' }
                    { title }
                    { ' ' }
-                   <NodeEditorStateLabels node={ node } hasConnectedError={ hasConnectedError } error={ error } />
+                   <NodeEditorStateLabels hasConnectedError={ hasConnectedError } error={ error } />
                </div>
                { icons }
            </div>
