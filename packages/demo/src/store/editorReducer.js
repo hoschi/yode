@@ -112,14 +112,6 @@ export const deleteBuffer = ({id}) => {
     }
 }
 
-export const SWAP_WITH_PARENT_FUNCTION = 'SWAP_WITH_PARENT_FUNCTION '
-export const swapWithParentFunction = ({id}) => {
-    return {
-        type: SWAP_WITH_PARENT_FUNCTION,
-        id
-    }
-}
-
 export const SWAP_BUFFER_EDITORS = 'SWAP_BUFFER_EDITORS'
 export const swapBufferEditors = ({oldId, newId}) => {
     return {

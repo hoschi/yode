@@ -1,7 +1,7 @@
 import R from 'ramda'
 import Core from 'core'
-import { selectAllFiles, ADD_FILE_TO_STORAGE, DELETE_BUFFER, SWAP_WITH_PARENT_FUNCTION, BUFFER_TEXT_CHANGED, selectFocusedEditorId, selectCursor } from 'store/editorReducer'
-import { OPEN_FUNCTION_EDITOR_UNDER_CURSOR } from './yodeActions.js'
+import { selectAllFiles, ADD_FILE_TO_STORAGE, DELETE_BUFFER, BUFFER_TEXT_CHANGED, selectFocusedEditorId, selectCursor } from 'store/editorReducer'
+import { OPEN_FUNCTION_EDITOR_UNDER_CURSOR, SWAP_WITH_PARENT_FUNCTION } from './yodeActions.js'
 import emitter from './emitter'
 
 const core = Core.create()

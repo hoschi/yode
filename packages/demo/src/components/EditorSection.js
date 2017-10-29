@@ -1,7 +1,7 @@
 import React from 'react'
 import R from 'ramda'
 import ReactGridLayoutOrig, { WidthProvider } from 'react-grid-layout'
-import BufferEditorContainer from './BufferEditorContainer'
+import BufferEditorContainer from 'plugin/BufferEditorContainer'
 import EditorGridItemContainer from './EditorGridItemContainer'
 import { EDITOR_LAYOUT_COLS, EDITOR_HEADER_CLS_NAME } from 'consts'
 

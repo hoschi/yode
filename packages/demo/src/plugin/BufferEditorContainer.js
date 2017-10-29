@@ -1,7 +1,8 @@
 import { connect } from 'react-redux'
 import R from 'ramda'
 import BufferEditor from './BufferEditor'
-import { selectFocusedEditorId, cursorPositionChanged, closeEditor, bufferTextChanged, swapWithParentFunction } from 'store/editorReducer'
+import { swapWithParentFunction } from './yodeActions.js'
+import { selectFocusedEditorId, cursorPositionChanged, closeEditor, bufferTextChanged } from 'store/editorReducer'
 
 let makeMapStateToProps = () => (state, ownProps) => {
     let focusedEditorId = selectFocusedEditorId(state)
