@@ -44,7 +44,6 @@ const BufferEditor = ({buffer, onTextChanged, onCursorActivity, onSwapWithParent
     let headerProps = {
         titlePrefix: 'buffer:',
         title,
-        node: buffer,
         error: syntaxError,
         hasConnectedError,
         iconConfigs: [

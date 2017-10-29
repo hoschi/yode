@@ -2,7 +2,7 @@ import React from 'react'
 import * as palette from 'material-ui/styles/colors'
 import { subtleLabelStyle } from './styles'
 
-const NodeEditorStateLabels = ({node, error, hasConnectedError}) => {
+const NodeEditorStateLabels = ({error, hasConnectedError}) => {
     let errorMessage,
         errorType
     const labelStyle = {
@@ -10,20 +10,12 @@ const NodeEditorStateLabels = ({node, error, hasConnectedError}) => {
         paddingRight: 4,
         borderRadius: 4
     }
-    const dirtyLabelStyle = Object.assign({}, labelStyle, subtleLabelStyle, {
-        backgroundColor: palette.amber50
-    })
     const errorTypeLabelStyle = Object.assign({}, labelStyle, subtleLabelStyle, {
         backgroundColor: palette.deepOrange200
     })
     const errorMessageStyle = Object.assign({}, labelStyle, {
         backgroundColor: palette.deepOrange200
     })
-
-    if (node.text === node.unformattedText) {
-        // hide, editor and ast generated text are the same
-        dirtyLabelStyle.display = 'none'
-    }
 
     if (error) {
         errorMessage = error.message
@@ -39,8 +31,7 @@ const NodeEditorStateLabels = ({node, error, hasConnectedError}) => {
         errorMessageStyle.display = 'none'
     }
 
-    return <span> <span style={ dirtyLabelStyle }>unformatted</span>
-           { ' ' } <span style={ errorTypeLabelStyle }>{ errorType }</span>
+    return <span> <span style={ errorTypeLabelStyle }>{ errorType }</span>
            { ' ' } <span style={ errorMessageStyle }>{ errorMessage }</span> </span>
 }
 export default NodeEditorStateLabels
