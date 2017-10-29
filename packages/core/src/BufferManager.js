@@ -22,10 +22,16 @@ let BufferManager = stampit().deepProps({
          * If true we do a string equality check to prevent pushing useless
          * updates to editor when buffer text changed. This can happen
          * wen user edits text, but through Recasts formatting their are small
-         * changes, e.g. removed new line at top of file. Disable this check
+         * changes, e.g. removed whitespace at top/end of file. Disable this check
          * when the underlying editor does this by itself already and in the
          * editor `buffer.updateText(allTextInFile)` is faster than JS string
          * equality when `allTextInFile` contains the same as rendered buffer.
+         *
+         * This flag also enables a manual "format" action issued by the user,
+         * if the auto formatting is undesired by the user. In that case the
+         * flag should be set to `false`. Editor itself must than check if
+         * text given from Yode is not the same as in the corresponding buffer
+         * and give the user an action to "format" the text.
          */
         guardFileUpdateWithDirtyCheck: true
     }
