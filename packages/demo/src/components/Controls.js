@@ -3,17 +3,7 @@ import RaisedButtonWithTooltip from './RaisedButtonWithTooltip'
 import OpenFileMenuContainer from './OpenFileMenuContainer'
 import AddFileDialogContainer from './AddFileDialogContainer'
 
-const Controls = ({onFormatClick, onOpenFunctionEditorUnderCursorClick, openFunctionEditorDisabled}) => {
-    let formatButtonProps = {
-        label: 'format code',
-        style: {
-            ...buttonStyle,
-            // just for playing around with AST + formatter instead of CST
-            display: 'none'
-        },
-        tooltip: 'Recast formats code mostly as you type it',
-        onTouchTap: onFormatClick
-    }
+const Controls = ({onOpenFunctionEditorUnderCursorClick, openFunctionEditorDisabled}) => {
     let openFunctionEditorButtonProps = {
         label: 'open function editor',
         style: buttonStyle,
@@ -25,7 +15,6 @@ const Controls = ({onFormatClick, onOpenFunctionEditorUnderCursorClick, openFunc
                <RaisedButtonWithTooltip {...openFunctionEditorButtonProps} />
                <OpenFileMenuContainer />
                <AddFileDialogContainer />
-               <RaisedButtonWithTooltip {...formatButtonProps} />
            </div>
 }
 
