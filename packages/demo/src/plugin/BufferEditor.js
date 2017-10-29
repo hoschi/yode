@@ -1,7 +1,7 @@
 import React from 'react'
 import IconUp from 'material-ui/svg-icons/navigation/arrow-upward'
-import EditorPaper from './EditorPaper'
-import EditorHeader, { closeIconConfig } from './EditorHeader'
+import EditorPaper from 'components/EditorPaper'
+import EditorHeader, { closeIconConfig } from 'components/EditorHeader'
 
 const BufferEditor = ({buffer, onTextChanged, onCursorActivity, onSwapWithParent, onClose, style, isFocused}) => {
     const {id, text:bufferText, metaData} = buffer

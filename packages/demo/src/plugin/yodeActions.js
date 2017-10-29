@@ -4,3 +4,11 @@ export const openFunctionEditorUnderCursor = () => {
         type: OPEN_FUNCTION_EDITOR_UNDER_CURSOR
     }
 }
+
+export const SWAP_WITH_PARENT_FUNCTION = 'SWAP_WITH_PARENT_FUNCTION '
+export const swapWithParentFunction = ({id}) => {
+    return {
+        type: SWAP_WITH_PARENT_FUNCTION,
+        id
+    }
+}
