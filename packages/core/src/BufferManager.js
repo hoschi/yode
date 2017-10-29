@@ -6,16 +6,6 @@ import File from './File'
 import FunctionBuffer from './FunctionBuffer'
 import { getMetaData } from './astBackedEditing'
 
-function initInputFile (inputFile) {
-    const {id, text} = inputFile
-    let file = File.create()
-    file.init({
-        id,
-        unformattedText: text
-    })
-    return file
-}
-
 let BufferManager = stampit().deepProps({
     files: undefined,
     functionBuffers: undefined,
@@ -110,18 +100,28 @@ let BufferManager = stampit().deepProps({
             })
         }
     },
+    initInputFile (inputFile) {
+        const {id, text} = inputFile
+        let file = File.create()
+        file.init({
+            id,
+            unformattedText: text
+        })
+        this.editorApi.changeMetaData(file.id, file.getMetaData())
+        return file
+    },
     ////////////////////////////////////////////////////////////////////////////////
     // public API
     ////////////////////////////////////////////////////////////////////////////////
     init(editorApi, inputFiles = []) {
         this.editorApi = editorApi
-        let files = inputFiles.map(initInputFile)
+        let files = inputFiles.map(this.initInputFile, this)
         this.files = R.zipObj(files.map(R.prop('id')), files)
 
         this.functionBuffers = {}
     },
     addFile(inputFile) {
-        let file = initInputFile(inputFile)
+        let file = this.initInputFile(inputFile)
         this.files[file.id] = file
     },
     deleteBuffer(id) {
