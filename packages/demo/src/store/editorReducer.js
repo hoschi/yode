@@ -145,8 +145,8 @@ export let selectVisibleBuffers = (state) => {
 
 let defaultGridItemProps = {
     h: 1,
-    //w: EDITOR_LAYOUT_COLS / 2,
-    w: EDITOR_LAYOUT_COLS,
+    w: EDITOR_LAYOUT_COLS / 2,
+    //w: EDITOR_LAYOUT_COLS,
     x: 0,
     y: 0
 }
