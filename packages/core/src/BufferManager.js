@@ -126,6 +126,15 @@ let BufferManager = stampit().deepProps({
     ////////////////////////////////////////////////////////////////////////////////
     // public API
     ////////////////////////////////////////////////////////////////////////////////
+    /**
+     * Init state when editor is ready.
+     *
+     * @param {Object} editorApi instance to use to communicate with editor
+     * @param {Object[]} inputFiles which are already open, e.g. from session
+     *   loading logic or command line args
+     * @param {String} inputFiles[].id of the file
+     * @param {String} inputFiles[].text content of the file
+     */
     init(editorApi, inputFiles = []) {
         this.editorApi = editorApi
         let files = inputFiles.map(this.initInputFile, this)
@@ -133,14 +142,43 @@ let BufferManager = stampit().deepProps({
 
         this.functionBuffers = {}
     },
+    /**
+     * Add a file not known to Yode yet.
+     *
+     * E.g. when session loading of editor is over and the user starts
+     * interacting with it and opens a file from disk.
+     *
+     * @param {String} id of the file
+     * @param {String} text content of the file
+     */
     addFile(inputFile) {
         let file = this.initInputFile(inputFile)
         this.files[file.id] = file
     },
+    /**
+     * Remove a buffer from state.
+     *
+     * When a buffer gets removed from editors state and inmeory representation of that vanishes.
+     * E.g. a file is closed and any (e.g. not saved changes) state is remove from memory. When
+     * user opens that file again it shows the content as it is on disk.
+     *
+     * @param {String} id of buffer/file
+     */
     deleteBuffer(id) {
         delete this.functionBuffers[id]
         delete this.files[id]
     },
+    /**
+     * Open function buffer of the function "under" cursor.
+     *
+     * This method tries to find the function around the cursor position. If it can't find a function,
+     * nothing will happen. If function found has no buffer, one will be
+     * created. If function buffer isn't visible, it will be opened.
+     *
+     * @param {String} bufferId of buffer to search in
+     * @param {Object} cursor position in this buffer. Character count from
+     *   start of the buffer, which starts at zero.
+     */
     openFunctionUnderCursor(bufferId, cursor) {
         const stop = profiler.start('- open function editor for function under cursor')
 
@@ -173,6 +211,16 @@ let BufferManager = stampit().deepProps({
             }
         }
     },
+    /**
+     * Swap function buffer with its parent function/file.
+     *
+     * This methods look at the parent function (if available) and uses the editor API to replace the current
+     * buffer editor with the editor of the parent. This way the user can broaden his current view. If the
+     * parent function has no buffer state, it will be created. If there is no parent function, but the current
+     * buffer is a function buffer, the file buffer will be opened instead.
+     *
+     * @param {String} bufferId of child buffer
+     */
     swapWithParentFunction(bufferId) {
         const {node, file} = this.getFileAndNodeForBufferId(bufferId)
 
@@ -196,6 +244,19 @@ let BufferManager = stampit().deepProps({
         }
 
     },
+    /**
+     * After buffer text changed this method updates Yodes internal state with this new information.
+     *
+     * This is a noop if the buffer is not managed by Yode, e.g. because the file type is something other than
+     * JavaScript. If the underlying parser can't parse the buffer, meta data is updated accordingly.
+     * If the underlying parser changed the text by formatting the input text the edit will be informed.
+     * The option `guardFileUpdateWithDirtyCheck` can modify this logic. All buffers which have have state in
+     * editor are changed accordingly. Functions which were changed, but editor has no state, only Yodes state
+     * gets updated and no updates are pushed to editor.
+     *
+     * @param {String} bufferId of changed buffer
+     * @param {String} newText of this buffer
+     */
     updateBufferAst(bufferId, newText) {
         const {node, file} = this.getFileAndNodeForBufferId(bufferId)
 

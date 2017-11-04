@@ -15,14 +15,6 @@ let EditorApi = stampit().deepProps({
         this.dispatch = dispatch
         this.getState = getState
     },
-    createFileBuffer(text) {
-        let id = getNextBufferId()
-        this.dispatch(createBuffer({
-            id,
-            text
-        }))
-        return id
-    },
     createFunctionBuffer(text, metaData) {
         let id = getNextBufferId()
         this.dispatch(createBuffer({
