@@ -201,8 +201,9 @@ It is a side project, so don't expect a full time working pace.
 
 ## Additional docs
 
-* [Integration Tests](./docs/integration-tests.md )
 * [Development Environment](./docs/development.md )
+* [How to integrate Yode into an editor](./docs/integration.md )
+* [Integration Tests](./docs/integration-tests.md )
 * development happens on [develop branch](https://github.com/hoschi/yode/tree/develop )
 
 ## Known issues
