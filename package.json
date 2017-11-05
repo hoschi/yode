@@ -25,6 +25,6 @@
     "eslint": "3.5.0",
     "eslint-plugin-react": "6.2.1",
     "jsfmt": "0.5.3",
-    "lerna": "^2.1.1"
+    "lerna": "2.1.1"
   }
 }
