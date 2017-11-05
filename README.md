@@ -11,7 +11,7 @@ Yode is designed as library, so it can be integrated in existing text editors
 ([NeoVim](https://neovim.io/ ),
 [Atom](https://atom.io/ ), ...).
 
-## Introduction
+## Introduction Video
 
 [![Yode Introduction Video](https://img.youtube.com/vi/3H8MqT2OgkA/0.jpg)](https://www.youtube.com/watch?v=3H8MqT2OgkA)
 
