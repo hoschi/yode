@@ -242,7 +242,6 @@ let BufferManager = stampit().deepProps({
             let parentBufferId = this.createFunctionBufferIfNeeded(file, parentNode)
             this.editorApi.swapBufferEditors(bufferId, parentBufferId)
         }
-
     },
     /**
      * After buffer text changed this method updates Yodes internal state with this new information.
