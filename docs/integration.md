@@ -28,6 +28,7 @@ All needed to implement the logic to communicate with yode is located in
         * [BufferEditorContainer](../packages/demo/src/plugin/BufferEditorContainer.js)
     * which actions you want to support is up to you, you can start without supporting e.g. "swap with parent"
 * [Yode API](../packages/core/src/BufferManager.js )
+    * this is published as NPM module `yode`
     * this is implements the Yode API
     * for configuration at instanciation check the `options` property documentation
     * for methods see the block below "public API"

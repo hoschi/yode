@@ -1,6 +1,7 @@
 {
   "name": "yode-root",
   "version": "0.0.1",
+  "private": true,
   "description": "umbrella project",
   "author": "Stefan Gojan",
   "license": "MIT",

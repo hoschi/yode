@@ -1,10 +1,10 @@
 import R from 'ramda'
-import Core from 'core'
+import Yode from 'yode'
 import { selectAllFiles, ADD_FILE_TO_STORAGE, DELETE_BUFFER, BUFFER_TEXT_CHANGED, selectFocusedEditorId, selectCursor } from 'store/editorReducer'
 import { OPEN_FUNCTION_EDITOR_UNDER_CURSOR, SWAP_WITH_PARENT_FUNCTION } from './yodeActions.js'
 import emitter from './emitter'
 
-const core = Core.create()
+const core = Yode.create()
 
 const handlers = {
     [ADD_FILE_TO_STORAGE]: ({action}) => {

@@ -25,7 +25,8 @@
 /*jslint vars:false, bitwise:true*/
 /*jshint indent:4*/
 /*global exports:true*/
-(function clone(exports) {
+let mod = {}
+
     'use strict';
 
     var Syntax,
@@ -836,16 +837,13 @@
         return tree;
     }
 
-    exports.version = "4.2.0";
-    exports.Syntax = Syntax;
-    exports.traverse = traverse;
-    exports.replace = replace;
-    exports.attachComments = attachComments;
-    exports.VisitorKeys = VisitorKeys;
-    exports.VisitorOption = VisitorOption;
-    exports.Controller = Controller;
-    exports.cloneEnvironment = function () { return clone({}); };
+    mod.Syntax = Syntax;
+    mod.traverse = traverse;
+    mod.replace = replace;
+    mod.attachComments = attachComments;
+    mod.VisitorKeys = VisitorKeys;
+    mod.VisitorOption = VisitorOption;
+    mod.Controller = Controller;
 
-    return exports;
-}(exports));
+export default mod
 /* vim: set sw=4 ts=4 et tw=80 : */

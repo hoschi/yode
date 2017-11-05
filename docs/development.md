@@ -1,14 +1,20 @@
 # Notes
 
 * estraverse included by hand, because of [broken webpack import](https://github.com/estools/estraverse/issues/50 )
-* demo packages includes core with webpack alias. This allows you to switch between branches easily, because it doesn't rely on global npm modules.
 
 # Init
 
 * `npm install`
-* `lerna exec -- npm install`
+* `lerna bootstrap`
 
 # Run demo in development mode
+
+In one terminal
+
+* `cd packages/core`
+* `npm run build -- -w`
+
+In another terminal
 
 * `cd packages/demo`
 * `npm run serve-dev` starts the webpack server
