@@ -1,11 +1,12 @@
 {
-    "lerna": "2.1.1",
-    "packages": [
-        "packages/*"
-    ],
-    "command": {
-        "publish": {
-          "allowBranch": "master"
-        }
+  "lerna": "2.1.1",
+  "packages": [
+    "packages/*"
+  ],
+  "command": {
+    "publish": {
+      "allowBranch": "master"
     }
+  },
+  "version": "0.1.0"
 }
