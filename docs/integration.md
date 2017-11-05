@@ -3,9 +3,9 @@
 The demo webapp acts as a kind of reference implementation for how to integrate yode into an existing editor.
 So everytime you read "demo" you can replace that by "your editor you want to integrate yode into" in your mind.
 All needed to implement the logic to communicate with yode is located in
-[plugins directory](./packages/demo/src/plugin):
+[plugins directory](../packages/demo/src/plugin):
 
-* [YodeDemoPlugin](./packages/demo/src/plugin/YodeDemoPlugin.js)
+* [YodeDemoPlugin](../packages/demo/src/plugin/YodeDemoPlugin.js)
     * `initPlugin` connects the demo app and Yode
     * `R.mapObjIndexed((handler, eventName) => emitter.on(eventName, handler), handlers)`
       "Demo → Yode" information flow direction is done here with a simple event emitter,
@@ -15,7 +15,7 @@ All needed to implement the logic to communicate with yode is located in
       in turn does the other direction "Yode → Demo" by giving Yode access to
       demo through the API implementation `editorApi`
     * it uses the API Yode gives you to interact with it, listed below
-* [EditorApi](./packages/demo/src/plugin/EditorApi.js)
+* [EditorApi](../packages/demo/src/plugin/EditorApi.js)
     * this is the implementation of the API Yode uses to talk to the editor
     * an integration logic must implement these methods so Yode can call them
     * to inform the editor that changes need to be applied (e.g. `changeBufferText`) or query current
@@ -24,10 +24,10 @@ All needed to implement the logic to communicate with yode is located in
     * this is probably not needed in your editor e.g. when it has already a place to show syntax errors or
       you want to handle user interaction without visual elements
     * the files used to show the meta data special for yode and trigger actions are implemented in
-        * [BufferEditor](./packages/demo/src/plugin/BufferEditor.js)
+        * [BufferEditor](../packages/demo/src/plugin/BufferEditor.js)
         * [BufferEditorContainer](./packages/demo/src/plugin/BufferEditorContainer.js)
     * which actions you want to support is up to you, you can start without supporting e.g. "swap with parent"
-* [Yode API](./packages/core/src/BufferManager.js )
+* [Yode API](../packages/core/src/BufferManager.js )
     * this is implements the Yode API
     * for configuration at instanciation check the `options` property documentation
     * for methods see the block below "public API"
