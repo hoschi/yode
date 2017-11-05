@@ -25,7 +25,7 @@ All needed to implement the logic to communicate with yode is located in
       you want to handle user interaction without visual elements
     * the files used to show the meta data special for yode and trigger actions are implemented in
         * [BufferEditor](../packages/demo/src/plugin/BufferEditor.js)
-        * [BufferEditorContainer](./packages/demo/src/plugin/BufferEditorContainer.js)
+        * [BufferEditorContainer](../packages/demo/src/plugin/BufferEditorContainer.js)
     * which actions you want to support is up to you, you can start without supporting e.g. "swap with parent"
 * [Yode API](../packages/core/src/BufferManager.js )
     * this is implements the Yode API
