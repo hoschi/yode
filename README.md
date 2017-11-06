@@ -176,7 +176,7 @@ It is a side project, so don't expect a full time working pace.
     * check if the problem can be solved with a reasonable performance
     * simple UI which mocks real editor (demo UI is not here to stay)
     * gather not obvious problems
-* [ ] [refactor prototype into library](https://github.com/hoschi/yode/issues/1 )
+* [X] [refactor prototype into library](https://github.com/hoschi/yode/issues/1 )
     * which can then be used to integrate in editor
     * separate logic for demo UI from core logic
     * separate parser from state logic where possible
