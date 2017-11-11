@@ -1,11 +1,12 @@
 {
     "presets": ["react"],
-    "plugins": [
-        "transform-object-rest-spread"
-    ],
     "env": {
         "DEMO_DEV": {
             "presets": [[ "es2015", {modules:false} ], "react-hmre"],
+            "plugins": [
+                "transform-object-rest-spread",
+                "transform-class-properties"
+            ],
         },
         "DEMO_PROD": {
             "presets": [[ "es2015", {modules:false} ]],
@@ -13,7 +14,9 @@
                 "transform-react-remove-prop-types",
                 "dev-expression",
                 "transform-react-inline-elements",
-                "transform-react-constant-elements"
+                "transform-react-constant-elements",
+                "transform-object-rest-spread",
+                "transform-class-properties"
             ]
         }
     }

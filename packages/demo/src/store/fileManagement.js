@@ -1,5 +1,5 @@
 import createReducer from './createReducer'
-import R from 'ramda'
+import * as R from 'ramda'
 
 export const SET_IS_OPEN_FILE_MENU_OPEN = 'SET_IS_OPEN_FILE_MENU_OPEN'
 export let setIsOpenFileMenuOpen = (value) => ({

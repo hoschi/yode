@@ -1,6 +1,6 @@
 import stampit from '@stamp/it'
 import deepEquals from 'deep-equal'
-import R from 'ramda'
+import * as R from 'ramda'
 import profiler from './profiler'
 import File from './File'
 import FunctionBuffer from './FunctionBuffer'

@@ -4,8 +4,7 @@ import Popover from 'material-ui/Popover'
 import Menu from 'material-ui/Menu'
 import MenuItem from 'material-ui/MenuItem'
 
-const OpenFileMenu = React.createClass({
-    anchorEl: undefined,
+class OpenFileMenu extends React.Component {
     render() {
         const {isMenuOpen, setMenuIsOpen, filesWithOpenState, openEditorById} = this.props
 
@@ -23,12 +22,11 @@ const OpenFileMenu = React.createClass({
                 id: file.id
             })
             let props = {
-                key: file.id,
                 disabled: isOpen,
                 primaryText: file.path,
                 onTouchTap
             }
-            return <MenuItem {...props} />
+            return <MenuItem key={ file.id } {...props} />
         })
 
         let popoverProps = {
@@ -52,7 +50,7 @@ const OpenFileMenu = React.createClass({
                       </Popover>
         return <span><RaisedButton {...openButtonProps}/>{ popover }</span>
     }
-})
+}
 
 export default OpenFileMenu
 

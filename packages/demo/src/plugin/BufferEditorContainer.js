@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import R from 'ramda'
+import * as R from 'ramda'
 import BufferEditor from './BufferEditor'
 import { swapWithParentFunction } from './yodeActions.js'
 import { selectFocusedEditorId, cursorPositionChanged, closeEditor, bufferTextChanged } from 'store/editorReducer'

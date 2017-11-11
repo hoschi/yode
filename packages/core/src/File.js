@@ -1,5 +1,5 @@
 import stampit from '@stamp/it'
-import R from 'ramda'
+import * as R from 'ramda'
 import profiler from './profiler'
 import { parseCode, getFunctionsFromAst, getAllContainerNodesRecursive, getAllChildrenNodesRecursive, printAst, addTextToNode, replaceNodeInAst, getNodeForFirstFoundType, isNodeDirty, getInnerMostFunctionNode, getMetaData } from './astBackedEditing'
 import { getFunctionByText } from 'ast/compareFunctions'

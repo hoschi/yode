@@ -1,4 +1,4 @@
-import R from 'ramda'
+import * as R from 'ramda'
 import createReducer from './createReducer'
 import { EDITOR_LAYOUT_COLS, ANONYMOUS_BUFFER_PREFIX } from 'consts'
 import { setProp, setPath } from 'helper'
