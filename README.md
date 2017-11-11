@@ -2,8 +2,6 @@
 
 [![npm version](https://badge.fury.io/js/yode.svg)](https://badge.fury.io/js/yode) [![lerna](https://img.shields.io/badge/maintained%20with-lerna-cc00ff.svg)](https://lernajs.io/)
 
-| [HN](https://news.ycombinator.com/item?id=15105484 ) | [Echojs](http://www.echojs.com/news/23936 ) | [reddit](https://www.reddit.com/r/javascript/comments/6w5qfs/yode_focused_code_editing/ ) |
-
 Edit smaller parts of a code base, so you can focus better on the important parts of a task.
 You can edit functions of JavaScript code as deeper level of a file.
 By focusing on functions of interest you can open an editor for each of it and
