@@ -184,7 +184,7 @@ It is a side project, so don't expect a full time working pace.
     * separate parser from state logic where possible
 * [ ] integrate into [Oni](https://github.com/extr0py/oni ) (NeoVim GUI)
     * build Oni plugin which glues Oni and Yode together
-        * [see discussion](https://github.com/extr0py/oni/issues/362#issuecomment-320433400 )
+        * [see ticket at Oni repo](https://github.com/onivim/oni/issues/894 )
         * sends current buffer content
         * sends events like (cursor moved)
         * implements layouting logic as in prototype
