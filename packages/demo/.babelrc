@@ -2,14 +2,23 @@
     "presets": ["react"],
     "env": {
         "DEMO_DEV": {
-            "presets": [[ "es2015", {modules:false} ], "react-hmre"],
+            "presets": [
+                ["env", {
+                    "modules": false
+                }],
+                "react-hmre"
+            ],
             "plugins": [
                 "transform-object-rest-spread",
                 "transform-class-properties"
             ],
         },
         "DEMO_PROD": {
-            "presets": [[ "es2015", {modules:false} ]],
+            "presets": [
+                ["env", {
+                    "modules": false
+                }]
+            ],
             "plugins":[
                 "transform-react-remove-prop-types",
                 "dev-expression",

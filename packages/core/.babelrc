@@ -4,7 +4,11 @@
     ],
     "env": {
         "ROLLUP": {
-            "presets": [[ "es2015", {modules:false} ]],
+            "presets": [
+                ["env", {
+                    "modules": false
+                }]
+            ],
             "plugins": [
                 "external-helpers",
                 ["module-resolver", {
