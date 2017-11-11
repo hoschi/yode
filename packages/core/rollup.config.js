@@ -17,7 +17,8 @@ export default [
             },
             {
                 file: pkg.module,
-                format: 'es'
+                format: 'es',
+                sourcemap: 'inline'
             }
         ],
         plugins: [
