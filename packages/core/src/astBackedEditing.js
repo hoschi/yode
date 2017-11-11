@@ -1,5 +1,5 @@
 import profiler from './profiler'
-import R from 'ramda'
+import * as R from 'ramda'
 import parser from 'ast/parser-recast-jsx'
 import { getFunctionIndexByText } from 'ast/compareFunctions'
 

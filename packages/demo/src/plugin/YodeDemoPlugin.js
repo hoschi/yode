@@ -1,4 +1,4 @@
-import R from 'ramda'
+import * as R from 'ramda'
 import Yode from 'yode'
 import { selectAllFiles, ADD_FILE_TO_STORAGE, DELETE_BUFFER, BUFFER_TEXT_CHANGED, selectFocusedEditorId, selectCursor } from 'store/editorReducer'
 import { OPEN_FUNCTION_EDITOR_UNDER_CURSOR, SWAP_WITH_PARENT_FUNCTION } from './yodeActions.js'

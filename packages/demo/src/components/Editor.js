@@ -3,18 +3,18 @@ require('codemirror/mode/javascript/javascript')
 require('codemirror/lib/codemirror.css')
 import CodeMirror from 'codemirror'
 
-const Editor = React.createClass({
+class Editor extends React.Component {
     shouldComponentUpdate() {
         return false
-    },
+    }
 
-    isReadOnly() {
+    isReadOnly = () => {
         if (!this.props.error && this.props.hasConnectedError) {
             // we have no error to fix, but a connected error is present
             return true
         }
         return false
-    },
+    };
 
     componentDidMount() {
         this._CMHandlers = []
@@ -28,7 +28,7 @@ const Editor = React.createClass({
         this.suspendEvents = false
 
         this.codeMirror = CodeMirror(
-            this.refs.container,
+            this.containerRef,
             config
         )
 
@@ -51,13 +51,13 @@ const Editor = React.createClass({
                 this._updateTimer = setTimeout(this._onActivity, 100)
             })
         }
-    },
+    }
 
     componentWillUnmount() {
         this._unbindHandlers()
-        this.refs.container.removeChild(this.refs.container.children[0])
+        this.containerRef.removeChild(this.containerRef.children[0])
         this.codeMirror = null
-    },
+    }
 
     componentWillReceiveProps(nextProps) {
         if (nextProps.text !== this.props.text) {
@@ -74,9 +74,9 @@ const Editor = React.createClass({
             return
         }
         this.codeMirror.setOption('readOnly', this.isReadOnly())
-    },
+    }
 
-    _getErrorLine(error) {
+    _getErrorLine = (error) => {
         if (error.loc && error.loc.line) {
             return error.loc.line
         } else if (error.lineNumber) {
@@ -84,9 +84,9 @@ const Editor = React.createClass({
         }
         console.warning('no error line')
         return 0
-    },
+    };
 
-    _setError(error) {
+    _setError = (error) => {
         if (!this.codeMirror) {
             return
         }
@@ -105,32 +105,32 @@ const Editor = React.createClass({
                 this.codeMirror.addLineClass(lineNumber - 1, 'text', 'errorMarker')
             }
         }
-    },
+    };
 
-    _bindCMHandler(event, handler) {
+    _bindCMHandler = (event, handler) => {
         this._CMHandlers.push(event, handler)
         this.codeMirror.on(event, handler)
-    },
+    };
 
-    _unbindHandlers() {
+    _unbindHandlers = () => {
         let cmHandlers = this._CMHandlers
         for (let i = 0; i < cmHandlers.length; i += 2) {
             this.codeMirror.off(cmHandlers[i], cmHandlers[i + 1])
         }
-    },
+    };
 
-    _onTextChange() {
+    _onTextChange = () => {
         let doc = this.codeMirror.getDoc()
         this.props.onTextChange({
             value: doc.getValue(),
             cursor: doc.indexFromPos(doc.getCursor())
         })
-    },
+    };
 
-    _onActivity() {
+    _onActivity = () => {
         let doc = this.codeMirror.getDoc()
         this.props.onActivity(doc.indexFromPos(doc.getCursor()))
-    },
+    };
 
     render() {
         let containerStyle = {
@@ -139,9 +139,9 @@ const Editor = React.createClass({
         }
         const style = Object.assign({}, containerStyle, this.props.editorStyle)
         return <div style={ style }>
-                   <div className='editor' ref='container' style={ containerStyle }></div>
+                   <div className='editor' ref={ (el) => this.containerRef = el } style={ containerStyle }></div>
                </div>
     }
-})
+}
 
 export default Editor
