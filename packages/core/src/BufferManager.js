@@ -107,13 +107,12 @@ let BufferManager = stampit().deepProps({
         let currentMetaData = getMetaData(node)
         if (!deepEquals(currentMetaData, oldFunctionsMetaData[node.customId]) || oldFileErrorState !== file.hasConnectedError) {
             this.editorApi.changeMetaData(bufferId, {
-                hasConnectedError: file.hasConnectedError,
-                syntaxError: node.syntaxError,
-                title: node.customId
+                ...currentMetaData,
+                hasConnectedError: file.hasConnectedError
             })
         }
     },
-    initInputFile (inputFile) {
+    initInputFile(inputFile) {
         const {id, text} = inputFile
         let file = File.create()
         file.init({
