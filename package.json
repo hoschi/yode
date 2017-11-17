@@ -7,7 +7,8 @@
   "license": "MIT",
   "scripts": {
     "format": "jsfmt -w packages/*/src/**/*.js packages/*/*.js && eslint --fix packages/*/src/ packages/*/*.js",
-    "lint": "eslint packages/*/src/*.js packages/*/*.js"
+    "lint": "eslint packages/*/src/*.js packages/*/*.js",
+    "preversion": "github_changelog_generator"
   },
   "devDependencies": {
     "babel-core": "6.26.0",

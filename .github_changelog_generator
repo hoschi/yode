@@ -1,0 +1,6 @@
+unreleased=false
+user=hoschi
+project=yode
+include-labels=bug,enhancement,performance,editor-ui
+exclude-labels=duplicate,question,invalid,wontfix,needs-more-thoughts
+issue-line-labels=true
