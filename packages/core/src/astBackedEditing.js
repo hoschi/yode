@@ -227,7 +227,8 @@ export function getFunctionsFromAst (ast, fileId, functionsToCompare) {
     stop()
     return {
         functions,
-        functionsTreeRoot
+        functionsTreeRoot,
+        removedFunctions:functionsToCompareLeft
     }
 }
 

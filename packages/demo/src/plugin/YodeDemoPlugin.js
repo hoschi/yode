@@ -1,6 +1,6 @@
 import * as R from 'ramda'
 import Yode from 'yode'
-import { selectAllFiles, ADD_FILE_TO_STORAGE, DELETE_BUFFER, BUFFER_TEXT_CHANGED, selectFocusedEditorId, selectCursor } from 'store/editorReducer'
+import { selectAllFiles, ADD_FILE_TO_STORAGE, BUFFER_DELETED, BUFFER_TEXT_CHANGED, selectFocusedEditorId, selectCursor } from 'store/editorReducer'
 import { OPEN_FUNCTION_EDITOR_UNDER_CURSOR, SWAP_WITH_PARENT_FUNCTION } from './yodeActions.js'
 import emitter from './emitter'
 
@@ -28,7 +28,7 @@ const handlers = {
     [BUFFER_TEXT_CHANGED]: ({action: {buffer: {id}, newText}}) => {
         core.updateBufferAst(id, newText)
     },
-    [DELETE_BUFFER]: ({action: {id}}) => {
+    [BUFFER_DELETED]: ({action: {id}}) => {
         core.deleteBuffer(id)
     },
     [SWAP_WITH_PARENT_FUNCTION]: ({action: {id}}) => {

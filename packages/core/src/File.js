@@ -80,10 +80,13 @@ let File = stampit().deepProps({
         this.ast.text = newText
         this.ast.unformattedText = newText
 
-        let {functions, functionsTreeRoot} = getFunctionsFromAst(this.ast, this.id, this.functions)
+        let {functions, functionsTreeRoot, removedFunctions} = getFunctionsFromAst(this.ast, this.id, this.functions)
         this.setFunctions(functions)
         this.functionsTreeRoot = functionsTreeRoot
         stop()
+        return {
+            removedFunctions
+        }
     },
     updateFunctionAst(newText, oldFunction) {
         let newFunction
@@ -151,7 +154,7 @@ let File = stampit().deepProps({
         // get functions to compare, current changed one can't be matched
         let functionsToCompare = this.functions.filter(f => newFunction.customId !== f.customId)
         // update functions and port props from already known functions
-        let {functions, functionsTreeRoot} = getFunctionsFromAst(this.ast, this.id, functionsToCompare)
+        let {functions, functionsTreeRoot, removedFunctions} = getFunctionsFromAst(this.ast, this.id, functionsToCompare)
         this.setFunctions(functions)
         this.functionsTreeRoot = functionsTreeRoot
 
@@ -165,7 +168,8 @@ let File = stampit().deepProps({
         stop()
         return {
             nodesToUpdate,
-            node: newFunction
+            node: newFunction,
+            removedFunctions,
         }
     },
     findFunctionAroundCursor(node, cursor) {

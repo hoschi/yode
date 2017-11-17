@@ -112,6 +112,13 @@ let BufferManager = stampit().deepProps({
             })
         }
     },
+    deleteBufferByNode(node) {
+        let bufferId = this.getBufferIdForFunctionId(node.customId)
+        if (!R.isNil(bufferId)) {
+            this.editorApi.deleteBuffer(bufferId)
+        }
+        delete this.functionBuffers[node.customId]
+    },
     initInputFile(inputFile) {
         const {id, text} = inputFile
         let file = File.create()
@@ -157,8 +164,8 @@ let BufferManager = stampit().deepProps({
     /**
      * Remove a buffer from state.
      *
-     * When a buffer gets removed from editors state and inmeory representation of that vanishes.
-     * E.g. a file is closed and any (e.g. not saved changes) state is remove from memory. When
+     * When a buffer gets removed from editors state and inmemory representation of that vanishes.
+     * E.g. a file is closed and any (e.g. not saved changes) state is removed from memory. When
      * user opens that file again it shows the content as it is on disk.
      *
      * @param {String} id of buffer/file
@@ -256,6 +263,7 @@ let BufferManager = stampit().deepProps({
      * @param {String} newText of this buffer
      */
     updateBufferAst(bufferId, newText) {
+        let removedFunctions
         const {node, file} = this.getFileAndNodeForBufferId(bufferId)
 
         if (!file || !node) {
@@ -269,7 +277,8 @@ let BufferManager = stampit().deepProps({
         let changeFunctionMetaData = this.changeFunctionMetaData.bind(this, file, oldFileMetaData.hasConnectedError, oldFunctionsMetaData)
 
         if (this.isFile(bufferId)) {
-            file.updateFileAst(newText)
+            const updateInfo = file.updateFileAst(newText)
+            removedFunctions = updateInfo.removedFunctions
             file.functions.forEach(changeFunctionBufferText)
             if (!file.hasConnectedError) {
                 // files has no error, so recast has put text into `text` property
@@ -284,7 +293,9 @@ let BufferManager = stampit().deepProps({
                 }
             }
         } else {
-            let {nodesToUpdate, node:newNode} = file.updateFunctionAst(newText, node)
+            const updateInfo = file.updateFunctionAst(newText, node)
+            let {nodesToUpdate, node:newNode} = updateInfo
+            removedFunctions = updateInfo.removedFunctions
             if (this.options.guardFileUpdateWithDirtyCheck) {
                 // check if need to update current edited node also
                 if (!areTextsEqual(newNode.unformattedText, newNode.text)) {
@@ -305,7 +316,11 @@ let BufferManager = stampit().deepProps({
             this.editorApi.changeMetaData(file.id, file.getMetaData())
         }
         file.functions.forEach(changeFunctionMetaData)
-    }
+
+        if (removedFunctions) {
+            removedFunctions.forEach(this.deleteBufferByNode, this)
+        }
+    },
 })
 
 export default BufferManager

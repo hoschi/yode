@@ -1,4 +1,5 @@
 import babel from 'rollup-plugin-babel'
+import sourcemaps from 'rollup-plugin-sourcemaps'
 import pkg from './package.json'
 
 export default [
@@ -24,7 +25,8 @@ export default [
         plugins: [
             babel({
                 exclude: ['**/node_modules/**']
-            })
+            }),
+            sourcemaps()
         ]
     }
 ]
