@@ -171,8 +171,15 @@ let BufferManager = stampit().deepProps({
      * @param {String} id of buffer/file
      */
     deleteBuffer(id) {
-        delete this.functionBuffers[id]
-        delete this.files[id]
+        if (this.functionBuffers[id]) {
+            delete this.functionBuffers[id]
+        } else if (this.files[id]) {
+            const file = this.files[id]
+            // delete all function buffers from editor and our state
+            file.functions.forEach(this.deleteBufferByNode, this)
+            // delete file
+            delete this.files[id]
+        }
     },
     /**
      * Open function buffer of the function "under" cursor.
@@ -320,7 +327,7 @@ let BufferManager = stampit().deepProps({
         if (removedFunctions) {
             removedFunctions.forEach(this.deleteBufferByNode, this)
         }
-    },
+    }
 })
 
 export default BufferManager
