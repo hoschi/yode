@@ -5,6 +5,8 @@ node_js:
 cache:
   directories:
     - "node_modules"
+    - "packages/demo/node_modules"
+    - "packages/core/node_modules"
 install:
     - npm install
     - export PATH=./node_modules/.bin:$PATH
