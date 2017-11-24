@@ -10,14 +10,17 @@
     },
     "env": {
         "node": true,
-        "browser": true
+        "browser": true,
+        "jest": true
     },
     "plugins": [
-        "react"
+        "react",
+        "jest"
     ],
     "extends": [
         "eslint:recommended",
-        "plugin:react/recommended"
+        "plugin:react/recommended",
+        "plugin:jest/recommended"
     ],
     "rules":{
         "semi": [1, "never"],
