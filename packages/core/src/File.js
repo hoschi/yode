@@ -159,7 +159,7 @@ let File = stampit().deepProps({
         this.functionsTreeRoot = functionsTreeRoot
 
         // collect function nodes to update by walking up the linked list of
-        // containing functions. This list is no up to date after running
+        // containing functions. This list is now up to date after running
         // getFunctionsFromAst
         let containerNodesToUpdate = getAllContainerNodesRecursive(newFunction.parentFunction)
         let childrenNodesToUpdate = getAllChildrenNodesRecursive(newFunction.children)

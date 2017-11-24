@@ -30,10 +30,13 @@ export function getClosestMatchIndex (searchTerm, possibilities) {
     })
 
     if (results.length <= 0) {
-        console.debug('--- no match found', {
-            searchTerm,
-            possibilities
-        })
+        // FIXME use logger here
+        /*
+         *console.debug('--- no match found', {
+         *    searchTerm,
+         *    possibilities
+         *})
+         */
         // nothing found
         return -1
     }
@@ -41,11 +44,14 @@ export function getClosestMatchIndex (searchTerm, possibilities) {
     // sortBy prop ascending and reverse to have descending sorted results by score
     let sorted = R.sortBy(R.prop('score'), results).reverse()
     let bestMatch = R.head(sorted)
-    console.debug('--- match found', {
-        searchTerm,
-        score: bestMatch.score,
-        sorted
-    })
+    // FIXME use logger here
+    /*
+     *console.debug('--- match found', {
+     *    searchTerm,
+     *    score: bestMatch.score,
+     *    sorted
+     *})
+     */
     return bestMatch.index
 }
 

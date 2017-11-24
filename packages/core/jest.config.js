@@ -1,9 +1,18 @@
 module.exports = {
     moduleDirectories:['node_modules', '<rootDir>/src', '<rootDir>'],
+    setupFiles:['<rootDir>/src/test/setupJest.js'],
+    snapshotSerializers:[
+        '<rootDir>/test/getFunctionsFromAstResultSerializer.js',
+        '<rootDir>/test/astSerializer.js'
+    ],
     coverageReporters: ["html"],
     coverageDirectory: 'reports/coverage',
-    coveragePathIgnorePatterns: [
-        "<rootDir>/lib/",
-        "src/profiler.js"
+    collectCoverageFrom: [
+        "src/**/*.js",
+        "!<rootDir>/lib/**",
+        "!src/profiler.js",
+        "!src/test/**",
+        "!src/**/test*.js",
+        "!src/**/*.test.js"
     ]
 }

@@ -2,8 +2,7 @@ import profiler from './profiler'
 import * as R from 'ramda'
 import parser from 'ast/parser-recast-jsx'
 import { getFunctionIndexByText } from 'ast/compareFunctions'
-
-let id = 1
+import {getNextId}from'./customIdGenerator'
 
 let {estraverse} = parser
 function parse (...args) {
@@ -199,7 +198,7 @@ export function getFunctionsFromAst (ast, fileId, functionsToCompare) {
                         // remove function we found
                         functionsToCompareLeft.splice(foundFunctionIndex, 1)
                     } else {
-                        node.customId = id++
+                        node.customId = getNextId()
                     }
                 }
                 node.fileId = fileId
@@ -218,10 +217,15 @@ export function getFunctionsFromAst (ast, fileId, functionsToCompare) {
 
     // do some info logging
     if (functionsToCompareLeft && functionsToCompareLeft.length > 0) {
-        console.log('REMOVED FUNCTIONS', functionsToCompareLeft.length, functionsToCompareLeft)
+        //// FIXME use logger here
+        //console.log('REMOVED FUNCTIONS', functionsToCompareLeft.length, functionsToCompareLeft)
         functionsToCompareLeft.forEach(function (node) {
-            console.log('++', node.text)
+            //console.log('++', node.text)
         })
+    }
+
+    if (functionsToCompareLeft && functionsToCompareLeft.length <= 0) {
+        functionsToCompareLeft = undefined
     }
 
     stop()

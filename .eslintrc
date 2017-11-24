@@ -15,12 +15,14 @@
     },
     "plugins": [
         "react",
-        "jest"
+        "jest",
+        "jasmine"
     ],
     "extends": [
         "eslint:recommended",
         "plugin:react/recommended",
-        "plugin:jest/recommended"
+        "plugin:jest/recommended",
+        "plugin:jasmine/recommended"
     ],
     "rules":{
         "semi": [1, "never"],
