@@ -1,0 +1,11 @@
+language: node_js
+node_js:
+    - "lts/*"
+    - "node"
+cache:
+  directories:
+    - "node_modules"
+install:
+    - npm install
+    - export PATH=./node_modules/.bin:$PATH
+    - lerna bootstrap
