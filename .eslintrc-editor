@@ -1,6 +1,7 @@
 {
     "rules":{
         "semi": "off",
+        "jest/no-disabled-tests": "off"
     }
 }
 

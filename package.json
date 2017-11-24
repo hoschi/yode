@@ -9,7 +9,7 @@
     "format": "jsfmt -w packages/*/src/**/*.js packages/*/*.js && eslint --fix packages/*/src/ packages/*/*.js",
     "lint": "eslint packages/*/src/*.js packages/*/*.js",
     "preversion": "github_changelog_generator",
-    "test":"cd packages/core; npm test"
+    "test": "cd packages/core; npm test"
   },
   "devDependencies": {
     "babel-core": "6.26.0",
@@ -25,6 +25,7 @@
     "esformatter-limit-linebreaks": "0.0.3",
     "esformatter-remove-trailing-commas": "1.0.1",
     "eslint": "4.11.0",
+    "eslint-plugin-jasmine": "2.9.1",
     "eslint-plugin-jest": "21.3.2",
     "eslint-plugin-react": "7.4.0",
     "jsfmt": "0.5.3",
