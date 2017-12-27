@@ -1,0 +1,423 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`updateFunctionAst - function with children 1`] = `
+Object {
+  "node": ArrowFunctionExpression 1:0-18:1 {
+    "children": "[
+        {
+          children: [
+            {
+              children: [],
+              customId: 4,
+            },
+          ],
+          customId: 3,
+        },
+      ]",
+    "customId": 2,
+    "fileId": "myFile0",
+    "syntaxError": undefined,
+    "text": "() => {
+        let name = 'Walterrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr'
+    
+        it('displays name', () => {
+            function getTestName(a, b) {
+                return a + b + name;
+            }
+    
+            let myName = getTestName('I', 'Am', name);
+            expect(<HelloComponent name={myName} />).contain('Hello IAmWalter!')
+        })
+    
+        // function not recognized because not of a supported type
+        it(\\"doesn't work without name\\", function () {
+            let myName = undefined;
+            expect(<HelloComponent name={myName} />).contain('Hello !')
+        });
+    }",
+  },
+  "nodesToUpdate": Array [
+    ArrowFunctionExpression 4:24-11:5 {
+      "children": "[
+          {
+            children: [],
+            customId: 4,
+          },
+        ]",
+      "customId": 3,
+      "fileId": "myFile0",
+      "syntaxError": undefined,
+      "text": "() => {
+          function getTestName(a, b) {
+              return a + b + name;
+          }
+      
+          let myName = getTestName('I', 'Am', name);
+          expect(<HelloComponent name={myName} />).contain('Hello IAmWalter!')
+      }",
+    },
+    FunctionDeclaration 5:8-7:9 {
+      "children": "[]",
+      "customId": 4,
+      "fileId": "myFile0",
+      "syntaxError": undefined,
+      "text": "function getTestName(a, b) {
+          return a + b + name;
+      }",
+    },
+  ],
+  "removedFunctions": undefined,
+}
+`;
+
+exports[`updateFunctionAst - function with children 2`] = `
+Object {
+  "node": ArrowFunctionExpression 1:0-18:1 {
+    "children": "[
+        {
+          children: [
+            {
+              children: [],
+              customId: 4,
+            },
+          ],
+          customId: 3,
+        },
+      ]",
+    "customId": 2,
+    "fileId": "myFile0",
+    "syntaxError": [SyntaxError: Unterminated string constant (2:68)],
+    "text": "() => {
+        let name = 'Walterrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr'
+    
+        it('displays name', () => {
+            function getTestName(a, b) {
+                return a + b + name;
+            }
+    
+            let myName = getTestName('I', 'Am', name);
+            expect(<HelloComponent name={myName} />).contain('Hello IAmWalter!')
+        })
+    
+        // function not recognized because not of a supported type
+        it(\\"doesn't work without name\\", function () {
+            let myName = undefined;
+            expect(<HelloComponent name={myName} />).contain('Hello !')
+        });
+    }",
+    "unformattedText": "() => {
+        let name = 'Walterrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr' + 'foo
+    
+        it('displays name', () => {
+            function getTestName(a, b) {
+                return a + b + name;
+            }
+    
+            let myName = getTestName('I', 'Am', name);
+            expect(<HelloComponent name={myName} />).contain('Hello IAmWalter!')
+        })
+    
+        // function not recognized because not of a supported type
+        it(\\"doesn't work without name\\", function () {
+            let myName = undefined;
+            expect(<HelloComponent name={myName} />).contain('Hello !')
+        });
+    }",
+  },
+  "nodesToUpdate": Array [
+    ArrowFunctionExpression 1:0-18:1 {
+      "children": "[
+          {
+            children: [
+              {
+                children: [],
+                customId: 4,
+              },
+            ],
+            customId: 3,
+          },
+        ]",
+      "customId": 2,
+      "fileId": "myFile0",
+      "syntaxError": [SyntaxError: Unterminated string constant (2:68)],
+      "text": "() => {
+          let name = 'Walterrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr'
+      
+          it('displays name', () => {
+              function getTestName(a, b) {
+                  return a + b + name;
+              }
+      
+              let myName = getTestName('I', 'Am', name);
+              expect(<HelloComponent name={myName} />).contain('Hello IAmWalter!')
+          })
+      
+          // function not recognized because not of a supported type
+          it(\\"doesn't work without name\\", function () {
+              let myName = undefined;
+              expect(<HelloComponent name={myName} />).contain('Hello !')
+          });
+      }",
+      "unformattedText": "() => {
+          let name = 'Walterrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr' + 'foo
+      
+          it('displays name', () => {
+              function getTestName(a, b) {
+                  return a + b + name;
+              }
+      
+              let myName = getTestName('I', 'Am', name);
+              expect(<HelloComponent name={myName} />).contain('Hello IAmWalter!')
+          })
+      
+          // function not recognized because not of a supported type
+          it(\\"doesn't work without name\\", function () {
+              let myName = undefined;
+              expect(<HelloComponent name={myName} />).contain('Hello !')
+          });
+      }",
+    },
+  ],
+}
+`;
+
+exports[`updateFunctionAst - function with children 3`] = `
+Object {
+  "node": ArrowFunctionExpression 1:0-18:1 {
+    "children": "[
+        {
+          children: [
+            {
+              children: [],
+              customId: 4,
+            },
+          ],
+          customId: 3,
+        },
+      ]",
+    "customId": 2,
+    "fileId": "myFile0",
+    "syntaxError": undefined,
+    "text": "() => {
+        let name = 'Walterrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr' + 'foo';
+    
+        it('displays name', () => {
+            function getTestName(a, b) {
+                return a + b + name;
+            }
+    
+            let myName = getTestName('I', 'Am', name);
+            expect(<HelloComponent name={myName} />).contain('Hello IAmWalter!')
+        })
+    
+        // function not recognized because not of a supported type
+        it(\\"doesn't work without name\\", function () {
+            let myName = undefined;
+            expect(<HelloComponent name={myName} />).contain('Hello !')
+        });
+    }",
+  },
+  "nodesToUpdate": Array [
+    ArrowFunctionExpression 4:24-11:5 {
+      "children": "[
+          {
+            children: [],
+            customId: 4,
+          },
+        ]",
+      "customId": 3,
+      "fileId": "myFile0",
+      "syntaxError": undefined,
+      "text": "() => {
+          function getTestName(a, b) {
+              return a + b + name;
+          }
+      
+          let myName = getTestName('I', 'Am', name);
+          expect(<HelloComponent name={myName} />).contain('Hello IAmWalter!')
+      }",
+    },
+    FunctionDeclaration 5:8-7:9 {
+      "children": "[]",
+      "customId": 4,
+      "fileId": "myFile0",
+      "syntaxError": undefined,
+      "text": "function getTestName(a, b) {
+          return a + b + name;
+      }",
+    },
+  ],
+  "removedFunctions": undefined,
+}
+`;
+
+exports[`updateFunctionAst - nested function 1`] = `
+Object {
+  "node": FunctionDeclaration 1:0-3:1 {
+    "children": "[]",
+    "customId": 4,
+    "fileId": "myFile0",
+    "syntaxError": undefined,
+    "text": "function getTestName(a, b) {
+        return a + b + name+'mytest';
+    }",
+  },
+  "nodesToUpdate": Array [
+    ArrowFunctionExpression 10:24-17:5 {
+      "children": "[
+          {
+            children: [],
+            customId: 4,
+          },
+        ]",
+      "customId": 3,
+      "fileId": "myFile0",
+      "syntaxError": undefined,
+      "text": "() => {
+          function getTestName(a, b) {
+              return a + b + name+'mytest';
+          }
+      
+          let myName = getTestName('I', 'Am', name);
+          expect(<HelloComponent name={myName} />).contain('Hello IAmWalter!')
+      }",
+    },
+    ArrowFunctionExpression 7:27-24:1 {
+      "children": "[
+          {
+            children: [
+              {
+                children: [],
+                customId: 4,
+              },
+            ],
+            customId: 3,
+          },
+        ]",
+      "customId": 2,
+      "fileId": "myFile0",
+      "syntaxError": undefined,
+      "text": "() => {
+          let name = 'Walter';
+      
+          it('displays name', () => {
+              function getTestName(a, b) {
+                  return a + b + name+'mytest';
+              }
+      
+              let myName = getTestName('I', 'Am', name);
+              expect(<HelloComponent name={myName} />).contain('Hello IAmWalter!')
+          })
+      
+          // function not recognized because not of a supported type
+          it(\\"doesn't work without name\\", function () {
+              let myName = undefined;
+              expect(<HelloComponent name={myName} />).contain('Hello !')
+          });
+      }",
+    },
+  ],
+  "removedFunctions": undefined,
+}
+`;
+
+exports[`updateFunctionAst - nested function 2`] = `
+Object {
+  "node": FunctionDeclaration 1:0-3:1 {
+    "children": "[]",
+    "customId": 4,
+    "fileId": "myFile0",
+    "syntaxError": [SyntaxError: Unterminated string constant (2:37)],
+    "text": "function getTestName(a, b) {
+        return a + b + name+'mytest';
+    }",
+    "unformattedText": "function getTestName(a, b) {
+        return a + b + name + 'mytest' + 'another;
+    }",
+  },
+  "nodesToUpdate": Array [
+    FunctionDeclaration 1:0-3:1 {
+      "children": "[]",
+      "customId": 4,
+      "fileId": "myFile0",
+      "syntaxError": [SyntaxError: Unterminated string constant (2:37)],
+      "text": "function getTestName(a, b) {
+          return a + b + name+'mytest';
+      }",
+      "unformattedText": "function getTestName(a, b) {
+          return a + b + name + 'mytest' + 'another;
+      }",
+    },
+  ],
+}
+`;
+
+exports[`updateFunctionAst - nested function 3`] = `
+Object {
+  "node": FunctionDeclaration 1:0-3:1 {
+    "children": "[]",
+    "customId": 4,
+    "fileId": "myFile0",
+    "syntaxError": undefined,
+    "text": "function getTestName(a, b) {
+        return a + b + name + 'mytest' + 'another';
+    }",
+  },
+  "nodesToUpdate": Array [
+    ArrowFunctionExpression 10:24-17:5 {
+      "children": "[
+          {
+            children: [],
+            customId: 4,
+          },
+        ]",
+      "customId": 3,
+      "fileId": "myFile0",
+      "syntaxError": undefined,
+      "text": "() => {
+          function getTestName(a, b) {
+              return a + b + name + 'mytest' + 'another';
+          }
+      
+          let myName = getTestName('I', 'Am', name);
+          expect(<HelloComponent name={myName} />).contain('Hello IAmWalter!')
+      }",
+    },
+    ArrowFunctionExpression 7:27-24:1 {
+      "children": "[
+          {
+            children: [
+              {
+                children: [],
+                customId: 4,
+              },
+            ],
+            customId: 3,
+          },
+        ]",
+      "customId": 2,
+      "fileId": "myFile0",
+      "syntaxError": undefined,
+      "text": "() => {
+          let name = 'Walter';
+      
+          it('displays name', () => {
+              function getTestName(a, b) {
+                  return a + b + name + 'mytest' + 'another';
+              }
+      
+              let myName = getTestName('I', 'Am', name);
+              expect(<HelloComponent name={myName} />).contain('Hello IAmWalter!')
+          })
+      
+          // function not recognized because not of a supported type
+          it(\\"doesn't work without name\\", function () {
+              let myName = undefined;
+              expect(<HelloComponent name={myName} />).contain('Hello !')
+          });
+      }",
+    },
+  ],
+  "removedFunctions": undefined,
+}
+`;
