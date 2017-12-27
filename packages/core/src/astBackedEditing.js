@@ -85,7 +85,8 @@ export function parseCode (text) {
     try {
         ast = parse(text)
     } /* eslint-disable */ catch ( error ) /* eslint-enable */ {
-        console.log(error)
+        //// FIXME use logger here
+        //console.log(error)
         stop()
         return {
             error
@@ -115,27 +116,17 @@ export function getFunctionsFromAst (ast, fileId, functionsToCompare) {
 
     let addNodeToParent = (node) => {
         parentFunc = currentFunc
-        if (parentFunc) {
-            if (parentFunc.children) {
-                parentFunc.children.push(node)
-            } else {
-                parentFunc.children = [node]
-            }
-        }
+        parentFunc.children.push(node)
+
         currentFunc = node
-        if (!currentFunc.children) {
-            currentFunc.children = []
-        }
+        // set empty children, in case this node has children from previous runs, which get now collected again
+        currentFunc.children = []
         node.parentFunction = parentFunc
     }
 
     let leaveFunctionNode = () => {
         currentFunc = parentFunc
-        if (currentFunc) {
-            parentFunc = currentFunc.parentFunction
-        } else {
-            parentFunc = undefined
-        }
+        parentFunc = currentFunc.parentFunction
     }
 
     estraverse.traverse(ast, {
@@ -242,7 +233,8 @@ export function getInnerMostFunctionNode (sourceNode, cursor) {
     try {
         ast = parser.parse(sourceNode.unformattedText)
     } /* eslint-disable */ catch ( error ) /* eslint-enable */ {
-        console.log(error)
+        // FIXME use logger here
+        //console.log(error)
         return
     }
     parser.estraverse.traverse(ast, {
