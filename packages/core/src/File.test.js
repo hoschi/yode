@@ -269,5 +269,3 @@ test('updateFunctionAst - function with children', function () {
     expect(s.hasConnectedError).toBe(false)
     expect(result).toMatchSnapshot()
 });
-
-//updateFileAst

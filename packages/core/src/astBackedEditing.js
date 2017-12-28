@@ -1,4 +1,5 @@
 import profiler from './profiler'
+import logger from './logger'
 import * as R from 'ramda'
 import parser from 'ast/parser-recast-jsx'
 import { getFunctionIndexByText } from 'ast/compareFunctions'
@@ -85,8 +86,7 @@ export function parseCode (text) {
     try {
         ast = parse(text)
     } /* eslint-disable */ catch ( error ) /* eslint-enable */ {
-        //// FIXME use logger here
-        //console.log(error)
+        logger.log(error)
         stop()
         return {
             error
@@ -208,10 +208,9 @@ export function getFunctionsFromAst (ast, fileId, functionsToCompare) {
 
     // do some info logging
     if (functionsToCompareLeft && functionsToCompareLeft.length > 0) {
-        //// FIXME use logger here
-        //console.log('REMOVED FUNCTIONS', functionsToCompareLeft.length, functionsToCompareLeft)
+        logger.log('REMOVED FUNCTIONS', functionsToCompareLeft.length, functionsToCompareLeft)
         functionsToCompareLeft.forEach(function (node) {
-            //console.log('++', node.text)
+            logger.log('++', node.text)
         })
     }
 
@@ -233,8 +232,7 @@ export function getInnerMostFunctionNode (sourceNode, cursor) {
     try {
         ast = parser.parse(sourceNode.unformattedText)
     } /* eslint-disable */ catch ( error ) /* eslint-enable */ {
-        // FIXME use logger here
-        //console.log(error)
+        logger.log(error)
         return
     }
     parser.estraverse.traverse(ast, {
