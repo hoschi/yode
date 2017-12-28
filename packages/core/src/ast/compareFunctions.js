@@ -1,5 +1,6 @@
 import * as R from 'ramda'
 import * as difflib from 'difflib'
+import logger from 'logger'
 
 export function getClosestMatchIndex (searchTerm, possibilities) {
     let matcher = new difflib.SequenceMatcher()
@@ -30,13 +31,10 @@ export function getClosestMatchIndex (searchTerm, possibilities) {
     })
 
     if (results.length <= 0) {
-        // FIXME use logger here
-        /*
-         *console.debug('--- no match found', {
-         *    searchTerm,
-         *    possibilities
-         *})
-         */
+        logger.debug('--- no match found', {
+            searchTerm,
+            possibilities
+        })
         // nothing found
         return -1
     }
@@ -44,14 +42,11 @@ export function getClosestMatchIndex (searchTerm, possibilities) {
     // sortBy prop ascending and reverse to have descending sorted results by score
     let sorted = R.sortBy(R.prop('score'), results).reverse()
     let bestMatch = R.head(sorted)
-    // FIXME use logger here
-    /*
-     *console.debug('--- match found', {
-     *    searchTerm,
-     *    score: bestMatch.score,
-     *    sorted
-     *})
-     */
+    logger.debug('--- match found', {
+        searchTerm,
+        score: bestMatch.score,
+        sorted
+    })
     return bestMatch.index
 }
 

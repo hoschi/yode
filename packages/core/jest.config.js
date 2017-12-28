@@ -11,6 +11,7 @@ module.exports = {
         "src/**/*.js",
         "!<rootDir>/lib/**",
         "!src/profiler.js",
+        "!src/logger.js",
         "!src/test/**",
         "!src/**/test*.js",
         "!src/**/*.test.js"
