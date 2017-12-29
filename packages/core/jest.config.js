@@ -1,7 +1,7 @@
 module.exports = {
-    moduleDirectories:['node_modules', '<rootDir>/src', '<rootDir>'],
-    setupFiles:['<rootDir>/src/test/setupJest.js'],
-    snapshotSerializers:[
+    moduleDirectories: ['node_modules', '<rootDir>/src', '<rootDir>'],
+    setupFiles: ['<rootDir>/src/test/setupJest.js'],
+    snapshotSerializers: [
         '<rootDir>/test/getFunctionsFromAstResultSerializer.js',
         '<rootDir>/test/astSerializer.js'
     ],

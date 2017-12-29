@@ -3,9 +3,9 @@ import * as R from 'ramda'
 let noop = () => {
 }
 
-let shouldLog = true;
+let shouldLog = true
 if (process.env.YODE_LOGGER_DISABLED) {
-    shouldLog = false;
+    shouldLog = false
 }
 
 let levels = ['log', 'debug', 'error']

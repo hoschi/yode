@@ -30,7 +30,7 @@ test('init - with valid text', function () {
     expect(s.functionsTreeRoot.children).toHaveLength(2)
     expect(s.syntaxError).toBeUndefined()
     expect(s.hasConnectedError).toBeUndefined()
-});
+})
 
 test('init - with "unformatted" code', function () {
     let unformattedText = snip.recastFormat
@@ -42,7 +42,7 @@ test('init - with "unformatted" code', function () {
 
     expect(s.functions).toHaveLength(1)
     expect(s.functions[0].text).toBe(snip.recastFormat_formatted)
-});
+})
 
 test('init - with syntax error', function () {
     let unformattedText = snip.jsxComponentAndTest_withError
@@ -62,7 +62,7 @@ test('init - with syntax error', function () {
     expect(R.keys(s.functionsMap)).toHaveLength(0)
     expect(s.functionsTreeRoot.isRoot).toBe(true)
     expect(s.functionsTreeRoot.children).toHaveLength(0)
-});
+})
 
 test('updateFunctionAst - nested function', function () {
     let unformattedText = snip.jsxComponentAndTest
@@ -135,7 +135,7 @@ function getTestName(a, b) {
     expect(result.nodesToUpdate).toHaveLength(2)
     expect(s.hasConnectedError).toBe(false)
     expect(result).toMatchSnapshot()
-});
+})
 
 test('updateFunctionAst - function with children', function () {
     let unformattedText = snip.jsxComponentAndTest
@@ -268,4 +268,4 @@ test('updateFunctionAst - function with children', function () {
     expect(result.nodesToUpdate).toHaveLength(2)
     expect(s.hasConnectedError).toBe(false)
     expect(result).toMatchSnapshot()
-});
+})

@@ -22,7 +22,7 @@ test('getFunctionsFromAst - without functions', function () {
     expect(result.functions).toHaveLength(0)
     expect(result.functionsTreeRoot.children).toHaveLength(0)
     expect(result.functionsTreeRoot.isRoot).toBe(true)
-});
+})
 
 test('getFunctionsFromAst - doesn\'t collect object functions', () => {
     let ast = parser.parse(snip.jsxClassesAndObjects)
@@ -33,7 +33,7 @@ test('getFunctionsFromAst - doesn\'t collect object functions', () => {
     expect(result.functionsTreeRoot.children).toHaveLength(1)
     expect(result.functionsTreeRoot.isRoot).toBe(true)
 
-    expect(result).toMatchSnapshot();
+    expect(result).toMatchSnapshot()
 })
 
 test('getFunctionsFromAst - collects functions flat and tree', () => {
@@ -45,19 +45,19 @@ test('getFunctionsFromAst - collects functions flat and tree', () => {
     expect(result.functionsTreeRoot.children).toHaveLength(2)
     expect(result.functionsTreeRoot.isRoot).toBe(true)
 
-    expect(result).toMatchSnapshot();
-});
+    expect(result).toMatchSnapshot()
+})
 
 test('getFunctionsFromAst - removed one function on file level', () => {
-    let ast, result;
+    let ast, result
     ast = parser.parse(snip.nestedFunctions)
     result = s.getFunctionsFromAst(ast, 'myFile.js')
     expect(result.removedFunctions).toBeUndefined()
     expect(result.functions).toHaveLength(2)
-    let oldFunctions = result.functions;
+    let oldFunctions = result.functions
     expect(result.functionsTreeRoot.children).toHaveLength(1)
     expect(result.functionsTreeRoot.isRoot).toBe(true)
-    expect(result).toMatchSnapshot();
+    expect(result).toMatchSnapshot()
 
     ast = parser.parse(snip.nestedFunctions_removedOneFunc)
     result = s.getFunctionsFromAst(ast, 'myFile.js', oldFunctions)
@@ -65,20 +65,20 @@ test('getFunctionsFromAst - removed one function on file level', () => {
     expect(result.functions).toHaveLength(1)
     expect(result.functionsTreeRoot.children).toHaveLength(1)
     expect(result.functionsTreeRoot.isRoot).toBe(true)
-    expect(result).toMatchSnapshot();
-});
+    expect(result).toMatchSnapshot()
+})
 
 test('getFunctionsFromAst - remove more/nested functions on file level', () => {
-    let ast, result;
+    let ast, result
 
     ast = parser.parse(snip.jsxComponentAndTest)
     result = s.getFunctionsFromAst(ast, 'myFile.js')
     expect(result.removedFunctions).toBeUndefined()
     expect(result.functions).toHaveLength(4)
-    let oldFunctions = result.functions;
+    let oldFunctions = result.functions
     expect(result.functionsTreeRoot.children).toHaveLength(2)
     expect(result.functionsTreeRoot.isRoot).toBe(true)
-    expect(result).toMatchSnapshot();
+    expect(result).toMatchSnapshot()
 
     ast = parser.parse(snip.jsxComponentAndTest_removedFuncs)
     result = s.getFunctionsFromAst(ast, 'myFile.js', oldFunctions)
@@ -86,8 +86,8 @@ test('getFunctionsFromAst - remove more/nested functions on file level', () => {
     expect(result.functions).toHaveLength(1)
     expect(result.functionsTreeRoot.children).toHaveLength(1)
     expect(result.functionsTreeRoot.isRoot).toBe(true)
-    expect(result).toMatchSnapshot();
-});
+    expect(result).toMatchSnapshot()
+})
 
 test('getFunctionsFromAst - rerun keeps ids', () => {
     let simplifyNodes = R.map(R.pick(['customId', 'text']))
@@ -126,5 +126,5 @@ test('getFunctionsFromAst - rerun keeps ids', () => {
     expect(additionalRun.functionsTreeRoot.children).toHaveLength(2)
     expect(additionalRun.functionsTreeRoot.isRoot).toBe(true)
     expect(simplifyNodes(additionalRun.functions)).toEqual(firstRunFunctionsSimple)
-});
+})
 

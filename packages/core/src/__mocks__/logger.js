@@ -1,6 +1,5 @@
 export default {
-    log() { },
-    debug() { },
-    error() { }
+    log() {},
+    debug() {},
+    error() {}
 }
-
