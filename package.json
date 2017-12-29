@@ -9,7 +9,8 @@
     "format": "jsfmt -w packages/*/src/**/*.js packages/*/*.js && eslint --fix packages/*/src/ packages/*/*.js",
     "lint": "eslint packages/*/src/*.js packages/*/*.js",
     "preversion": "github_changelog_generator",
-    "test": "cd packages/core; npm test"
+    "test":"cd packages/core; npm test",
+    "test-ci":"cd packages/core; npm run test-ci"
   },
   "devDependencies": {
     "babel-core": "6.26.0",

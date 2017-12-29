@@ -5,7 +5,7 @@ module.exports = {
         '<rootDir>/test/getFunctionsFromAstResultSerializer.js',
         '<rootDir>/test/astSerializer.js'
     ],
-    coverageReporters: ["html"],
+    coverageReporters: ['html', 'lcov'],
     coverageDirectory: 'reports/coverage',
     collectCoverageFrom: [
         "src/**/*.js",
