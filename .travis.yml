@@ -21,4 +21,6 @@ before_script:
 script:
   - npm run test-ci
 after_script:
-  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
+  - mv cc-test-reporter packages/core/reports
+  - cd packages/core/reports
+  - ./cc-test-reporter after-build -t lcov --exit-code $TRAVIS_TEST_RESULT
