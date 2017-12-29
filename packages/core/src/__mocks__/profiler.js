@@ -1,7 +1,5 @@
 export default {
     start() {
-        return function () {
-        }
+        return function () {}
     }
 }
-
