@@ -21,6 +21,5 @@ before_script:
 script:
   - npm run test-ci
 after_script:
-  - mv cc-test-reporter packages/core/reports
-  - cd packages/core/reports
-  - ./cc-test-reporter after-build --prefix /home/travis/build/hoschi/yode/packages/core/ -t lcov -d --exit-code $TRAVIS_TEST_RESULT
+  - mv packages/core/reports/coverage .
+  - ./cc-test-reporter after-build --prefix /home/travis/build/hoschi/yode -t lcov -d --exit-code $TRAVIS_TEST_RESULT
