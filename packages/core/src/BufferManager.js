@@ -21,7 +21,7 @@ let BufferManager = stampit().deepProps({
         /**
          * If true we do a string equality check to prevent pushing useless
          * updates to editor when buffer text changed. This can happen
-         * wen user edits text, but through Recasts formatting their are small
+         * when user edits text, but through Recasts formatting their are small
          * changes, e.g. removed whitespace at top/end of file. Disable this check
          * when the underlying editor does this by itself already and in the
          * editor `buffer.updateText(allTextInFile)` is faster than JS string
