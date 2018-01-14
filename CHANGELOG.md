@@ -1,5 +1,28 @@
 # Change Log
 
+## [v0.1.2](https://github.com/hoschi/yode/tree/v0.1.2) (2018-01-14)
+[Full Changelog](https://github.com/hoschi/yode/compare/v0.1.1...v0.1.2)
+
+**Implemented enhancements:**
+
+- refactor prototype into library [\#1](https://github.com/hoschi/yode/issues/1)
+
+**Fixed bugs:**
+
+- Broken edit sync between function and file editor [\#13](https://github.com/hoschi/yode/issues/13)
+- delete function buffer when function was removed in parent node [\#6](https://github.com/hoschi/yode/issues/6)
+- delete file buffer [\#5](https://github.com/hoschi/yode/issues/5)
+
+**Closed issues:**
+
+- add changelog [\#12](https://github.com/hoschi/yode/issues/12)
+- upgrade dependencies [\#10](https://github.com/hoschi/yode/issues/10)
+
+**Merged pull requests:**
+
+- update with build from master 21b6de6 [\#15](https://github.com/hoschi/yode/pull/15) ([hoschi](https://github.com/hoschi))
+- simple tests [\#14](https://github.com/hoschi/yode/pull/14) ([hoschi](https://github.com/hoschi))
+
 ## [v0.1.1](https://github.com/hoschi/yode/tree/v0.1.1) (2017-11-06)
 [Full Changelog](https://github.com/hoschi/yode/compare/v0.1.0...v0.1.1)
 
