@@ -1,5 +1,329 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`updateFileAst - edit file outside function 1`] = `
+Object {
+  "ast": Program 1:0-7:1 {
+    "children": "undefined",
+    "text": "let myVar = 'some string EDITED HERE'
+    function myFunc (a) {
+        function innerFunc () {
+            return 'hello'
+        }
+        return a + innerFunc()
+    }",
+  },
+  "findFunctionAroundCursor": [Function],
+  "functions": Array [
+    FunctionDeclaration 2:0-7:1 {
+      "children": "[
+          {
+            children: [],
+            customId: 2,
+          },
+        ]",
+      "customId": 1,
+      "fileId": "myFile0",
+      "syntaxError": undefined,
+      "text": "function myFunc(a) {
+          function innerFunc () {
+              return 'hello'
+          }
+          return a + innerFunc()
+      }",
+    },
+    FunctionDeclaration 3:4-5:5 {
+      "children": "[]",
+      "customId": 2,
+      "fileId": "myFile0",
+      "syntaxError": undefined,
+      "text": "function innerFunc() {
+          return 'hello'
+      }",
+    },
+  ],
+  "functionsMap": Object {
+    "1": FunctionDeclaration 2:0-7:1 {
+      "children": "[
+          {
+            children: [],
+            customId: 2,
+          },
+        ]",
+      "customId": 1,
+      "fileId": "myFile0",
+      "syntaxError": undefined,
+      "text": "function myFunc(a) {
+          function innerFunc () {
+              return 'hello'
+          }
+          return a + innerFunc()
+      }",
+    },
+    "2": FunctionDeclaration 3:4-5:5 {
+      "children": "[]",
+      "customId": 2,
+      "fileId": "myFile0",
+      "syntaxError": undefined,
+      "text": "function innerFunc() {
+          return 'hello'
+      }",
+    },
+  },
+  "functionsTreeRoot(shortened)": Object {
+    "children": "[
+      {
+        children: [
+          {
+            children: [],
+            customId: 2,
+          },
+        ],
+        customId: 1,
+      },
+    ]",
+    "isRoot": true,
+  },
+  "getMetaData": [Function],
+  "hasConnectedError": false,
+  "id": "myFile0",
+  "init": [Function],
+  "setFunctions": [Function],
+  "syntaxError": undefined,
+  "text": "let myVar = 'some string EDITED HERE'
+function myFunc (a) {
+    function innerFunc () {
+        return 'hello'
+    }
+    return a + innerFunc()
+}",
+  "unformattedText": "let myVar = 'some string EDITED HERE'
+function myFunc (a) {
+    function innerFunc () {
+        return 'hello'
+    }
+    return a + innerFunc()
+}",
+  "updateFileAst": [Function],
+  "updateFunctionAst": [Function],
+}
+`;
+
+exports[`updateFileAst - edit outer function in file 1`] = `
+Object {
+  "ast": Program 1:0-7:1 {
+    "children": "undefined",
+    "text": "let myVar = 'some string'
+    function myFunc (a) {
+        function innerFunc () {
+            return 'hello'
+        }
+        return a + innerFunc() + 'foooooooooo'
+    }",
+  },
+  "findFunctionAroundCursor": [Function],
+  "functions": Array [
+    FunctionDeclaration 2:0-7:1 {
+      "children": "[
+          {
+            children: [],
+            customId: 2,
+          },
+        ]",
+      "customId": 1,
+      "fileId": "myFile0",
+      "syntaxError": undefined,
+      "text": "function myFunc(a) {
+          function innerFunc () {
+              return 'hello'
+          }
+          return a + innerFunc() + 'foooooooooo'
+      }",
+    },
+    FunctionDeclaration 3:4-5:5 {
+      "children": "[]",
+      "customId": 2,
+      "fileId": "myFile0",
+      "syntaxError": undefined,
+      "text": "function innerFunc() {
+          return 'hello'
+      }",
+    },
+  ],
+  "functionsMap": Object {
+    "1": FunctionDeclaration 2:0-7:1 {
+      "children": "[
+          {
+            children: [],
+            customId: 2,
+          },
+        ]",
+      "customId": 1,
+      "fileId": "myFile0",
+      "syntaxError": undefined,
+      "text": "function myFunc(a) {
+          function innerFunc () {
+              return 'hello'
+          }
+          return a + innerFunc() + 'foooooooooo'
+      }",
+    },
+    "2": FunctionDeclaration 3:4-5:5 {
+      "children": "[]",
+      "customId": 2,
+      "fileId": "myFile0",
+      "syntaxError": undefined,
+      "text": "function innerFunc() {
+          return 'hello'
+      }",
+    },
+  },
+  "functionsTreeRoot(shortened)": Object {
+    "children": "[
+      {
+        children: [
+          {
+            children: [],
+            customId: 2,
+          },
+        ],
+        customId: 1,
+      },
+    ]",
+    "isRoot": true,
+  },
+  "getMetaData": [Function],
+  "hasConnectedError": false,
+  "id": "myFile0",
+  "init": [Function],
+  "setFunctions": [Function],
+  "syntaxError": undefined,
+  "text": "let myVar = 'some string'
+function myFunc (a) {
+    function innerFunc () {
+        return 'hello'
+    }
+    return a + innerFunc() + 'foooooooooo'
+}",
+  "unformattedText": "let myVar = 'some string'
+function myFunc (a) {
+    function innerFunc () {
+        return 'hello'
+    }
+    return a + innerFunc() + 'foooooooooo'
+}",
+  "updateFileAst": [Function],
+  "updateFunctionAst": [Function],
+}
+`;
+
+exports[`updateFileAst - edit with syntax error 1`] = `
+Object {
+  "ast": Program 1:0-7:1 {
+    "children": "undefined",
+    "text": "let myVar = 'some string'
+    function myFunc (a) {
+        function innerFunc () {
+            return 'hello'
+        }
+        return a + innerFunc()
+    }",
+  },
+  "findFunctionAroundCursor": [Function],
+  "functions": Array [
+    FunctionDeclaration 2:0-7:1 {
+      "children": "[
+          {
+            children: [],
+            customId: 2,
+          },
+        ]",
+      "customId": 1,
+      "fileId": "myFile0",
+      "syntaxError": undefined,
+      "text": "function myFunc(a) {
+          function innerFunc() {
+              return 'hello'
+          }
+          return a + innerFunc()
+      }",
+    },
+    FunctionDeclaration 3:4-5:5 {
+      "children": "[]",
+      "customId": 2,
+      "fileId": "myFile0",
+      "syntaxError": undefined,
+      "text": "function innerFunc() {
+          return 'hello'
+      }",
+    },
+  ],
+  "functionsMap": Object {
+    "1": FunctionDeclaration 2:0-7:1 {
+      "children": "[
+          {
+            children: [],
+            customId: 2,
+          },
+        ]",
+      "customId": 1,
+      "fileId": "myFile0",
+      "syntaxError": undefined,
+      "text": "function myFunc(a) {
+          function innerFunc() {
+              return 'hello'
+          }
+          return a + innerFunc()
+      }",
+    },
+    "2": FunctionDeclaration 3:4-5:5 {
+      "children": "[]",
+      "customId": 2,
+      "fileId": "myFile0",
+      "syntaxError": undefined,
+      "text": "function innerFunc() {
+          return 'hello'
+      }",
+    },
+  },
+  "functionsTreeRoot(shortened)": Object {
+    "children": "[
+      {
+        children: [
+          {
+            children: [],
+            customId: 2,
+          },
+        ],
+        customId: 1,
+      },
+    ]",
+    "isRoot": true,
+  },
+  "getMetaData": [Function],
+  "hasConnectedError": true,
+  "id": "myFile0",
+  "init": [Function],
+  "setFunctions": [Function],
+  "syntaxError": [SyntaxError: Unterminated string constant (1:12)],
+  "text": "let myVar = 'some string'
+function myFunc (a) {
+    function innerFunc () {
+        return 'hello'
+    }
+    return a + innerFunc()
+}",
+  "unformattedText": "let myVar = 'some string NO CLOSING QUOTE
+function myFunc (a) {
+    function innerFunc () {
+        return 'hello'
+    }
+    return a + innerFunc()
+}",
+  "updateFileAst": [Function],
+  "updateFunctionAst": [Function],
+}
+`;
+
 exports[`updateFunctionAst - function with children 1`] = `
 Object {
   "node": ArrowFunctionExpression 1:0-18:1 {

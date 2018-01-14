@@ -269,3 +269,80 @@ test('updateFunctionAst - function with children', function () {
     expect(s.hasConnectedError).toBe(false)
     expect(result).toMatchSnapshot()
 })
+
+test('updateFileAst - edit file outside function', function () {
+    let unformattedText = snip.nestedFunctions
+    let s = File.create()
+    s.init({
+        id: 'myFile0',
+        unformattedText
+    })
+
+    let newText = `
+let myVar = 'some string EDITED HERE'
+function myFunc (a) {
+    function innerFunc () {
+        return 'hello'
+    }
+    return a + innerFunc()
+}
+        `.trim()
+    let result = s.updateFileAst(newText)
+    expect(result.removedFunctions).toBeUndefined()
+    expect(s).toMatchSnapshot()
+})
+
+test('updateFileAst - edit with syntax error', function () {
+    let unformattedText = snip.nestedFunctions
+    let s = File.create()
+    s.init({
+        id: 'myFile0',
+        unformattedText
+    })
+
+    let newText = `
+let myVar = 'some string NO CLOSING QUOTE
+function myFunc (a) {
+    function innerFunc () {
+        return 'hello'
+    }
+    return a + innerFunc()
+}
+        `.trim()
+    let result = s.updateFileAst(newText)
+    expect(result).toBeUndefined()
+    expect(s.hasConnectedError).toBe(true)
+    expect(s.syntaxError.toString()).toBe('SyntaxError: Unterminated string constant (1:12)')
+
+    expect(s).toMatchSnapshot()
+})
+
+test('updateFileAst - edit outer function in file', function () {
+    let unformattedText = snip.nestedFunctions
+    let s = File.create()
+    s.init({
+        id: 'myFile0',
+        unformattedText
+    })
+
+    let newText = `
+let myVar = 'some string'
+function myFunc (a) {
+    function innerFunc () {
+        return 'hello'
+    }
+    return a + innerFunc() + 'foooooooooo'
+}
+        `.trim()
+    let result = s.updateFileAst(newText)
+    expect(result.removedFunctions).toBeUndefined()
+    expect(s.functionsMap["1"].text).toEqual(`
+function myFunc(a) {
+    function innerFunc () {
+        return 'hello'
+    }
+    return a + innerFunc() + 'foooooooooo'
+}
+    `.trim())
+    expect(s).toMatchSnapshot()
+})

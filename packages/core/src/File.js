@@ -1,7 +1,7 @@
 import stampit from '@stamp/it'
 import * as R from 'ramda'
 import profiler from './profiler'
-import { parseCode, getFunctionsFromAst, getAllContainerNodesRecursive, getAllChildrenNodesRecursive, printAst, addTextToNode, replaceNodeInAst, getNodeForFirstFoundType, isNodeDirty, getInnerMostFunctionNode, getMetaData } from './astBackedEditing'
+import { parseCode, getFunctionsFromAst, getAllContainerNodesRecursive, getAllChildrenNodesRecursive, printAst, addTextToNode, replaceNodeInAst, getNodeForFirstFoundType, getInnerMostFunctionNode, getMetaData } from './astBackedEditing'
 import { getFunctionByText } from 'ast/compareFunctions'
 
 let File = stampit().deepProps({
@@ -141,15 +141,10 @@ let File = stampit().deepProps({
 
         // update file text with merged ast
         let fileText = printAst(this.ast)
-
-        // update text if possible
-        if (!isNodeDirty(this)) {
-            // in sync, update
-            this.text = fileText
-            this.unformattedText = fileText
-            this.ast.text = fileText
-            this.ast.unformattedText = fileText
-        }
+        this.text = fileText
+        this.unformattedText = fileText
+        this.ast.text = fileText
+        this.ast.unformattedText = fileText
 
         // get functions to compare, current changed one can't be matched
         let functionsToCompare = this.functions.filter(f => newFunction.customId !== f.customId)

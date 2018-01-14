@@ -29,10 +29,6 @@ export function addTextToNode (ast) {
     ast.text = printAst(ast)
 }
 
-export function isNodeDirty (node) {
-    return node.text !== node.unformattedText
-}
-
 export function getNodeForFirstFoundType (type, ast) {
     let found
     estraverse.traverse(ast, {
@@ -181,11 +177,6 @@ export function getFunctionsFromAst (ast, fileId, functionsToCompare) {
                     if (foundFunctionIndex >= 0) {
                         let foundFunction = functionsToCompareLeft[foundFunctionIndex]
                         node.customId = foundFunction.customId
-                        // restore dirty editor state if needed
-                        if (isNodeDirty(foundFunction)) {
-                            node.unformattedText = foundFunction.unformattedText
-                            node.syntaxError = foundFunction.syntaxError
-                        }
                         // remove function we found
                         functionsToCompareLeft.splice(foundFunctionIndex, 1)
                     } else {
