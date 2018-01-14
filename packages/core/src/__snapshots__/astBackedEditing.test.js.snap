@@ -1,0 +1,410 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`getFunctionsFromAst - collects functions flat and tree 1`] = `
+Object {
+  "functions": Array [
+    ArrowFunctionExpression 3:21-5:1 {
+      "children": "[]",
+      "customId": 1,
+      "fileId": "myFile.js",
+      "syntaxError": undefined,
+      "text": "({name}) => {
+          return <span>Hello&nbsp;{name}!</span>;
+      }",
+    },
+    ArrowFunctionExpression 7:27-24:1 {
+      "children": "[
+          {
+            children: [
+              {
+                children: [],
+                customId: 4,
+              },
+            ],
+            customId: 3,
+          },
+        ]",
+      "customId": 2,
+      "fileId": "myFile.js",
+      "syntaxError": undefined,
+      "text": "() => {
+          let name = 'Walter';
+      
+          it('displays name', () => {
+              function getTestName(a, b) {
+                  return a + b + name;
+              }
+      
+              let myName = getTestName('I', 'Am', name);
+              expect(<HelloComponent name={myName} />).contain('Hello IAmWalter!')
+          })
+      
+          // function not recognized because not of a supported type
+          it(\\"doesn't work without name\\", function () {
+              let myName = undefined;
+              expect(<HelloComponent name={myName} />).contain('Hello !')
+          });
+      }",
+    },
+    ArrowFunctionExpression 10:24-17:5 {
+      "children": "[
+          {
+            children: [],
+            customId: 4,
+          },
+        ]",
+      "customId": 3,
+      "fileId": "myFile.js",
+      "syntaxError": undefined,
+      "text": "() => {
+          function getTestName(a, b) {
+              return a + b + name;
+          }
+      
+          let myName = getTestName('I', 'Am', name);
+          expect(<HelloComponent name={myName} />).contain('Hello IAmWalter!')
+      }",
+    },
+    FunctionDeclaration 11:8-13:9 {
+      "children": "[]",
+      "customId": 4,
+      "fileId": "myFile.js",
+      "syntaxError": undefined,
+      "text": "function getTestName(a, b) {
+          return a + b + name;
+      }",
+    },
+  ],
+  "functionsTreeRoot(shortened)": Object {
+    "children": "[
+      {
+        children: [],
+        customId: 1,
+      },
+      {
+        children: [
+          {
+            children: [
+              {
+                children: [],
+                customId: 4,
+              },
+            ],
+            customId: 3,
+          },
+        ],
+        customId: 2,
+      },
+    ]",
+    "isRoot": true,
+  },
+  "removedFunctions": undefined,
+}
+`;
+
+exports[`getFunctionsFromAst - doesn't collect object functions 1`] = `
+Object {
+  "functions": Array [
+    ArrowFunctionExpression 3:14-3:39 {
+      "children": "[]",
+      "customId": 1,
+      "fileId": "myFile.js",
+      "syntaxError": undefined,
+      "text": "name => 'Hello ' + name",
+    },
+  ],
+  "functionsTreeRoot(shortened)": Object {
+    "children": "[
+      {
+        children: [],
+        customId: 1,
+      },
+    ]",
+    "isRoot": true,
+  },
+  "removedFunctions": undefined,
+}
+`;
+
+exports[`getFunctionsFromAst - remove more/nested functions on file level 1`] = `
+Object {
+  "functions": Array [
+    ArrowFunctionExpression 3:21-5:1 {
+      "children": "[]",
+      "customId": 1,
+      "fileId": "myFile.js",
+      "syntaxError": undefined,
+      "text": "({name}) => {
+          return <span>Hello&nbsp;{name}!</span>;
+      }",
+    },
+    ArrowFunctionExpression 7:27-24:1 {
+      "children": "[
+          {
+            children: [
+              {
+                children: [],
+                customId: 4,
+              },
+            ],
+            customId: 3,
+          },
+        ]",
+      "customId": 2,
+      "fileId": "myFile.js",
+      "syntaxError": undefined,
+      "text": "() => {
+          let name = 'Walter';
+      
+          it('displays name', () => {
+              function getTestName(a, b) {
+                  return a + b + name;
+              }
+      
+              let myName = getTestName('I', 'Am', name);
+              expect(<HelloComponent name={myName} />).contain('Hello IAmWalter!')
+          })
+      
+          // function not recognized because not of a supported type
+          it(\\"doesn't work without name\\", function () {
+              let myName = undefined;
+              expect(<HelloComponent name={myName} />).contain('Hello !')
+          });
+      }",
+    },
+    ArrowFunctionExpression 10:24-17:5 {
+      "children": "[
+          {
+            children: [],
+            customId: 4,
+          },
+        ]",
+      "customId": 3,
+      "fileId": "myFile.js",
+      "syntaxError": undefined,
+      "text": "() => {
+          function getTestName(a, b) {
+              return a + b + name;
+          }
+      
+          let myName = getTestName('I', 'Am', name);
+          expect(<HelloComponent name={myName} />).contain('Hello IAmWalter!')
+      }",
+    },
+    FunctionDeclaration 11:8-13:9 {
+      "children": "[]",
+      "customId": 4,
+      "fileId": "myFile.js",
+      "syntaxError": undefined,
+      "text": "function getTestName(a, b) {
+          return a + b + name;
+      }",
+    },
+  ],
+  "functionsTreeRoot(shortened)": Object {
+    "children": "[
+      {
+        children: [],
+        customId: 1,
+      },
+      {
+        children: [
+          {
+            children: [
+              {
+                children: [],
+                customId: 4,
+              },
+            ],
+            customId: 3,
+          },
+        ],
+        customId: 2,
+      },
+    ]",
+    "isRoot": true,
+  },
+  "removedFunctions": undefined,
+}
+`;
+
+exports[`getFunctionsFromAst - remove more/nested functions on file level 2`] = `
+Object {
+  "functions": Array [
+    ArrowFunctionExpression 3:21-5:1 {
+      "children": "[]",
+      "customId": 1,
+      "fileId": "myFile.js",
+      "syntaxError": undefined,
+      "text": "({name}) => {
+          return <span>Hello&nbsp;{name}!</span>;
+      }",
+    },
+  ],
+  "functionsTreeRoot(shortened)": Object {
+    "children": "[
+      {
+        children: [],
+        customId: 1,
+      },
+    ]",
+    "isRoot": true,
+  },
+  "removedFunctions": Array [
+    ArrowFunctionExpression 7:27-24:1 {
+      "children": "[
+          {
+            children: [
+              {
+                children: [],
+                customId: 4,
+              },
+            ],
+            customId: 3,
+          },
+        ]",
+      "customId": 2,
+      "fileId": "myFile.js",
+      "syntaxError": undefined,
+      "text": "() => {
+          let name = 'Walter';
+      
+          it('displays name', () => {
+              function getTestName(a, b) {
+                  return a + b + name;
+              }
+      
+              let myName = getTestName('I', 'Am', name);
+              expect(<HelloComponent name={myName} />).contain('Hello IAmWalter!')
+          })
+      
+          // function not recognized because not of a supported type
+          it(\\"doesn't work without name\\", function () {
+              let myName = undefined;
+              expect(<HelloComponent name={myName} />).contain('Hello !')
+          });
+      }",
+    },
+    ArrowFunctionExpression 10:24-17:5 {
+      "children": "[
+          {
+            children: [],
+            customId: 4,
+          },
+        ]",
+      "customId": 3,
+      "fileId": "myFile.js",
+      "syntaxError": undefined,
+      "text": "() => {
+          function getTestName(a, b) {
+              return a + b + name;
+          }
+      
+          let myName = getTestName('I', 'Am', name);
+          expect(<HelloComponent name={myName} />).contain('Hello IAmWalter!')
+      }",
+    },
+    FunctionDeclaration 11:8-13:9 {
+      "children": "[]",
+      "customId": 4,
+      "fileId": "myFile.js",
+      "syntaxError": undefined,
+      "text": "function getTestName(a, b) {
+          return a + b + name;
+      }",
+    },
+  ],
+}
+`;
+
+exports[`getFunctionsFromAst - removed one function on file level 1`] = `
+Object {
+  "functions": Array [
+    FunctionDeclaration 2:0-7:1 {
+      "children": "[
+          {
+            children: [],
+            customId: 2,
+          },
+        ]",
+      "customId": 1,
+      "fileId": "myFile.js",
+      "syntaxError": undefined,
+      "text": "function myFunc(a) {
+          function innerFunc () {
+              return 'hello'
+          }
+          return a + innerFunc()
+      }",
+    },
+    FunctionDeclaration 3:4-5:5 {
+      "children": "[]",
+      "customId": 2,
+      "fileId": "myFile.js",
+      "syntaxError": undefined,
+      "text": "function innerFunc() {
+          return 'hello'
+      }",
+    },
+  ],
+  "functionsTreeRoot(shortened)": Object {
+    "children": "[
+      {
+        children: [
+          {
+            children: [],
+            customId: 2,
+          },
+        ],
+        customId: 1,
+      },
+    ]",
+    "isRoot": true,
+  },
+  "removedFunctions": undefined,
+}
+`;
+
+exports[`getFunctionsFromAst - removed one function on file level 2`] = `
+Object {
+  "functions": Array [
+    FunctionDeclaration 2:0-4:1 {
+      "children": "[]",
+      "customId": 2,
+      "fileId": "myFile.js",
+      "syntaxError": undefined,
+      "text": "function myFunc(a) {
+          return a
+      }",
+    },
+  ],
+  "functionsTreeRoot(shortened)": Object {
+    "children": "[
+      {
+        children: [],
+        customId: 2,
+      },
+    ]",
+    "isRoot": true,
+  },
+  "removedFunctions": Array [
+    FunctionDeclaration 2:0-7:1 {
+      "children": "[
+          {
+            children: [],
+            customId: 2,
+          },
+        ]",
+      "customId": 1,
+      "fileId": "myFile.js",
+      "syntaxError": undefined,
+      "text": "function myFunc(a) {
+          function innerFunc () {
+              return 'hello'
+          }
+          return a + innerFunc()
+      }",
+    },
+  ],
+}
+`;

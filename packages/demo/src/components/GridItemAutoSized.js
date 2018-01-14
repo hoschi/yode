@@ -1,5 +1,5 @@
 import React from 'react'
-import R from 'ramda'
+import * as R from 'ramda'
 import sizeMe from 'react-sizeme'
 
 let isNilOrZero = R.anyPass([
@@ -7,7 +7,7 @@ let isNilOrZero = R.anyPass([
     R.equals(0)
 ])
 
-const GridItemAutoSized = React.createClass({
+class GridItemAutoSized extends React.Component {
     componentWillReceiveProps(nextProps) {
         const {size, itemId, onHeightChanged} = this.props
         if (!isNilOrZero(nextProps.size.height) &&
@@ -17,14 +17,15 @@ const GridItemAutoSized = React.createClass({
                 height: nextProps.size.height
             })
         }
-    },
+    }
+
     render() {
         const {children} = this.props
         return <div>
                    { children }
                </div>
     }
-})
+}
 
 export default sizeMe({
     monitorHeight: true,

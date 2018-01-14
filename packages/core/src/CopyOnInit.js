@@ -1,4 +1,4 @@
-import R from 'ramda'
+import * as R from 'ramda'
 import stampit from '@stamp/it'
 
 let CopyOnInit = stampit().methods({

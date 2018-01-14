@@ -1,5 +1,5 @@
 import stampit from '@stamp/it'
-import { createBuffer, openEditorById, selectVisibleBuffers, swapBufferEditors, changeBufferText, changeMetaData } from 'store/editorReducer'
+import { createBuffer, openEditorById, selectVisibleBuffers, swapBufferEditors, changeBufferText, changeMetaData, deleteBuffer } from 'store/editorReducer'
 import { ANONYMOUS_BUFFER_PREFIX } from 'consts'
 
 let id = 1
@@ -52,6 +52,11 @@ let EditorApi = stampit().deepProps({
         this.dispatch(changeMetaData({
             id,
             newMetaData
+        }))
+    },
+    deleteBuffer(id) {
+        this.dispatch(deleteBuffer({
+            id
         }))
     }
 })

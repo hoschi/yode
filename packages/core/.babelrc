@@ -4,13 +4,26 @@
     ],
     "env": {
         "ROLLUP": {
-            "presets": [[ "es2015", {modules:false} ]],
+            "presets": [
+                ["env", {
+                    "modules": false
+                }]
+            ],
             "plugins": [
                 "external-helpers",
                 ["module-resolver", {
                     "root":["./src"],
                     "alias":{
                         "lib":"./lib"
+                    }
+                }]
+            ]
+        },
+        "test": {
+            "presets": [
+                ["env", {
+                    targets:{
+                        node:"current"
                     }
                 }]
             ]

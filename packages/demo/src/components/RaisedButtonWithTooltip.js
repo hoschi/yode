@@ -2,29 +2,33 @@ import React from 'react'
 import RaisedButton from 'material-ui/RaisedButton'
 import Tooltip from 'material-ui/internal/Tooltip'
 
-const RaisedButtonWithTooltip = React.createClass({
-    showTooltip() {
+class RaisedButtonWithTooltip extends React.Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            showTooltip: false
+        }
+    }
+
+    showTooltip = () => {
         this.setState({
             tooltipShown: true
         })
-    },
-    hideTooltip() {
+    };
+
+    hideTooltip = () => {
         this.setState({
             tooltipShown: false
         })
-    },
-    getInitialState() {
-        return {
-            showTooltip: false
-        }
-    },
+    };
+
     render() {
         const {tooltip, ...buttonProps} = this.props
         return <RaisedButton {...buttonProps} onMouseEnter={ this.showTooltip } onMouseLeave={ this.hideTooltip }>
                    <Tooltip label={ tooltip } show={ this.state.tooltipShown } verticalPosition='top' style={ tooltipStyle } />
                </RaisedButton>
     }
-})
+}
 
 export default RaisedButtonWithTooltip
 

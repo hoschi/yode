@@ -1,7 +1,7 @@
 import stampit from '@stamp/it'
-import R from 'ramda'
+import * as R from 'ramda'
 import profiler from './profiler'
-import { parseCode, getFunctionsFromAst, getAllContainerNodesRecursive, getAllChildrenNodesRecursive, printAst, addTextToNode, replaceNodeInAst, getNodeForFirstFoundType, isNodeDirty, getInnerMostFunctionNode, getMetaData } from './astBackedEditing'
+import { parseCode, getFunctionsFromAst, getAllContainerNodesRecursive, getAllChildrenNodesRecursive, printAst, addTextToNode, replaceNodeInAst, getNodeForFirstFoundType, getInnerMostFunctionNode, getMetaData } from './astBackedEditing'
 import { getFunctionByText } from 'ast/compareFunctions'
 
 let File = stampit().deepProps({
@@ -80,10 +80,13 @@ let File = stampit().deepProps({
         this.ast.text = newText
         this.ast.unformattedText = newText
 
-        let {functions, functionsTreeRoot} = getFunctionsFromAst(this.ast, this.id, this.functions)
+        let {functions, functionsTreeRoot, removedFunctions} = getFunctionsFromAst(this.ast, this.id, this.functions)
         this.setFunctions(functions)
         this.functionsTreeRoot = functionsTreeRoot
         stop()
+        return {
+            removedFunctions
+        }
     },
     updateFunctionAst(newText, oldFunction) {
         let newFunction
@@ -138,25 +141,20 @@ let File = stampit().deepProps({
 
         // update file text with merged ast
         let fileText = printAst(this.ast)
-
-        // update text if possible
-        if (!isNodeDirty(this)) {
-            // in sync, update
-            this.text = fileText
-            this.unformattedText = fileText
-            this.ast.text = fileText
-            this.ast.unformattedText = fileText
-        }
+        this.text = fileText
+        this.unformattedText = fileText
+        this.ast.text = fileText
+        this.ast.unformattedText = fileText
 
         // get functions to compare, current changed one can't be matched
         let functionsToCompare = this.functions.filter(f => newFunction.customId !== f.customId)
         // update functions and port props from already known functions
-        let {functions, functionsTreeRoot} = getFunctionsFromAst(this.ast, this.id, functionsToCompare)
+        let {functions, functionsTreeRoot, removedFunctions} = getFunctionsFromAst(this.ast, this.id, functionsToCompare)
         this.setFunctions(functions)
         this.functionsTreeRoot = functionsTreeRoot
 
         // collect function nodes to update by walking up the linked list of
-        // containing functions. This list is no up to date after running
+        // containing functions. This list is now up to date after running
         // getFunctionsFromAst
         let containerNodesToUpdate = getAllContainerNodesRecursive(newFunction.parentFunction)
         let childrenNodesToUpdate = getAllChildrenNodesRecursive(newFunction.children)
@@ -165,7 +163,8 @@ let File = stampit().deepProps({
         stop()
         return {
             nodesToUpdate,
-            node: newFunction
+            node: newFunction,
+            removedFunctions,
         }
     },
     findFunctionAroundCursor(node, cursor) {

@@ -1,6 +1,6 @@
-import R from 'ramda'
+import * as R from 'ramda'
 import createReducer from './createReducer'
-import { EDITOR_LAYOUT_COLS, ANONYMOUS_BUFFER_PREFIX } from 'consts'
+import { EDITOR_LAYOUT_COLS } from 'consts'
 import { setProp, setPath } from 'helper'
 import demoFiles from './demoFiles'
 
@@ -104,6 +104,15 @@ export const createBuffer = ({id, text}) => {
     }
 }
 
+// TODO action used in UI by #4
+export const BUFFER_DELETED = 'BUFFER_DELETED'
+export const bufferDeleted = ({buffer}) => {
+    return {
+        type: BUFFER_DELETED,
+        buffer
+    }
+}
+
 export const DELETE_BUFFER = 'DELETE_BUFFER'
 export const deleteBuffer = ({id}) => {
     return {
@@ -183,6 +192,19 @@ let initialState = {
 }
 initialState.editorsLayout = getInitialLayout(initialState)
 
+let resetFocusedEditorForId = R.curry((id, state) => {
+    if (state.focusedEditorId === id) {
+        // closed editor was focused, reset
+        return setProp('focusedEditorId', undefined, state)
+    }
+    return state
+})
+let removeVisibleBufferById = R.curry((id, state) => {
+    return setProp('visibleEditorIds', R.filter(R.complement(R.equals(id)), state.visibleEditorIds), state)
+})
+
+let gridItemInZeroRange = propName => (item) => item[propName] >= -1 && item[propName] <= 1
+
 let reducerFunctions = {
     [EDITORS_LAYOUT_CHANGED]: (state, {layout}) => {
         return {
@@ -230,7 +252,7 @@ let reducerFunctions = {
         const {id} = action
         let newLayout = R.map(shiftGridItem(R.allPass([
             R.propEq('x', 0),
-            R.propEq('y', 0)
+            gridItemInZeroRange('y')
         ])), state.editorsLayout)
         return {
             ...state,
@@ -245,28 +267,18 @@ let reducerFunctions = {
         const {id} = action
         return R.pipe(
             // reset focus
-            (state) => {
-                if (state.focusedEditorId === id) {
-                    // closed editor was focused, reset
-                    return setProp('focusedEditorId', undefined, state)
-                }
-                return state
-            },
-            setProp('visibleEditorIds', R.filter(R.complement(R.equals(id)), state.visibleEditorIds))
+            resetFocusedEditorForId(id),
+            removeVisibleBufferById(id),
         )(state)
     },
     [DELETE_BUFFER]: (state, action) => {
         const {id} = action
         return R.pipe(
+            // can't be visible nor focused
+            removeVisibleBufferById(id),
+            resetFocusedEditorForId(id),
             // delete buffer
-            (state) => {
-                if (id.startsWith(ANONYMOUS_BUFFER_PREFIX)) {
-                    // remove anonymous buffer when editor closes
-                    return R.dissocPath(['buffers', id], state)
-                }
-                return state
-            },
-            setProp('visibleEditorIds', R.filter(R.complement(R.equals(id)), state.visibleEditorIds))
+            R.dissocPath(['buffers', id]),
         )(state)
     },
     [SWAP_BUFFER_EDITORS]: (state, action) => {

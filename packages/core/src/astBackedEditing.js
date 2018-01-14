@@ -1,9 +1,9 @@
 import profiler from './profiler'
-import R from 'ramda'
+import logger from './logger'
+import * as R from 'ramda'
 import parser from 'ast/parser-recast-jsx'
 import { getFunctionIndexByText } from 'ast/compareFunctions'
-
-let id = 1
+import {getNextId}from'./customIdGenerator'
 
 let {estraverse} = parser
 function parse (...args) {
@@ -27,10 +27,6 @@ export let getMetaData = (node) => ({
 
 export function addTextToNode (ast) {
     ast.text = printAst(ast)
-}
-
-export function isNodeDirty (node) {
-    return node.text !== node.unformattedText
 }
 
 export function getNodeForFirstFoundType (type, ast) {
@@ -86,7 +82,7 @@ export function parseCode (text) {
     try {
         ast = parse(text)
     } /* eslint-disable */ catch ( error ) /* eslint-enable */ {
-        console.log(error)
+        logger.log(error)
         stop()
         return {
             error
@@ -116,27 +112,17 @@ export function getFunctionsFromAst (ast, fileId, functionsToCompare) {
 
     let addNodeToParent = (node) => {
         parentFunc = currentFunc
-        if (parentFunc) {
-            if (parentFunc.children) {
-                parentFunc.children.push(node)
-            } else {
-                parentFunc.children = [node]
-            }
-        }
+        parentFunc.children.push(node)
+
         currentFunc = node
-        if (!currentFunc.children) {
-            currentFunc.children = []
-        }
+        // set empty children, in case this node has children from previous runs, which get now collected again
+        currentFunc.children = []
         node.parentFunction = parentFunc
     }
 
     let leaveFunctionNode = () => {
         currentFunc = parentFunc
-        if (currentFunc) {
-            parentFunc = currentFunc.parentFunction
-        } else {
-            parentFunc = undefined
-        }
+        parentFunc = currentFunc.parentFunction
     }
 
     estraverse.traverse(ast, {
@@ -191,15 +177,10 @@ export function getFunctionsFromAst (ast, fileId, functionsToCompare) {
                     if (foundFunctionIndex >= 0) {
                         let foundFunction = functionsToCompareLeft[foundFunctionIndex]
                         node.customId = foundFunction.customId
-                        // restore dirty editor state if needed
-                        if (isNodeDirty(foundFunction)) {
-                            node.unformattedText = foundFunction.unformattedText
-                            node.syntaxError = foundFunction.syntaxError
-                        }
                         // remove function we found
                         functionsToCompareLeft.splice(foundFunctionIndex, 1)
                     } else {
-                        node.customId = id++
+                        node.customId = getNextId()
                     }
                 }
                 node.fileId = fileId
@@ -218,16 +199,21 @@ export function getFunctionsFromAst (ast, fileId, functionsToCompare) {
 
     // do some info logging
     if (functionsToCompareLeft && functionsToCompareLeft.length > 0) {
-        console.log('REMOVED FUNCTIONS', functionsToCompareLeft.length, functionsToCompareLeft)
+        logger.log('REMOVED FUNCTIONS', functionsToCompareLeft.length, functionsToCompareLeft)
         functionsToCompareLeft.forEach(function (node) {
-            console.log('++', node.text)
+            logger.log('++', node.text)
         })
+    }
+
+    if (functionsToCompareLeft && functionsToCompareLeft.length <= 0) {
+        functionsToCompareLeft = undefined
     }
 
     stop()
     return {
         functions,
-        functionsTreeRoot
+        functionsTreeRoot,
+        removedFunctions:functionsToCompareLeft
     }
 }
 
@@ -237,7 +223,7 @@ export function getInnerMostFunctionNode (sourceNode, cursor) {
     try {
         ast = parser.parse(sourceNode.unformattedText)
     } /* eslint-disable */ catch ( error ) /* eslint-enable */ {
-        console.log(error)
+        logger.log(error)
         return
     }
     parser.estraverse.traverse(ast, {

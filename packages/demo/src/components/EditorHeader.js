@@ -1,5 +1,5 @@
 import React from 'react'
-import R from 'ramda'
+import * as R from 'ramda'
 import NodeEditorStateLabels from './NodeEditorStateLabels'
 import IconButton from 'material-ui/IconButton'
 import IconClose from 'material-ui/svg-icons/navigation/close'

@@ -1,5 +1,5 @@
 import React from 'react'
-import R from 'ramda'
+import * as R from 'ramda'
 import RaisedButton from 'material-ui/RaisedButton'
 import FlatButton from 'material-ui/FlatButton'
 import Dialog from 'material-ui/Dialog'
@@ -41,8 +41,8 @@ const AddFileDialog = ({isOpen, setDialogIsOpen, content, fileName, onContentCha
         onTouchTap: () => setDialogIsOpen(true)
     }
     let actions = [
-        <FlatButton label='cancel' onTouchTap={ closeAndReset } />,
-        <FlatButton label='add' primary={ true } disabled={ isAddButtonDisabled } onTouchTap={ addClick } />
+        <FlatButton key='cancel' label='cancel' onTouchTap={ closeAndReset } />,
+        <FlatButton key='add' label='add' primary={ true } disabled={ isAddButtonDisabled } onTouchTap={ addClick } />
     ]
     let dialog = <Dialog title='Add File' actions={ actions } modal={ true } open={ isOpen }>
                      <TextField floatingLabelText='file name' value={ fileName } onChange={ (ev, newValue) => onFileNameChange(newValue) } errorText={ fileNameErrorMessage } />

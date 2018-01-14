@@ -8,25 +8,30 @@
   "scripts": {
     "format": "jsfmt -w packages/*/src/**/*.js packages/*/*.js && eslint --fix packages/*/src/ packages/*/*.js",
     "lint": "eslint packages/*/src/*.js packages/*/*.js",
-    "preversion": "github_changelog_generator"
+    "preversion": "github_changelog_generator",
+    "test":"cd packages/core; npm test",
+    "test-ci":"cd packages/core; npm run test-ci"
   },
   "devDependencies": {
-    "babel-core": "6.14.0",
-    "babel-loader": "6.4.1",
+    "babel-core": "6.26.0",
+    "babel-eslint": "8.0.2",
     "babel-plugin-dev-expression": "0.2.1",
-    "babel-plugin-module-resolver": "2.7.1",
-    "babel-plugin-transform-object-rest-spread": "6.8.0",
+    "babel-plugin-module-resolver": "3.0.0",
+    "babel-plugin-transform-object-rest-spread": "6.26.0",
     "babel-plugin-transform-react-constant-elements": "6.23.0",
-    "babel-plugin-transform-react-inline-elements": "6.8.0",
-    "babel-plugin-transform-react-remove-prop-types": "0.2.9",
-    "babel-preset-es2015": "6.22.0",
-    "babel-preset-es2015-node6": "0.4.0",
-    "esformatter-jsx": "7.0.1",
+    "babel-plugin-transform-react-inline-elements": "6.22.0",
+    "babel-plugin-transform-react-remove-prop-types": "0.4.10",
+    "babel-preset-env": "1.6.1",
+    "esformatter-jsx": "8.0.1",
     "esformatter-limit-linebreaks": "0.0.3",
     "esformatter-remove-trailing-commas": "1.0.1",
-    "eslint": "3.5.0",
-    "eslint-plugin-react": "6.2.1",
+    "eslint": "4.11.0",
+    "eslint-plugin-jasmine": "2.9.1",
+    "eslint-plugin-jest": "21.3.2",
+    "eslint-plugin-react": "7.4.0",
     "jsfmt": "0.5.3",
-    "lerna": "2.1.1"
-  }
+    "lerna": "2.5.1",
+    "treis": "2.5.0"
+  },
+  "dependencies": {}
 }
