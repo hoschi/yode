@@ -203,6 +203,8 @@ let removeVisibleBufferById = R.curry((id, state) => {
     return setProp('visibleEditorIds', R.filter(R.complement(R.equals(id)), state.visibleEditorIds), state)
 })
 
+let gridItemInZeroRange = propName => (item) => item[propName] >= -1 && item[propName] <= 1
+
 let reducerFunctions = {
     [EDITORS_LAYOUT_CHANGED]: (state, {layout}) => {
         return {
@@ -250,7 +252,7 @@ let reducerFunctions = {
         const {id} = action
         let newLayout = R.map(shiftGridItem(R.allPass([
             R.propEq('x', 0),
-            R.propEq('y', 0)
+            gridItemInZeroRange('y')
         ])), state.editorsLayout)
         return {
             ...state,
