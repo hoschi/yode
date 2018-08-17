@@ -23,7 +23,7 @@ In another terminal
 
 * `lerna run build` all static files are created now
 * `lerna run serve-build` to spawn a simple webserver
-* go to 'http://localhost:9032/yode'
+* go to http://localhost:9032/yode
 
 # Release
 
