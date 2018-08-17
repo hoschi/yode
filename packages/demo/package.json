@@ -1,6 +1,6 @@
 {
   "name": "yode-demo",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "private": true,
   "description": "Demo for Yode",
   "scripts": {
@@ -39,6 +39,6 @@
     "react-sizeme": "2.3.6",
     "react-tap-event-plugin": "3.0.2",
     "redux": "3.7.2",
-    "yode": "^0.1.2"
+    "yode": "^0.1.3"
   }
 }
