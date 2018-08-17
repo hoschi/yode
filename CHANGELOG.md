@@ -1,5 +1,10 @@
 # Change Log
 
+## [v0.1.3](https://github.com/hoschi/yode/tree/v0.1.3) (2018-08-17)
+[Full Changelog](https://github.com/hoschi/yode/compare/v0.1.2...v0.1.3)
+
+Updated dependencies.
+
 ## [v0.1.2](https://github.com/hoschi/yode/tree/v0.1.2) (2018-01-14)
 [Full Changelog](https://github.com/hoschi/yode/compare/v0.1.1...v0.1.2)
 
